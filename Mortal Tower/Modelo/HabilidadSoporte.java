@@ -1,4 +1,4 @@
-package MortalTower.Modelo;
+package Modelo;
 
 public abstract class HabilidadSoporte extends Habilidad {
 
@@ -14,7 +14,7 @@ public abstract class HabilidadSoporte extends Habilidad {
     }
 
     @Override
-    public boolean puedeUsarse(Personaje usuario) {
+    public boolean puedeUsarse(Entidad usuario) {
         return super.puedeUsarse(usuario) && cooldownActual == 0;
     }
 

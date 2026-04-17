@@ -1,4 +1,4 @@
-package MortalTower.Modelo;
+package Modelo;
 
 public class HabilidadDefensa extends Habilidad {
 
@@ -12,7 +12,7 @@ public class HabilidadDefensa extends Habilidad {
     }
 
     @Override
-    public void ejecutarHabilidad(Personaje usuario, Personaje objetivo) {
+    public void ejecutarHabilidad(Entidad usuario, Entidad objetivo) {
 
         if (!puedeUsarse(usuario)) return;
 
