@@ -2,9 +2,9 @@ package Modelo;
 
 public class HabilidadCuracion extends HabilidadSoporte {
     
-    public HabilidadCuracion(String nombre, String descripcion, int costoMana, int valorBase, int cooldownMax) {
+    public HabilidadCuracion(String nombre, String descripcion, String tipo, int costoMana, int valorBase, int cooldownMax) {
         
-        super(nombre, descripcion, costoMana, valorBase, cooldownMax);
+        super(nombre, descripcion, tipo, costoMana, valorBase, cooldownMax);
     }
 
     @Override
@@ -13,7 +13,7 @@ public class HabilidadCuracion extends HabilidadSoporte {
         if (!puedeUsarse(usuario)) return;
 
         usuario.curarVida(valorBase);
-        usuario.gastarMana(getCostoMana()); //no consume mana la habilidad
+        usuario.usarMana(getCostoMana()); //no consume mana la habilidad
 
         activarCooldown();
     }

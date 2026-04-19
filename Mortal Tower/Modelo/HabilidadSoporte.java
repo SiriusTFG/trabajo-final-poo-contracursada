@@ -5,9 +5,9 @@ public abstract class HabilidadSoporte extends Habilidad {
     private int cooldownMax;
     private int cooldownActual;
 
-    public HabilidadSoporte(String nombre, String descripcion, int costoMana, int valorBase, int cooldownMax) {
+    public HabilidadSoporte(String nombre, String descripcion, String tipo, int costoMana, int valorBase, int cooldownMax) {
 
-        super(nombre, descripcion, costoMana, valorBase);
+        super(nombre, descripcion, tipo, costoMana, valorBase);
 
         this.cooldownMax = cooldownMax;
         this.cooldownActual = 0;

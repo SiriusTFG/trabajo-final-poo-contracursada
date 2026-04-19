@@ -3,13 +3,15 @@ package Modelo;
 public abstract class Habilidad {
     private String nombre;
     private String descripcion;
+    private String tipo;
     private int costoMana;
     protected int valorBase; //Puede representar daño, curación, etc., dependiendo del tipo de habilidad
 
-    public Habilidad(String nombre, String descripcion, int costoMana, int valorBase) {
+    public Habilidad(String nombre, String descripcion, String tipo, int costoMana, int valorBase) {
 
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.tipo = tipo;
         this.costoMana = costoMana;
         this.valorBase = valorBase;
     }
@@ -23,6 +25,7 @@ public abstract class Habilidad {
     //Getters
     public String getNombre() {return nombre;}
     public String getDescripcion() {return descripcion;}
+    public String getTipo() {return tipo;}
     public int getCostoMana() {return costoMana;}
     public int getValorBase() {return valorBase;}
 }

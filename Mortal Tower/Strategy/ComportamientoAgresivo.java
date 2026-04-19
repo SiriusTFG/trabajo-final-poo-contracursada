@@ -22,7 +22,7 @@ public class ComportamientoAgresivo implements ComportamientoEnemigo {
         }
 
         //utiliza la habilidad elegida
-        mejorHabildad.ejecutarEfecto(); 
+        mejorHabildad.ejecutarHabilidad(enemigo, objetivo); 
     }
     
 }

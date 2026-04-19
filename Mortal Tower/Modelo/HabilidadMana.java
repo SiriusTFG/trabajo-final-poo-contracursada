@@ -2,9 +2,9 @@ package Modelo;
 
 public class HabilidadMana extends HabilidadSoporte {
 
- public HabilidadMana(String nombre, String descripcion, int costoMana, int valorBase, int cooldownMax) {
+ public HabilidadMana(String nombre, String descripcion, String tipo, int costoMana, int valorBase, int cooldownMax) {
 
-        super(nombre, descripcion, costoMana, valorBase, cooldownMax);
+        super(nombre, descripcion, tipo, costoMana, valorBase, cooldownMax);
     }
 
     @Override

@@ -4,9 +4,9 @@ public class HabilidadDefensa extends Habilidad {
 
     private double reduccionDaño; // ej: 0.5 = reduce 50%
 
-    public HabilidadDefensa(String nombre, String descripcion, int costoMana, int valorBase, double reduccionDaño) {
+    public HabilidadDefensa(String nombre, String descripcion, String tipo, int costoMana, int valorBase, double reduccionDaño) {
 
-        super(nombre, descripcion, costoMana, valorBase);
+        super(nombre, descripcion, tipo, costoMana, valorBase);
 
         this.reduccionDaño = reduccionDaño;
     }

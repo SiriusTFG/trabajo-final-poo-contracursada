@@ -5,9 +5,9 @@ public class HabilidadAtaque extends Habilidad {
     private double probabilidadCritico; //porcentaje que representa la probabilidad de un golpe crítico
     private int bonusCritico; //cantidad adicional de daño que se aplica si el ataque es crítico
 
-    public HabilidadAtaque(String nombre, String descripcion, int costoMana, int valorBase, double probabilidadCritico, int bonusCritico) {
+    public HabilidadAtaque(String nombre, String descripcion, String tipo, int costoMana, int valorBase, double probabilidadCritico, int bonusCritico) {
 
-        super(nombre, descripcion, costoMana, valorBase);
+        super(nombre, descripcion, tipo, costoMana, valorBase);
 
         this.probabilidadCritico = probabilidadCritico;
         this.bonusCritico = bonusCritico;
@@ -27,6 +27,6 @@ public class HabilidadAtaque extends Habilidad {
             daño += bonusCritico; //aplica el bonus de crítico al daño total
         }
 
-        objetivo.recibirDaño(daño);
+        objetivo.recibirDanio(daño);
     }
 }
