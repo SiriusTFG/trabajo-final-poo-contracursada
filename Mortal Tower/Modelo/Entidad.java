@@ -11,6 +11,7 @@ public abstract class Entidad {
         this.vidaMax = vida;
         this.vidaActual = vidaMax;
         this.manaMax = mana;
+        this.manaActual = mana;
     }
 
     public abstract void realizarTurno(Entidad objetivo);
@@ -23,6 +24,7 @@ public abstract class Entidad {
 
     public void usarMana(int cantidad) {
         this.manaActual -= cantidad;
+        if (this.manaActual < 0) this.manaActual = 0;
     }
 
     public Habilidad[] getHabilidades() {
