@@ -1,15 +1,30 @@
 package Controlador;
 
-import java.util.Scanner;
 import Modelo.*;
+import Strategy.ComportamientoAgresivo;
+import Strategy.ComportamientoEnemigo;
 import Vista.ConsolaVista;
+import java.util.Scanner;
 
 public class JuegoControlador {
 
     private ConsolaVista vista;
+    private Entidad enemigo;
+    private Entidad[] personajes = new Entidad[4];
 
     public JuegoControlador() {
         this.vista = new ConsolaVista();
+        crearEnemigo();
+        crearPersonaje();
+    }
+
+    private void crearEnemigo() {
+        ComportamientoEnemigo comportamiento = new ComportamientoAgresivo();
+        enemigo = new Enemigo("zombie", 100, 100, comportamiento);
+    }
+
+    private void crearPersonaje() {
+        personajes[1] = new Heroe("Caballero", 100, 100);
     }
 
     public void iniciarJuego() {
@@ -39,6 +54,8 @@ public class JuegoControlador {
                 heroe = new Mago();
 
         }
+
+        enemigo.realizarTurno(heroe);
         vista.mostrarMensaje("Elegiste: " + heroe.getClass().getSimpleName());
         vista.mostrarMensaje("Vida actual: " + heroe.getVidaActual());
         vista.mostrarMensaje("Mana actual: " + heroe.getManaActual());
