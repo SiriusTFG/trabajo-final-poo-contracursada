@@ -10,16 +10,18 @@ public class ComportamientoDefensivo implements ComportamientoEnemigo {
     public void accionEnemigo(Enemigo enemigo, Entidad objetivo) {
         Habilidad mejorHabilidad = null;
 
-        if (enemigo.getManaActual() <= (enemigo.getManaMax() * 0.3)) {
+        /* if (enemigo.getManaActual() <= (enemigo.getManaMax() * 0.3)) {
             mejorHabilidad = buscarHabilidadPorTipo(enemigo, "Mana");
-        }
+        } */
         
         if (enemigo.getVidaActual() < (enemigo.getVidaMax() * 0.3)) {
             mejorHabilidad = buscarHabilidadPorTipo(enemigo, "Curacion");
         }
 
-        if (enemigo.getVidaActual() <= (enemigo.getVidaMax() * 0.5)) {
-            mejorHabilidad = buscarHabilidadPorTipo(enemigo, "Defensa");
+        if (mejorHabilidad == null && enemigo.getVidaActual() <= (enemigo.getVidaMax() * 0.5)) {
+            if (enemigo.getDefensa() == 1.0) { 
+                mejorHabilidad = buscarHabilidadPorTipo(enemigo, "Defensa");
+            }
         }
 
         if (mejorHabilidad == null) {
@@ -27,8 +29,12 @@ public class ComportamientoDefensivo implements ComportamientoEnemigo {
         }
 
         if (mejorHabilidad != null) {
-            System.out.println(enemigo.getNombre() + "usa: " + mejorHabilidad.getNombre());
+            System.out.println(enemigo.getNombre() + " usa: " + mejorHabilidad.getNombre());
             mejorHabilidad.ejecutarHabilidad(enemigo, objetivo);
+        } else {
+            mejorHabilidad = buscarHabilidadPorTipo(enemigo, "Mana");
+             System.out.println(enemigo.getNombre() + " usa: " + mejorHabilidad.getNombre());
+             mejorHabilidad.ejecutarHabilidad(enemigo, objetivo);
         }
         
         

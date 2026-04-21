@@ -18,15 +18,15 @@ public class HabilidadAtaque extends Habilidad {
 
         if (!puedeUsarse(usuario)) return;
 
-        int daño = valorBase + usuario.getAtaque() - objetivo.getDefensa(); //calcula el daño base de la habilidad, considerando el ataque del usuario y la defensa del objetivo (suponiendo que la defensa del enemigo es pasiva)
+        int daño = valorBase + usuario.getAtaque(); //calcula el daño base de la habilidad, considerando el ataque del usuario y la defensa del objetivo (suponiendo que la defensa del enemigo es pasiva)
         daño = Math.max(daño, 0);
 
-        boolean critico = Math.random() < probabilidadCritico;
-
-        if (critico) {
-            daño += bonusCritico; //aplica el bonus de crítico al daño total
+        if (Math.random() < probabilidadCritico) {
+            daño += bonusCritico;
+            System.out.println("¡GOLPE CRÍTICO!");
         }
 
         objetivo.recibirDanio(daño);
+        usuario.usarMana(getCostoMana());
     }
 }

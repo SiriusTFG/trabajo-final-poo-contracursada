@@ -2,7 +2,7 @@ package Controlador;
 
 import Modelo.*;
 import Strategy.ComportamientoAgresivo;
-import Strategy.ComportamientoEnemigo;
+import Strategy.ComportamientoDefensivo;
 import Vista.ConsolaVista;
 import java.util.Scanner;
 
@@ -10,21 +10,59 @@ public class JuegoControlador {
 
     private ConsolaVista vista;
     private Entidad enemigo;
-    private Entidad[] personajes = new Entidad[4];
+    private Entidad[] personajes = new Entidad[3];
 
     public JuegoControlador() {
         this.vista = new ConsolaVista();
-        crearEnemigo();
         crearPersonaje();
     }
 
-    private void crearEnemigo() {
-        ComportamientoEnemigo comportamiento = new ComportamientoAgresivo();
-        enemigo = new Enemigo("zombie", 100, 100, comportamiento);
+    private void ejecutarSimulacion() {
+        Entidad zombie = new Enemigo("Herrero Zombie", 100, 50, new ComportamientoAgresivo());
+        Entidad cuervo = new Enemigo("Cuervo Sombrio", 120, 100, new ComportamientoDefensivo());
+
+        zombie.setHabilidad(0, new HabilidadAtaque("Desgarrar", "Ulti", "Ataque", 30, 40, 0.5, 10));
+        zombie.setHabilidad(1, new HabilidadAtaque("Mordida", "Daño leve", "Ataque", 10, 10, 0.2, 10));
+        zombie.setHabilidad(2, new HabilidadAtaque("Rasguño", "Daño leve", "Ataque", 5, 5, 0.1, 10));
+        zombie.setHabilidad(3, new HabilidadMana("Descansar", "Aumenta mana", "Mana", 0, 20, 5));
+
+        cuervo.setHabilidad(0, new HabilidadAtaque("Golpe Aereo", "Ulti", "Ataque", 35, 30, 0.5, 10));
+        cuervo.setHabilidad(1, new HabilidadCuracion("Curacion", "Cura heridas", "Curacion", 30,45, 3));
+        cuervo.setHabilidad(2, new HabilidadDefensa("Escudo de alas", "Defensa de ataque", "Defensa", 20, 0, 0.5));
+        cuervo.setHabilidad(3, new HabilidadMana("Descansar", "Aumenta mana", "Mana", 0, 20, 5));
+
+       vista.mostrarMensaje("=== INICIO DE LA SIMULACIÓN DE COMBATE ===");
+       vista.mostrarMensaje(zombie.getNombre() + " vs " + cuervo.getNombre());
+
+       int turno = 1;
+       while (zombie.getVidaActual() > 0 && cuervo.getVidaActual() > 0) {
+        vista.mostrarMensaje("\n--- TURNO " + turno + " ---");
+
+        // Turno del Zombie
+        zombie.realizarTurno(cuervo);
+        
+        if (cuervo.getVidaActual() <= 0) {
+            vista.mostrarMensaje("¡El " + zombie.getNombre() + " ha ganado la simulación!");
+            break;
+        }
+
+        // Turno del Jefe
+        cuervo.realizarTurno(zombie);
+
+        if (zombie.getVidaActual() <= 0) {
+            vista.mostrarMensaje("¡El " + cuervo.getNombre() + " ha ganado la simulación!");
+            break;
+        }
+
+        turno++;
+        if(turno > 20) break;
+       }
+       vista.mostrarMensaje("=== FIN DE LA SIMULACIÓN ===");
+
     }
 
     private void crearPersonaje() {
-        personajes[1] = new Heroe("Caballero", 100, 100);
+        personajes[0] = new Heroe("Caballero", 100, 100);
     }
 
     public void iniciarJuego() {
@@ -55,9 +93,10 @@ public class JuegoControlador {
 
         }
 
-        enemigo.realizarTurno(heroe);
         vista.mostrarMensaje("Elegiste: " + heroe.getClass().getSimpleName());
         vista.mostrarMensaje("Vida actual: " + heroe.getVidaActual());
         vista.mostrarMensaje("Mana actual: " + heroe.getManaActual());
+
+        ejecutarSimulacion();
     }
 }

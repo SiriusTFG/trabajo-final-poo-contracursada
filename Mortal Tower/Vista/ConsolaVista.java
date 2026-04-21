@@ -14,5 +14,4 @@ public class ConsolaVista {
         System.out.println("4. Caballero");
     }
 
-
 }
