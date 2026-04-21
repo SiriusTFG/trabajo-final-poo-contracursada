@@ -1,6 +1,6 @@
 package Modelo;
 
-public abstract class HabilidadSoporte extends Habilidad {
+public abstract class HabilidadSoporte extends Habilidad { //Esta clase ya no se usaria, NO BORRAR POR LAS DUDAs
 
     private int cooldownMax;
     private int cooldownActual;
