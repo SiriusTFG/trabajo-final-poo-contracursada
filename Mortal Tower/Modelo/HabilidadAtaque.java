@@ -3,7 +3,7 @@ package Modelo;
 public class HabilidadAtaque extends Habilidad {
 
     private double probabilidadCritico; //porcentaje que representa la probabilidad de un golpe crítico
-    private int bonusCritico; //cantidad adicional de daño que se aplica si el ataque es crítico
+    private int bonusCritico;           //cantidad adicional de daño que se aplica si el ataque es crítico
 
     public HabilidadAtaque(String nombre, String descripcion, String tipo, int costoMana, int valorBase, double probabilidadCritico, int bonusCritico) {
 
@@ -18,8 +18,8 @@ public class HabilidadAtaque extends Habilidad {
 
         if (!puedeUsarse(usuario)) return;
 
-        int daño = valorBase + usuario.getAtaque(); //calcula el daño base de la habilidad, considerando el ataque del usuario y la defensa del objetivo (suponiendo que la defensa del enemigo es pasiva)
-        daño = Math.max(daño, 0);
+        int daño = valorBase + usuario.getAtaque();
+        daño = Math.max(daño, 0); //asegura que el daño nunca sea negativo.
 
         if (Math.random() < probabilidadCritico) {
             daño += bonusCritico;
