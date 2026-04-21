@@ -18,7 +18,7 @@ public class HabilidadAtaque extends Habilidad {
 
         if (!puedeUsarse(usuario)) return;
 
-        int daño = valorBase;        //calcula el daño base de la habilidad, considerando el ataque del usuario y la defensa del objetivo (suponiendo que la defensa del enemigo es pasiva)
+        int daño = valorBase;
         daño = Math.max(daño, 0); //asegura que el daño nunca sea negativo.
 
         boolean critico = Math.random() < probabilidadCritico;

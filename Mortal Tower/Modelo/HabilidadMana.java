@@ -13,7 +13,7 @@ public class HabilidadMana extends HabilidadSoporte {
         if (!puedeUsarse(usuario)) return;
 
         usuario.recuperarMana(valorBase);
-        usuario.gastarMana(getCostoMana());
+        usuario.usarMana(getCostoMana());
 
         activarCooldown();
     }
