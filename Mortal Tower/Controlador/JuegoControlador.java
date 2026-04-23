@@ -1,10 +1,11 @@
 package Controlador;
 
+import java.util.Scanner;
+
 import Modelo.*;
 import Strategy.ComportamientoAgresivo;
 import Strategy.ComportamientoDefensivo;
 import Vista.ConsolaVista;
-import java.util.Scanner;
 
 public class JuegoControlador {
 
