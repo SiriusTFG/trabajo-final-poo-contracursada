@@ -10,20 +10,18 @@ import java.awt.image.BufferedImage;
 
 public class MenuPrincipal extends JPanel {
 
+    private Image fondo;
+
     private BufferedImage nueva;
     private BufferedImage opciones;
     private BufferedImage salir;
-
-    private Image fondo;
 
     private int selectedIndex = 0;
 
     public MenuPrincipal() {
 
         // Fondo
-        fondo = new ImageIcon(
-                getClass().getResource("/assets/Imagenes/MenuInicio/Fondo.jpg")
-        ).getImage();
+        fondo = new ImageIcon(getClass().getResource("/assets/Imagenes/MenuInicio/Fondo.jpg")).getImage();
 
         // Cargar sprites
         try {
@@ -32,9 +30,11 @@ public class MenuPrincipal extends JPanel {
             salir = ImageIO.read(getClass().getResource("/assets/Imagenes/MenuInicio/salir.png"));
 
         } catch (Exception e) {
+            
             e.printStackTrace();
         }
 
+        
         // Teclado
         setFocusable(true);
 
@@ -61,7 +61,7 @@ public class MenuPrincipal extends JPanel {
         });
     }
 
-    // 🔥 Sprites verticales (normal / seleccionado)
+    //Sprites
     private Image getSprite(BufferedImage img, boolean selected) {
 
         int width = img.getWidth();
@@ -70,26 +70,6 @@ public class MenuPrincipal extends JPanel {
         int y = selected ? height : 0;
 
         return img.getSubimage(0, y, width, height);
-    }
-
-    // 🎮 Acciones del menú
-    private void ejecutarOpcion() {
-
-        switch (selectedIndex) {
-
-            case 0:
-                System.out.println("Nueva Partida");
-                break;
-
-            case 1:
-                System.out.println("Opciones");
-                break;
-
-            case 2:
-                System.out.println("Salir");
-                System.exit(0);
-                break;
-        }
     }
 
     @Override
@@ -112,6 +92,26 @@ public class MenuPrincipal extends JPanel {
             Image sprite = getSprite(imgs[i], selected);
 
             g.drawImage(sprite, x, y + i * spacing, 300, 100, this);
+        }
+    }
+
+    // Acciones del menú
+    private void ejecutarOpcion() {
+
+        switch (selectedIndex) {
+
+            case 0:
+                System.out.println("Nueva Partida");
+                break;
+
+            case 1:
+                System.out.println("Opciones");
+                break;
+
+            case 2:
+                System.out.println("Salir");
+                System.exit(0);
+                break;
         }
     }
 }

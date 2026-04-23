@@ -1,48 +1,39 @@
 package Controlador;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-public class Teclado implements KeyListener {
+public class Teclado {
 
-    public boolean arriba, abajo, derecha, izquierda;
+    public boolean up, down, left, right, select, back;
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
+    public void keyPressed(int key) {
+
+        switch (key) {
+
+            case KeyEvent.VK_UP -> up = true;
+            case KeyEvent.VK_DOWN -> down = true;
+            case KeyEvent.VK_LEFT -> left = true;
+            case KeyEvent.VK_RIGHT -> right = true;
+            case KeyEvent.VK_ENTER -> select = true;
+            case KeyEvent.VK_ESCAPE -> back = true;
+        }
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-        
-        int code = e.getKeyCode();
+    public void keyReleased(int key) {
 
-        if(code == KeyEvent.VK_UP){arriba = true;}
+        switch (key) {
 
-        if(code == KeyEvent.VK_DOWN){abajo = true;}
-
-        if(code == KeyEvent.VK_LEFT){izquierda = true;}
-
-        if(code == KeyEvent.VK_RIGHT){derecha = true;}
-
+            case KeyEvent.VK_UP -> up = false;
+            case KeyEvent.VK_DOWN -> down = false;
+            case KeyEvent.VK_LEFT -> left = false;
+            case KeyEvent.VK_RIGHT -> right = false;
+            case KeyEvent.VK_ENTER -> select = false;
+            case KeyEvent.VK_ESCAPE -> back = false;
+        }
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-        
-        int code = e.getKeyCode();
-
-        if(code == KeyEvent.VK_UP){arriba = false;}
-
-        if(code == KeyEvent.VK_DOWN){abajo = false;}
-
-        if(code == KeyEvent.VK_LEFT){izquierda = false;}
-
-        if(code == KeyEvent.VK_RIGHT){derecha = false;}
-
+    public void resetActions() {
+        select = false;
+        back = false;
     }
-
-    
-    
 }
