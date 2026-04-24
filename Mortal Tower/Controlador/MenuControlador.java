@@ -1,47 +1,54 @@
 package Controlador;
 
-import java.awt.event.KeyListener;
-
 import Modelo.MenuModelo;
-import Vista.MenuPrincipal;
 
-public class MenuControlador{
+public class MenuControlador {
+
+    private SonidoControlador musica = new SonidoControlador();
+    private SonidoControlador efectos = new SonidoControlador();
+
+    private long ultimoInput = 0;
+    private final long cooldown = 120;
 
     private MenuModelo menuModelo;
     private Teclado teclado;
-    //private MenuPrincipal menuPrincipal;
 
-    public MenuControlador(MenuModelo menuModelo,  Teclado teclado){
-
+    public MenuControlador(MenuModelo menuModelo, Teclado teclado) {
         this.menuModelo = menuModelo;
-        //this.menuPrincipal = menuPrincipal;
-        this.teclado= teclado;
+        this.teclado = teclado;
 
-        //menuPrincipal.addKeyListener(teclado);
-
-
+        musica.loop(0); // música de fondo
     }
 
     public void update() {
 
-        if (teclado.up) {
-            System.out.println("aribaaaaaaaa");
+        long now = System.currentTimeMillis();
+
+        if (teclado.up && now - ultimoInput > cooldown) {
+            efectos.play(1);
+            System.out.println("arriba");
             menuModelo.arriba();
             teclado.up = false;
+
+            ultimoInput = now;
         }
 
-        if (teclado.down){
-            System.out.println("abajoooooooooooooo");
+        if (teclado.down && now - ultimoInput > cooldown) {
+            efectos.play(1);
+            System.out.println("abajo");
             menuModelo.abajo();
             teclado.down = false;
+
+            ultimoInput = now;
         }
 
-        if (teclado.select){
-
+        if (teclado.select && now - ultimoInput > cooldown) {
+            System.out.println("enter");
             ejecutar();
             teclado.select = false;
-        }
 
+            ultimoInput = now;
+        }
     }
 
     private void ejecutar() {
@@ -50,6 +57,8 @@ public class MenuControlador{
 
         switch (opcion) {
             case 0:
+                efectos.play(2);
+                musica.stop(0);
                 System.out.println("nueva partida");
                 break;
             case 1:
@@ -62,8 +71,6 @@ public class MenuControlador{
             default:
                 System.out.println("Opción inválida: " + opcion);
                 break;
+        }
     }
-}
-
-    
 }
