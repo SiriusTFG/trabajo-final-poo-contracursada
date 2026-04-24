@@ -1,12 +1,16 @@
 package Controlador;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class Teclado {
+public class Teclado implements KeyListener {
 
     public boolean up, down, left, right, select, back;
 
-    public void keyPressed(int key) {
+
+    public void keyPressed(KeyEvent e) {
+
+        int key = e.getKeyCode();
 
         switch (key) {
 
@@ -19,7 +23,9 @@ public class Teclado {
         }
     }
 
-    public void keyReleased(int key) {
+    public void keyReleased(KeyEvent e) {
+
+        int key = e.getKeyCode();
 
         switch (key) {
 
@@ -36,4 +42,8 @@ public class Teclado {
         select = false;
         back = false;
     }
+
+    @Override
+    public void keyTyped(KeyEvent e) {}
+
 }

@@ -1,15 +1,14 @@
 package Vista;
 
+import javax.swing.*;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import Modelo.MenuModelo;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 public class MenuPrincipal extends JPanel {
 
+    private MenuModelo menuModelo;
     private Image fondo;
 
     private BufferedImage nueva;
@@ -18,7 +17,9 @@ public class MenuPrincipal extends JPanel {
 
     private int selectedIndex = 0;
 
-    public MenuPrincipal() {
+    public MenuPrincipal(MenuModelo menuModelo) {
+
+        this.menuModelo = menuModelo;
 
         // Fondo
         fondo = new ImageIcon(getClass().getResource("/assets/Imagenes/MenuInicio/Fondo.jpg")).getImage();
@@ -38,7 +39,7 @@ public class MenuPrincipal extends JPanel {
         // Teclado
         setFocusable(true);
 
-        addKeyListener(new KeyAdapter() {
+        /*addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
 
@@ -58,7 +59,7 @@ public class MenuPrincipal extends JPanel {
                     ejecutarOpcion();
                 }
             }
-        });
+        });*/
     }
 
     //Sprites
@@ -79,6 +80,7 @@ public class MenuPrincipal extends JPanel {
         // Fondo
         g.drawImage(fondo, 0, 0, getWidth(), getHeight(), this);
 
+        // Opciones
         int x = 100;
         int y = 430;
         int spacing = 120;
@@ -87,31 +89,21 @@ public class MenuPrincipal extends JPanel {
 
         for (int i = 0; i < imgs.length; i++) {
 
-            boolean selected = (i == selectedIndex);
+            //boolean selected = (i == selectedIndex);
+            boolean selected;
 
-            Image sprite = getSprite(imgs[i], selected);
+            Image sprite;
+
+            if(i ==menuModelo.getSeleccion()){
+                selected = true;
+                sprite = getSprite(imgs[i], selected);
+            }else { 
+                selected = false;
+                sprite = getSprite(imgs[i], selected);
+            }
 
             g.drawImage(sprite, x, y + i * spacing, 300, 100, this);
         }
     }
 
-    // Acciones del menú
-    private void ejecutarOpcion() {
-
-        switch (selectedIndex) {
-
-            case 0:
-                System.out.println("Nueva Partida");
-                break;
-
-            case 1:
-                System.out.println("Opciones");
-                break;
-
-            case 2:
-                System.out.println("Salir");
-                System.exit(0);
-                break;
-        }
-    }
 }
