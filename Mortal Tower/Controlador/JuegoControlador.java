@@ -75,24 +75,7 @@ public class JuegoControlador {
         int opcion = sc.nextInt();
 
         Heroe heroe = null;
-        switch (opcion) {
-            case 1:
-                heroe = new Mago();
-                break;
-            case 2:
-                heroe = new Orco();
-                break;
-            case 3:
-                heroe = new Elfo();
-                break;
-            case 4:
-                heroe = new Caballero();
-                break;
-            default:
-                vista.mostrarMensaje("Opción inválida. Se seleccionará Mago por defecto.");
-                heroe = new Mago();
-
-        }
+     
 
         vista.mostrarMensaje("Elegiste: " + heroe.getClass().getSimpleName());
         vista.mostrarMensaje("Vida actual: " + heroe.getVidaActual());
