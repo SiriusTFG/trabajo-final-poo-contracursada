@@ -11,7 +11,7 @@ public class JuegoControlador {
 
     private ConsolaVista vista;
     private Entidad enemigo;
-    private Entidad[] personajes = new Entidad[3];
+    private Entidad[] personajes = new Entidad[2];
 
     public JuegoControlador() {
         this.vista = new ConsolaVista();
