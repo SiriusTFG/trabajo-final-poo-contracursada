@@ -4,11 +4,11 @@ import Modelo.MenuOpcionesModelo;
 import java.awt.Color;
 import java.awt.Graphics;
 
-public class MenuOpciones {
+public class OpcionesVista {
 
     private MenuOpcionesModelo modelo;
 
-    public MenuOpciones(MenuOpcionesModelo modelo) {
+    public OpcionesVista(MenuOpcionesModelo modelo) {
         this.modelo = modelo;
     }
 
