@@ -1,28 +1,28 @@
 package Vista;
 
-import Modelo.MenuOpcionesModelo;
+import Modelo.OpcionesModelo;
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 public class OpcionesVista {
 
-    private MenuOpcionesModelo modelo;
+    private OpcionesModelo modelo;
 
-    public OpcionesVista(MenuOpcionesModelo modelo) {
+    public OpcionesVista(OpcionesModelo modelo) {
         this.modelo = modelo;
     }
 
-    public void render(Graphics g, int width, int height) {
+    public void draw(Graphics2D g) {
 
-        // 🌑 overlay oscuro
-        g.setColor(new Color(0, 0, 0, 160));
-        g.fillRect(0, 0, width, height);
+        // overlay oscuro
+        g.setColor(new Color(0, 0, 0, 140));
+        g.fillRect(0, 0, 600, 800);
 
         // 🪟 panel central
         int panelW = 400;
         int panelH = 300;
-        int x = (width - panelW) / 2;
-        int y = (height - panelH) / 2;
+        int x = (600 - panelW) / 2;
+        int y = (800 - panelH) / 2;
 
         g.setColor(Color.DARK_GRAY);
         g.fillRoundRect(x, y, panelW, panelH, 20, 20);
@@ -30,7 +30,7 @@ public class OpcionesVista {
         g.setColor(Color.WHITE);
         g.drawString("OPCIONES", x + 160, y + 40);
 
-        // 📋 opciones normales
+        // opciones normales
         if (!modelo.isEnVolumen()) {
 
             String[] ops = modelo.getOpciones();
@@ -50,7 +50,7 @@ public class OpcionesVista {
             g.drawString("ENTER = seleccionar | ESC = volver", x + 80, y + panelH - 30);
         }
 
-        // 🎚️ submenú volumen
+        // submenú volumen
         else {
 
             g.setColor(Color.WHITE);

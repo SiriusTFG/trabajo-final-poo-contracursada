@@ -1,11 +1,9 @@
 package Controlador;
 
 import javax.swing.*;
-
+import java.awt.*;
 import GameState.GameState;
 import GameState.MenuState;
-
-import java.awt.*;
 
 public class Game extends JPanel implements Runnable {
 
@@ -16,12 +14,13 @@ public class Game extends JPanel implements Runnable {
     private Teclado input;
 
     public Game(Teclado input) {
+
         this.input = input;
 
         setFocusable(true);
         addKeyListener(input);
 
-        setState(new MenuState(input, this));
+        setState(new MenuState(input, this)); //nos muestra la primer pantalla(menuPrincipal)
     }
 
     public void setState(GameState newState) {

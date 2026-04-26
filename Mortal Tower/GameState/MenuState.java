@@ -8,8 +8,6 @@ import Controlador.Teclado;
 import Modelo.MenuModelo;
 import Vista.MenuPrincipal;
 
-import java.awt.Graphics2D;
-
 public class MenuState implements GameState {
 
     private MenuModelo model;
@@ -19,9 +17,7 @@ public class MenuState implements GameState {
     public MenuState(Teclado teclado, Game game) {
 
         model = new MenuModelo();
-
         controller = new MenuControlador(model, teclado, game);
-
         view = new MenuPrincipal(model);
     }
 

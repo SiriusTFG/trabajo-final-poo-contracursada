@@ -1,5 +1,6 @@
 package Controlador;
 
+import GameState.OpcioneState;
 import Modelo.MenuModelo;
 
 public class MenuControlador {
@@ -64,7 +65,9 @@ public class MenuControlador {
                 //game.setState(new PlayState(game, teclado)); // 👈 cambio de estado
             }
 
-            case 1 -> System.out.println("Opciones");
+            case 1 -> {System.out.println("Opciones");
+                game.setState(new OpcioneState(teclado, game));
+            }
 
             case 2 -> System.exit(0);
         }
