@@ -1,6 +1,6 @@
 package Modelo;
 
-public class MenuOpcionesModelo {
+public class OpcionesModelo {
 
     private String[] opciones = {
         "Volumen",

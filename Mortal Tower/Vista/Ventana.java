@@ -1,13 +1,10 @@
 package Vista;
 
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 public class Ventana extends JFrame {
 
-    private JPanel panel;
-    private CardLayout cardLayout;
     private boolean isUndecorated = false; // Estado actual del frame
 
     public Ventana() {
@@ -16,11 +13,6 @@ public class Ventana extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setResizable(false);
-
-        cardLayout = new CardLayout();
-        panel = new JPanel(cardLayout);
-
-        add(panel, BorderLayout.CENTER);
 
         // Key Binding para F11
         agregarKeyBindingF11();
@@ -56,9 +48,6 @@ public class Ventana extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-
-    public JPanel getPanel() { return panel; }
-    public CardLayout getCardLayout() { return cardLayout; }
 
     
 }

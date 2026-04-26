@@ -7,26 +7,19 @@ import Modelo.MenuModelo;
 import Vista.MenuPrincipal;
 import Vista.Ventana;
 
+import javax.swing.JFrame;
+
 public class Main {
 
     public static void main(String[] args) {
-        
-        MenuModelo menuModelo = new MenuModelo();
-        MenuPrincipal menuPrincipal = new MenuPrincipal(menuModelo);
-        Teclado teclado = new Teclado();
 
-        menuPrincipal.addKeyListener(teclado);
-
-        MenuControlador menuControlador = new MenuControlador(menuModelo, teclado);
-
+        Teclado input = new Teclado();
         Ventana ventana = new Ventana();
-        ventana.add(menuPrincipal);
+        Game game = new Game(input);
+
+        ventana.add(game);
         ventana.setVisible(true);
 
-        //menuPrincipal.setFocusable(true);
-        menuPrincipal.requestFocusInWindow();
-
-        Timer timer = new Timer(16, e-> {menuControlador.update(); menuPrincipal.repaint();});
-        timer.start();
+        game.startGame();
     }
 }

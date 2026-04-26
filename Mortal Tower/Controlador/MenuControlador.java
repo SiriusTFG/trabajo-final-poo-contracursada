@@ -1,5 +1,6 @@
 package Controlador;
 
+import GameState.OpcioneState;
 import Modelo.MenuModelo;
 
 public class MenuControlador {
@@ -12,10 +13,12 @@ public class MenuControlador {
 
     private MenuModelo menuModelo;
     private Teclado teclado;
+    private Game game;
 
-    public MenuControlador(MenuModelo menuModelo, Teclado teclado) {
+    public MenuControlador(MenuModelo menuModelo, Teclado teclado, Game game) {
         this.menuModelo = menuModelo;
         this.teclado = teclado;
+        this.game = game;
 
         musica.loop(0); // música de fondo
     }
@@ -52,25 +55,21 @@ public class MenuControlador {
     }
 
     private void ejecutar() {
-        int opcion = menuModelo.getSeleccion();
-        System.out.println("Seleccion actual: " + opcion);
 
-        switch (opcion) {
-            case 0:
+        switch (menuModelo.getSeleccion()) {
+
+            case 0 -> {
                 efectos.play(2);
                 musica.stop(0);
-                System.out.println("nueva partida");
-                break;
-            case 1:
-                System.out.println("opciones");
-                break;
-            case 2:
-                System.out.println("saliendo...");
-                System.exit(0);
-                break;
-            default:
-                System.out.println("Opción inválida: " + opcion);
-                break;
+                System.out.println("Nueva partida");
+                //game.setState(new PlayState(game, teclado)); // 👈 cambio de estado
+            }
+
+            case 1 -> {System.out.println("Opciones");
+                game.setState(new OpcioneState(teclado, game));
+            }
+
+            case 2 -> System.exit(0);
         }
     }
 }
