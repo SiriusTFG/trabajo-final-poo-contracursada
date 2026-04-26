@@ -9,7 +9,7 @@ public abstract class Habilidad {
     private int cooldownMax;    
     private int cooldownActual;
 
-    public Habilidad(String nombre, String descripcion, String tipo, int costoMana, int valorBase, int cooldownMax, int cooldownActual) {
+    public Habilidad(String nombre, String descripcion, String tipo, int costoMana, int valorBase, int cooldownMax) {
 
         this.nombre = nombre;
         this.descripcion = descripcion;
@@ -18,7 +18,7 @@ public abstract class Habilidad {
         this.valorBase = valorBase;
 
         this.cooldownMax = cooldownMax;
-        this.cooldownActual = cooldownActual;
+        this.cooldownActual = cooldownMax;
     }
 
     public abstract void ejecutarHabilidad(Entidad usuario, Entidad objetivo); //atributos necesarios para ejecutar la habilidad, como el personaje objetivo, el personaje que la ejecuta, etc.

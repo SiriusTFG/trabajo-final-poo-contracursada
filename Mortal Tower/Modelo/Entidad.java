@@ -1,12 +1,14 @@
 package Modelo;
 
 public abstract class Entidad {
+    protected int id;
     protected String nombre;
     protected int vidaActual, vidaMax;
     protected int manaActual, manaMax;
     protected int ataque;
     protected double defensa = 1.0;
     protected Habilidad[] habilidades = new Habilidad[4];
+    protected String rutaImagenPerfil;
 
     public Entidad(String nombre, int vida, int mana) {
         ataque = 0;
@@ -54,7 +56,7 @@ public abstract class Entidad {
         }
     }
 
-    //Getters
+    //Getters y Setters
     public String getNombre() {return nombre;}
     public Habilidad[] getHabilidades() {return habilidades;}
     public int getVidaActual() {return vidaActual;}
@@ -63,4 +65,9 @@ public abstract class Entidad {
     public int getManaMax() {return manaMax;}
     public int getAtaque() {return ataque;}
     public double getDefensa() {return defensa;}
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
+    public void setAtaque(int ataque) {this.ataque = ataque;}
+    public void setRutaImagen(String ruta) {this.rutaImagenPerfil = ruta;}
+
 }

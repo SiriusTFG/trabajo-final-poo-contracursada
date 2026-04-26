@@ -2,9 +2,9 @@ package Modelo;
 
 public class HabilidadCuracion extends Habilidad{
 
-    public HabilidadCuracion(String nombre, String descripcion, String tipo, int costoMana, int valorBase, int cooldownMax, int cooldownActual) {
+    public HabilidadCuracion(String nombre, String descripcion, String tipo, int costoMana, int valorBase, int cooldownMax) {
         
-        super(nombre, descripcion, tipo, costoMana, valorBase, cooldownMax, cooldownActual);
+        super(nombre, descripcion, tipo, costoMana, valorBase, cooldownMax);
     }
 
     @Override
