@@ -11,7 +11,7 @@ public class JuegoControlador {
 
     private ConsolaVista vista;
     private Entidad enemigo;
-    private Entidad[] personajes = new Entidad[2];
+    private Heroe[] personajes = new Heroe[2];
 
     public JuegoControlador() {
         this.vista = new ConsolaVista();
@@ -64,6 +64,7 @@ public class JuegoControlador {
 
     private void crearPersonaje() {
         personajes[0] = new Heroe("Caballero", 100, 100);
+        personajes[1] = new Heroe("Mago", 80, 120);
     }
 
     public void iniciarJuego() {
@@ -71,16 +72,28 @@ public class JuegoControlador {
 
         
         vista.mostrarMensaje("¡Bienvenido a Mortal Tower!");
-        vista.mostrarMenuHeroes();
-        int opcion = sc.nextInt();
+       
+        int opcion;
 
         Heroe heroe = null;
+        do { 
+            vista.mostrarMenuHeroes();
+            opcion = sc.nextInt();
+
+            if (opcion >= 1 && opcion <= 2) {
+                heroe = personajes[opcion - 1];
+                break;
+             } else {
+                vista.mostrarMensaje("Opción no válida, por favor selecciona una opción entre 1 y 2.");
+            }
+        } while (true);
      
 
-        vista.mostrarMensaje("Elegiste: " + heroe.getClass().getSimpleName());
+        vista.mostrarMensaje("Elegiste: " + heroe.getNombre());
         vista.mostrarMensaje("Vida actual: " + heroe.getVidaActual());
         vista.mostrarMensaje("Mana actual: " + heroe.getManaActual());
 
         ejecutarSimulacion();
     }
+    
 }
