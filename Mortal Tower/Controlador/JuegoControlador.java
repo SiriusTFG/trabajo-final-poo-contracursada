@@ -12,6 +12,7 @@ public class JuegoControlador {
     private ConsolaVista vista;
     private Entidad enemigo;
     private Heroe[] personajes = new Heroe[2];
+    private Heroe[] personajes = new Heroe[2];
 
     public JuegoControlador() {
         this.vista = new ConsolaVista();
@@ -65,6 +66,7 @@ public class JuegoControlador {
     private void crearPersonaje() {
         personajes[0] = new Heroe("Caballero", 100, 100);
         personajes[1] = new Heroe("Mago", 80, 120);
+        personajes[1] = new Heroe("Mago", 80, 120);
     }
 
     public void iniciarJuego() {
@@ -95,5 +97,4 @@ public class JuegoControlador {
 
         ejecutarSimulacion();
     }
-    
 }
