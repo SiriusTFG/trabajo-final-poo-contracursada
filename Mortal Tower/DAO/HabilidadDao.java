@@ -23,7 +23,7 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
         String tablaRelacion = tipoEntidad.equalsIgnoreCase("Heroe") ? "heroe_habilidades" : "enemigo_habilidades";
         String columnaId = tipoEntidad.equalsIgnoreCase("Heroe") ? "id_heroe" : "id_enemigo";
 
-        String sql = "SELECT h. * FROM habilidades h" + 
+        String sql = "SELECT h. * FROM habilidades h " + 
         "JOIN " + tablaRelacion + " rel ON h.id = rel.id_habilidad " + 
         "WHERE rel." + columnaId + "= ? ORDER BY rel.slot ASC";
 
