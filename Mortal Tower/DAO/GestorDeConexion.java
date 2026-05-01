@@ -89,20 +89,21 @@ public class GestorDeConexion {
         "estado TEXT, " + 
         "orden INTEGER, " +
         "ruta_imagen TEXT NOT NULL, " + 
-        "FOREIGN KEY (id_heroe) REFERENCES heroes(id)" + 
-        "FOREIGN KAY (id_enemigo) REFERENCES enemigos(id));";
+        "FOREIGN KEY (id_heroe) REFERENCES heroes(id), " + 
+        "FOREIGN KEY (id_enemigo) REFERENCES enemigos(id));";
 
         String tablaPartidas = "CREATE TABLE IF NOT EXISTS partidas(" +
         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-        "nombre_jugador TEXT NOT NULL, " +
+        "nombre_partida TEXT NOT NULL, " +
         "id_heroe INTEGER NOT NULL, " +
         "nivel_actual INTEGER DEFAULT 1, " +
         "experiencia_actual INTEGER DEFAULT 0, " +
         "vida_actual INTEGER, " + 
         "mana_actual INTEGER, " +
         "ataque_actual INTEGER, " +
+        "defensa_actual REAL, " +
         "piso_torre INTEGER DEFAULT 1, " +
-        "fecha_guardado DATATIME DEFAULT CURRENT_TIMESTAMP, " +
+        "fecha_guardado TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
         "FOREIGN KEY (id_heroe) REFERENCES heroes(id));"; 
 
         try (Statement stmt = this.conexion.createStatement()) {

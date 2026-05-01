@@ -12,6 +12,7 @@ public class JuegoControlador {
     private ConsolaVista vista;
     private Entidad enemigo;
     private Heroe[] personajes = new Heroe[2];
+    private Heroe[] personajes = new Heroe[2];
 
     public JuegoControlador() {
         this.vista = new ConsolaVista();
@@ -65,6 +66,7 @@ public class JuegoControlador {
     private void crearPersonaje() {
         personajes[0] = new Heroe("Caballero", 100, 100);
         personajes[1] = new Heroe("Mago", 80, 120);
+        personajes[1] = new Heroe("Mago", 80, 120);
     }
 
     public void iniciarJuego() {
@@ -88,40 +90,11 @@ public class JuegoControlador {
             }
         } while (true);
      
+
         vista.mostrarMensaje("Elegiste: " + heroe.getNombre());
         vista.mostrarMensaje("Vida actual: " + heroe.getVidaActual());
         vista.mostrarMensaje("Mana actual: " + heroe.getManaActual());
 
         ejecutarSimulacion();
     }
-    private void turnoHeroe(Heroe heroe, Entidad enemigo, Scanner sc) {
-    int opcion;
-    do {
-        vista.mostrarMensaje( "=== TURNO DEL HÉROE ===");
-        vista.mostrarMensaje("1. Atacar");
-        vista.mostrarMensaje("2 - Defender");
-        vista.mostrarMensaje("3 - Usar Habilidad");
-
-        opcion = sc.nextInt();
-
-        switch (opcion) {
-            case 1:
-                heroe.atacar(enemigo);
-                return;
-            case 2:
-                // Implementar defensa
-                heroe.activarDefensa(0.5);
-                vista.mostrarMensaje(heroe.getNombre() + " se defiende, reduciendo el daño recibido en un 50% durante el próximo turno.");
-                return;
-            case 3:
-                // Implementar uso de habilidad
-               vista.mostrarMensaje("Uso de habilidad pendiente"); // Usar la primera habilidad como ejemplo
-                return;
-            default:
-                vista.mostrarMensaje("Opción no válida, por favor selecciona una opción entre 1 y 3.");
-        }
-      
-    } while (true);
-
-}
 }
