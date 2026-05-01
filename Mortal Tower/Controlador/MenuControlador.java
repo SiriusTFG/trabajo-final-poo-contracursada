@@ -20,7 +20,7 @@ public class MenuControlador {
         this.teclado = teclado;
         this.game = game;
 
-        musica.loop(0); // música de fondo
+        //musica.loop(0); // música de fondo
     }
 
     public void update() {
@@ -66,7 +66,7 @@ public class MenuControlador {
             }
 
             case 1 -> {System.out.println("Opciones");
-                game.setState(new OpcioneState(teclado, game));
+                game.setOverlay(new OpcioneState(teclado, game));
             }
 
             case 2 -> System.exit(0);

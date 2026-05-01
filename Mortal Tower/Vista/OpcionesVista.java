@@ -3,64 +3,103 @@ package Vista;
 import Modelo.OpcionesModelo;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 public class OpcionesVista {
 
     private OpcionesModelo modelo;
+    private Image cuadro;
+    private BufferedImage[][] volMusica, volEfecto, controles; // [estado][nivel]
 
     public OpcionesVista(OpcionesModelo modelo) {
         this.modelo = modelo;
+
+        // Sprites
+        try {
+            cuadro = new ImageIcon(getClass().getResource("/assets/Imagenes/Opciones/menuOpciones.png")).getImage();
+
+            BufferedImage Musica = ImageIO.read(getClass().getResource("/assets/Imagenes/Opciones/volMusica.png"));
+            BufferedImage Efecto = ImageIO.read(getClass().getResource("/assets/Imagenes/Opciones/volEfectos.png"));
+            BufferedImage Controles = ImageIO.read(getClass().getResource("/assets/Imagenes/Opciones/controles.png"));
+
+            volMusica = cargarBarra(Musica, 2, 11);
+            volEfecto = cargarBarra(Efecto, 2, 11);
+            controles = cargarBarra(Controles, 2, 1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Image getBarra(BufferedImage[][] barra, int valor, boolean seleccionado) {
+
+        int estado = seleccionado ? 0 : 1;
+
+        int niveles = barra[0].length;
+        int nivel = (int)((valor / 100.0) * (niveles - 1));
+
+        if (nivel < 0) nivel = 0;
+        if (nivel >= niveles) nivel = niveles - 1;
+
+        return barra[estado][nivel];
+    }
+    
+
+
+    // convierte sprite (normal / seleccionado)
+    private BufferedImage[][] cargarBarra(BufferedImage sheet, int estados, int niveles) {
+
+        int spriteWidth = 715;
+        int spriteHeight = 125;
+
+            BufferedImage[][] sprites = new BufferedImage[estados][niveles];
+
+        for (int estado = 0; estado < estados; estado++) {
+            for (int nivel = 0; nivel < niveles; nivel++) {
+
+                sprites[estado][nivel] = sheet.getSubimage(
+                    estado * spriteWidth,
+                    nivel * spriteHeight,
+                    spriteWidth,
+                    spriteHeight
+                );
+            }
+        }
+
+        return sprites;
     }
 
     public void draw(Graphics2D g) {
 
-        // overlay oscuro
-        g.setColor(new Color(0, 0, 0, 140));
-        g.fillRect(0, 0, 600, 800);
+    int width = g.getClipBounds().width;
+    int height = g.getClipBounds().height;
 
-        // 🪟 panel central
-        int panelW = 400;
-        int panelH = 300;
-        int x = (600 - panelW) / 2;
-        int y = (800 - panelH) / 2;
+    g.setColor(new Color(0, 0, 0, 140));
+    g.fillRect(0, 0, width, height);
 
-        g.setColor(Color.DARK_GRAY);
-        g.fillRoundRect(x, y, panelW, panelH, 20, 20);
+    int panelW = 1600;
+    int panelH = 800;
+    int x = (width - panelW) / 2;
+    int y = (height - panelH) / 2;
 
-        g.setColor(Color.WHITE);
-        g.drawString("OPCIONES", x + 160, y + 40);
+    g.drawImage(cuadro, x, y, panelW, panelH, null);
 
-        // opciones normales
-        if (!modelo.isEnVolumen()) {
+    // 🎵 MUSICA
+    g.drawImage(
+        getBarra(volMusica, modelo.getVolumenMusica(), modelo.getSeleccion() == 0),
+        x + 475, y + 200, 650, 110, null
+    );
 
-            String[] ops = modelo.getOpciones();
+    // 🔊 EFECTOS
+    g.drawImage(
+        getBarra(volEfecto, modelo.getVolumenFX(), modelo.getSeleccion() == 1),
+        x + 475, y + 340,650, 110, null
+    );
 
-            for (int i = 0; i < ops.length; i++) {
-
-                if (i == modelo.getSeleccion()) {
-                    g.setColor(Color.YELLOW);
-                } else {
-                    g.setColor(Color.WHITE);
-                }
-
-                g.drawString(ops[i], x + 120, y + 120 + i * 40);
-            }
-
-            g.setColor(Color.LIGHT_GRAY);
-            g.drawString("ENTER = seleccionar | ESC = volver", x + 80, y + panelH - 30);
-        }
-
-        // submenú volumen
-        else {
-
-            g.setColor(Color.WHITE);
-            g.drawString("VOLUMEN", x + 150, y + 100);
-
-            g.drawString("Musica: " + modelo.getVolumenMusica(), x + 120, y + 160);
-            g.drawString("FX: " + modelo.getVolumenFX(), x + 120, y + 200);
-
-            g.setColor(Color.LIGHT_GRAY);
-            g.drawString("ESC = volver", x + 130, y + 260);
-        }
-    }
+    g.drawImage (getBarra(controles, modelo.getcontroles(), modelo.getSeleccion() == 1), x + 475, y + 480, 650, 110, null);
+}
 }

@@ -19,13 +19,13 @@ public class OpcioneState implements GameState {
     public OpcioneState(Teclado teclado, Game game) {
 
         model = new OpcionesModelo();
-        controller = new OpcionesControlador();
+        controller = new OpcionesControlador(model, teclado, game);
         view = new OpcionesVista(model);
     }
 
     @Override
     public void update() {
-        //controller.update();
+        controller.update();
     }
 
     @Override

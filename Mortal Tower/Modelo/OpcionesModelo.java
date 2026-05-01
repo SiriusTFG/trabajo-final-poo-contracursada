@@ -2,24 +2,20 @@ package Modelo;
 
 public class OpcionesModelo {
 
-    private String[] opciones = {
-        "Volumen",
-        "Controles",
-        "Volver"
-    };
-
+    private String[] opciones = {"Musica","Efectos", "Controles"};
     private int seleccion = 0;
 
     // subnivel de volumen
     private int volumenMusica = 5;
     private int volumenFX = 5;
 
+    private int controles;
+
     // estado interno
     private boolean enVolumen = false;
 
     public void arriba() {
         if (enVolumen) return;
-
         seleccion = (seleccion - 1 + opciones.length) % opciones.length;
     }
 
@@ -27,16 +23,6 @@ public class OpcionesModelo {
         if (enVolumen) return;
 
         seleccion = (seleccion + 1) % opciones.length;
-    }
-
-    public void enter() {
-
-        switch (seleccion) {
-
-            case 0 -> enVolumen = true; // entra a volumen
-            case 1 -> System.out.println("Controles (futuro)");
-            case 2 -> {} // volver (lo maneja el controlador)
-        }
     }
 
     public void back() {
@@ -61,13 +47,8 @@ public class OpcionesModelo {
     }
 
     // getters
-    public int getSeleccion() {
-        return seleccion;
-    }
-
-    public String[] getOpciones() {
-        return opciones;
-    }
+    public int getSeleccion() {return seleccion;}
+    public String[] getOpciones() {return opciones;}
 
     public boolean isEnVolumen() {
         return enVolumen;
@@ -75,6 +56,10 @@ public class OpcionesModelo {
 
     public int getVolumenMusica() {
         return volumenMusica;
+    }
+
+    public int getcontroles() {
+        return controles;
     }
 
     public int getVolumenFX() {

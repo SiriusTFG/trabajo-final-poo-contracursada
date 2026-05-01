@@ -1,13 +1,6 @@
 package Controlador;
 
-import java.awt.Menu;
-import javax.swing.*;
-
-import Modelo.MenuModelo;
-import Vista.MenuPrincipal;
 import Vista.Ventana;
-
-import javax.swing.JFrame;
 
 public class Main {
 

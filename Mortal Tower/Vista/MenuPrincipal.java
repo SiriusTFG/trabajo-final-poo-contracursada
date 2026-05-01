@@ -22,11 +22,10 @@ public class MenuPrincipal {
     public MenuPrincipal(MenuModelo menuModelo) {
         this.menuModelo = menuModelo;
 
-        // Fondo
-        fondo = new ImageIcon(getClass().getResource("/assets/Imagenes/MenuInicio/Fondo.jpg")).getImage();
-
         // Sprites
         try {
+            fondo = new ImageIcon(getClass().getResource("/assets/Imagenes/MenuInicio/Fondo.jpg")).getImage();
+
             nueva = ImageIO.read(getClass().getResource("/assets/Imagenes/MenuInicio/nuevaPartida.png"));
             opciones = ImageIO.read(getClass().getResource("/assets/Imagenes/MenuInicio/opciones.png"));
             salir = ImageIO.read(getClass().getResource("/assets/Imagenes/MenuInicio/salir.png"));

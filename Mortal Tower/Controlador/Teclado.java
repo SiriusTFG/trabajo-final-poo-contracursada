@@ -7,7 +7,8 @@ public class Teclado implements KeyListener {
 
     public boolean up, down, left, right, select, back;
 
-
+    //Se ejecuta al apretar una tecla
+    @Override
     public void keyPressed(KeyEvent e) {
 
         int key = e.getKeyCode();
@@ -23,6 +24,8 @@ public class Teclado implements KeyListener {
         }
     }
 
+    //Se ejecuta al soltar una tecla
+    @Override
     public void keyReleased(KeyEvent e) {
 
         int key = e.getKeyCode();
@@ -43,6 +46,8 @@ public class Teclado implements KeyListener {
         back = false;
     }
 
+
+    //se usa para escribir texto y capturar caracteres reales
     @Override
     public void keyTyped(KeyEvent e) {}
 
