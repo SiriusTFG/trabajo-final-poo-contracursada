@@ -46,7 +46,7 @@ public class MenuPrincipal {
         return img.getSubimage(0, y, width, height);
     }
 
-    // 🔥 ahora es draw(), no paintComponent()
+    // ahora es draw(), no paintComponent()
     public void draw(Graphics2D g) {
 
         // Fondo
