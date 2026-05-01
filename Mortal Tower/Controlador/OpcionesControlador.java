@@ -1,39 +1,52 @@
 package Controlador;
 
-import GameState.OpcioneState;
 import Modelo.OpcionesModelo;
 
 public class OpcionesControlador {
 
-    private OpcionesModelo opcionesModelo;
+    private OpcionesModelo modelo;
     private Teclado teclado;
     private Game game;
 
-    public OpcionesControlador(OpcionesModelo opcionesModelo, Teclado teclado, Game game ){
-
-        this.opcionesModelo = opcionesModelo;
-        this.game = game;
+    public OpcionesControlador(OpcionesModelo modelo, Teclado teclado, Game game) {
+        this.modelo = modelo;
         this.teclado = teclado;
+        this.game = game;
     }
 
-    public void update(){
+    public void update() {
 
-        
-
-        if (teclado.back) {
-
-            System.out.println("esc");
-            opcionesModelo.back();
-            teclado.back = false;
-            game.setOverlay(null);
+        if (teclado.up) {
+            modelo.arriba();
+            teclado.up = false;
         }
 
-        
+        if (teclado.down) {
+            modelo.abajo();
+            teclado.down = false;
+        }
 
+        if (teclado.back){
+            game.setOverlay(null);
+            teclado.back = false;
+            
+        }
+
+        if (teclado.right) {
+            modelo.derecha();
+            actualizarVolumen();
+            teclado.right = false;
+        }
+
+        if (teclado.left) {
+            modelo.izquierda();
+            actualizarVolumen();
+            teclado.left = false;
+        }
     }
 
-
-
-    
-    
+    private void actualizarVolumen() {
+        game.musica.setVolumen(modelo.getVolumenMusica() / 10f);
+        game.efectos.setVolumen(modelo.getVolumenFX() / 10f);
+    }
 }

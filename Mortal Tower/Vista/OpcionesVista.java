@@ -48,8 +48,6 @@ public class OpcionesVista {
         return barra[estado][nivel];
     }
     
-
-
     // convierte sprite (normal / seleccionado)
     private BufferedImage[][] cargarBarra(BufferedImage sheet, int estados, int niveles) {
 
@@ -75,31 +73,31 @@ public class OpcionesVista {
 
     public void draw(Graphics2D g) {
 
-    int width = g.getClipBounds().width;
-    int height = g.getClipBounds().height;
+        int width = g.getClipBounds().width;
+        int height = g.getClipBounds().height;
 
-    g.setColor(new Color(0, 0, 0, 140));
-    g.fillRect(0, 0, width, height);
+        g.setColor(new Color(0, 0, 0, 140));
+        g.fillRect(0, 0, width, height);
 
-    int panelW = 1600;
-    int panelH = 800;
-    int x = (width - panelW) / 2;
-    int y = (height - panelH) / 2;
+        int panelW = 1600;
+        int panelH = 800;
+        int x = (width - panelW) / 2;
+        int y = (height - panelH) / 2;
 
-    g.drawImage(cuadro, x, y, panelW, panelH, null);
+        g.drawImage(cuadro, x, y, panelW, panelH, null);
+        
+        // MUSICA
+        g.drawImage(
+            getBarra(volMusica, modelo.getVolumenMusica(), modelo.getSeleccion() == 0),
+            x + 475, y + 200, 650, 110, null
+        );
 
-    // 🎵 MUSICA
-    g.drawImage(
-        getBarra(volMusica, modelo.getVolumenMusica(), modelo.getSeleccion() == 0),
-        x + 475, y + 200, 650, 110, null
-    );
+        // EFECTOS
+        g.drawImage(
+            getBarra(volEfecto, modelo.getVolumenFX(), modelo.getSeleccion() == 1),
+            x + 475, y + 340,650, 110, null
+        );
 
-    // 🔊 EFECTOS
-    g.drawImage(
-        getBarra(volEfecto, modelo.getVolumenFX(), modelo.getSeleccion() == 1),
-        x + 475, y + 340,650, 110, null
-    );
-
-    g.drawImage (getBarra(controles, modelo.getcontroles(), modelo.getSeleccion() == 1), x + 475, y + 480, 650, 110, null);
-}
+        g.drawImage (getBarra(controles, modelo.getcontroles(), modelo.getSeleccion() == 2), x + 475, y + 480, 650, 110, null);
+    }
 }

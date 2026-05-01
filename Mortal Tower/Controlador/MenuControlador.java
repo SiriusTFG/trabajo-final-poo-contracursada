@@ -5,8 +5,8 @@ import Modelo.MenuModelo;
 
 public class MenuControlador {
 
-    private SonidoControlador musica = new SonidoControlador();
-    private SonidoControlador efectos = new SonidoControlador();
+    //private SonidoControlador musica = new SonidoControlador();
+    //private SonidoControlador efectos = new SonidoControlador();
 
     private long ultimoInput = 0;
     private final long cooldown = 120;
@@ -20,7 +20,7 @@ public class MenuControlador {
         this.teclado = teclado;
         this.game = game;
 
-        //musica.loop(0); // música de fondo
+        game.musica.loop(0); // música de fondo
     }
 
     public void update() {
@@ -28,7 +28,7 @@ public class MenuControlador {
         long now = System.currentTimeMillis();
 
         if (teclado.up && now - ultimoInput > cooldown) {
-            efectos.play(1);
+            game.efectos.play(1);
             System.out.println("arriba");
             menuModelo.arriba();
             teclado.up = false;
@@ -37,7 +37,7 @@ public class MenuControlador {
         }
 
         if (teclado.down && now - ultimoInput > cooldown) {
-            efectos.play(1);
+            game.efectos.play(1);
             System.out.println("abajo");
             menuModelo.abajo();
             teclado.down = false;
@@ -59,8 +59,8 @@ public class MenuControlador {
         switch (menuModelo.getSeleccion()) {
 
             case 0 -> {
-                efectos.play(2);
-                musica.stop(0);
+                game.efectos.play(2);
+                game.musica.stop(0);
                 System.out.println("Nueva partida");
                 //game.setState(new PlayState(game, teclado)); // 👈 cambio de estado
             }

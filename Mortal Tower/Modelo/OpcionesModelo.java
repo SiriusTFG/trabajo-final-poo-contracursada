@@ -11,26 +11,31 @@ public class OpcionesModelo {
 
     private int controles;
 
-    // estado interno
-    private boolean enVolumen = false;
+    public void arriba() {seleccion = (seleccion - 1 + opciones.length) % opciones.length;}
+    public void abajo() {seleccion = (seleccion + 1) % opciones.length;}
 
-    public void arriba() {
-        if (enVolumen) return;
-        seleccion = (seleccion - 1 + opciones.length) % opciones.length;
-    }
-
-    public void abajo() {
-        if (enVolumen) return;
-
-        seleccion = (seleccion + 1) % opciones.length;
-    }
-
-    public void back() {
+    /*public void back() {
         enVolumen = false;
+    }*/
+
+    public void derecha() {
+        if (seleccion == 0) {
+            volumenMusica = Math.min(volumenMusica + 1, 10);
+        } else if (seleccion == 1) {
+            volumenFX = Math.min(volumenFX + 1, 10);
+        }
+    }
+
+    public void izquierda() {
+        if (seleccion == 0) {
+            volumenMusica = Math.max(volumenMusica - 1, 0);
+        } else if (seleccion == 1) {
+            volumenFX = Math.max(volumenFX - 1, 0);
+        }
     }
 
     // volumen control
-    public void subirMusica() {
+    /*public void subirMusica() {
         volumenMusica = Math.min(volumenMusica + 1, 10);
     }
 
@@ -44,15 +49,11 @@ public class OpcionesModelo {
 
     public void bajarFX() {
         volumenFX = Math.max(volumenFX - 1, 0);
-    }
+    }*/
 
     // getters
     public int getSeleccion() {return seleccion;}
     public String[] getOpciones() {return opciones;}
-
-    public boolean isEnVolumen() {
-        return enVolumen;
-    }
 
     public int getVolumenMusica() {
         return volumenMusica;

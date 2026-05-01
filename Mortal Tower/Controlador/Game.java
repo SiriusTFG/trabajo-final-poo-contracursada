@@ -10,6 +10,9 @@ public class Game extends JPanel implements Runnable {
     private Thread thread;
     private boolean running;
 
+    public SonidoControlador musica = new SonidoControlador();
+    public SonidoControlador efectos = new SonidoControlador();
+    
     private GameState currentState;
     private GameState overlayState;
     private Teclado input;
