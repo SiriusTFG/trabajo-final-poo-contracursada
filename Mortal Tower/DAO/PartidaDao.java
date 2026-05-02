@@ -19,21 +19,44 @@ public class PartidaDao {
     private HabilidadDao habilidadDao = new HabilidadDao();
 
     public int nuevaPartida(String nombrePartida, int idHeroe) throws SQLException {
-        String sql = "INSERT INTO partidas (nombre_partida, id_heroe, nivel_actual, " +
+        String sqlpartida = "INSERT INTO partidas (nombre_partida, id_heroe, nivel_actual, " +
                      "experiencia_actual, vida_actual, mana_actual, ataque_actual, piso_torre) " +
                      "SELECT ?, id, 1, 0, vida_max, mana_max, ataque, 1 FROM heroes WHERE id = ?";
-        
-        try (PreparedStatement pstmt = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setString(1, nombrePartida);
-            pstmt.setInt(2, idHeroe);
-            pstmt.executeUpdate();
 
-            ResultSet rs = pstmt.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
+        String sqlCopiaHabilidades = "INSERT INTO partida_habilidades (id_partida, id_habilidad, slot) " +
+                                     "SELECT ?, id_habilidad, slot FROM heroe_habilidades WHERE id_heroe = ?";
+        
+        int idGenerado = -1;
+        try {
+            conexion.setAutoCommit(false); //para iniciar transaccion
+
+            try (PreparedStatement pstmt = conexion.prepareStatement(sqlpartida, Statement.RETURN_GENERATED_KEYS)) {
+                pstmt.setString(1, nombrePartida);
+                pstmt.setInt(2, idHeroe);
+                pstmt.executeUpdate();
+
+                ResultSet rs = pstmt.getGeneratedKeys();
+                if (rs.next()) {
+                    idGenerado = rs.getInt(1);
+                }
             }
+
+            if (idGenerado != -1) {
+                try (PreparedStatement pstmtH = conexion.prepareStatement(sqlCopiaHabilidades)) {
+                    pstmtH.setInt(1, idGenerado);
+                    pstmtH.setInt(2, idHeroe);
+                    pstmtH.executeUpdate();
+                }
+            }
+
+            conexion.commit(); //guarda los cambios
+        } catch (SQLException e) {
+            conexion.rollback(); //si falla se deshace todo
+            throw e;
+        }  finally {
+            conexion.setAutoCommit(true);
         }
-        return -1;
+        return idGenerado;
     }
     
 
@@ -58,7 +81,7 @@ public class PartidaDao {
                     
                     heroe.setRutaImagen(rs.getString("ruta_imagen"));
 
-                    List<Habilidad> habilidades = habilidadDao.obtenerPorEntidad(heroe.getId(), "Heroe");
+                    List<Habilidad> habilidades = habilidadDao.obtenerPorPartida(idPartida);
                     for (int i = 0; i < habilidades.size(); i++) {
                         heroe.setHabilidad(i, habilidades.get(i));
                     }
@@ -123,5 +146,29 @@ public class PartidaDao {
                 }
              }
              return resumenes;
+    }
+
+    public void ganarTorreYResetear(Partida partida) throws SQLException {
+        String sql = "INSERT OR REPLACE INTO partida_habilidades (id_partida, id_habilidad, slot) " + 
+                     "SELECT ?, id_habilidad, slot FROM heroe_habilidad WHERE id_heroe = ?";
+        
+        try {
+            conexion.setAutoCommit(false);
+
+            partida.setPisoActual(1);
+            guardarProgreso(partida);
+
+            try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+                pstmt.setInt(1, partida.getId());
+                pstmt.setInt(2, partida.getHeroe().getId());
+                pstmt.executeUpdate();
+            }
+            conexion.commit();
+        } catch (SQLException e) {
+            conexion.rollback();
+            throw e;
+        } finally {
+            conexion.setAutoCommit(true);
+        }
     }
 }

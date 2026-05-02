@@ -106,6 +106,14 @@ public class GestorDeConexion {
         "fecha_guardado TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
         "FOREIGN KEY (id_heroe) REFERENCES heroes(id));"; 
 
+        String tablaPartidasHabilidades = "CREATE TABLE IF NOT EXISTS partida_habilidades(" + 
+        "id_partida INTEGER, " + 
+        "id_habilidad INTEGER, " + 
+        "slot INTEGER CHECK(slot BETWEEN 0 AND 3), " +
+        "PRIMARY KEY (id_partida, slot), " +
+        "FOREIGN KEY (id_partida) REFERENCES partidas(id) ON DELETE CASCADE, " + 
+        "FOREIGN KEY (id_habilidad) REFERENCES habilidades(id));";
+
         try (Statement stmt = this.conexion.createStatement()) {
             stmt.execute(tablaHeroes);
             System.out.println("Tabla 'heroes' creada o ya existente");
@@ -121,6 +129,8 @@ public class GestorDeConexion {
             System.out.println("Tabla 'sprites' creada o ya existente");
             stmt.execute(tablaPartidas);
             System.out.println("Tabla 'partidas' creada o ya existente");
+            stmt.execute(tablaPartidasHabilidades);
+            System.out.println("Tabla 'partidas_habilidades' creada o ya existente");
         } catch (SQLException e) {
             System.err.println("Error en la base de datos: " + e.getMessage());
         }

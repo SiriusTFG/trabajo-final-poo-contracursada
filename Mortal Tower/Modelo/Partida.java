@@ -18,10 +18,10 @@ public class Partida {
         this.fechaGuardado = fechaGuardado;
     }
 
-    //Getters
+    //Getters y Setters
     public int getId() {return id;}
     public String getNombrePartida() {return nombrePartida;}
     public Heroe getHeroe() {return heroe;}
     public int getPisoActual() {return pisoActual;}
-    
+    public void setPisoActual(int numPiso) {pisoActual = numPiso;}
 }

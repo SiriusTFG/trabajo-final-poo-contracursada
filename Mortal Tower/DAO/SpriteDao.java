@@ -13,7 +13,7 @@ public class SpriteDao implements ObjetoDao<Sprite> {
     private Connection conexion = GestorDeConexion.getInstancia().getConexion();
 
     @Override
-    public List<Sprite> ObtenerPorEntidad(int idEntidad, String tipoEntidad) throws SQLException {
+    public List<Sprite> obtenerPorEntidad(int idEntidad, String tipoEntidad) throws SQLException {
         List<Sprite> sprites = new ArrayList<>();
         
         String columnaFiltro = tipoEntidad.equalsIgnoreCase("Heroe") ? "id_heroe" : "id_enemigo";
