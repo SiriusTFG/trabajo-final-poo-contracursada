@@ -26,12 +26,6 @@ public class OpcionesControlador {
             teclado.down = false;
         }
 
-        /*if (teclado.back){
-            game.setOverlay(null);
-            teclado.back = false;
-            
-        }*/
-
             if (teclado.back){
 
     if (modelo.getEstado() == OpcionesModelo.EstadoMenu.OPCIONES) {

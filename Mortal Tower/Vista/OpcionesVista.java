@@ -41,7 +41,6 @@ public class OpcionesVista {
         int estado = seleccionado ? 0 : 1;
 
         int niveles = barra.length; // devuelve 11;
-        System.out.println(niveles);
         int nivel = (barra.length - 1) - valor; // devuelve 0 por que valor = 11 en modelo;
 
         nivel = Math.max(0, Math.min(nivel, niveles - 1)); // devuelve 0;

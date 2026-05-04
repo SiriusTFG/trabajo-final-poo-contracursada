@@ -2,7 +2,7 @@ package Modelo;
 
 public class OpcionesModelo {
 
-    public enum EstadoMenu {PRINCIPAL,OPCIONES,CONTROLES}
+    public enum EstadoMenu {OPCIONES,CONTROLES}
     private EstadoMenu estado = EstadoMenu.OPCIONES;
     private int seleccionEstado = 0;
 
@@ -61,24 +61,17 @@ public void abajo() {
         }
     }
 
+    public void atras() {
 
-public void atras() {
-
-    if (estado == EstadoMenu.CONTROLES) {
-        estado = EstadoMenu.OPCIONES;
-       seleccionEstado = 2;
-    } 
+        if (estado == EstadoMenu.CONTROLES) {
+            estado = EstadoMenu.OPCIONES;
+           seleccionEstado = 2;
+        } 
     
-    else if (estado == EstadoMenu.OPCIONES) {
-        estado = EstadoMenu.PRINCIPAL;
     }
-}
 
     // getters
-
-    public EstadoMenu getEstado() {
-    return estado;
-}
+    public EstadoMenu getEstado() {return estado;}
 
     public int getSeleccion() {return seleccion;}
     public String[] getOpciones() {return opciones;}
