@@ -7,6 +7,8 @@ public class Teclado implements KeyListener {
 
     public boolean up, down, left, right, select, back;
 
+    public boolean upPressed, downPressed, leftPressed, rightPressed, selectPressed, backPressed;
+
     //Se ejecuta al apretar una tecla
     @Override
     public void keyPressed(KeyEvent e) {
@@ -15,10 +17,10 @@ public class Teclado implements KeyListener {
 
         switch (key) {
 
-            case KeyEvent.VK_UP -> up = true;
-            case KeyEvent.VK_DOWN -> down = true;
-            case KeyEvent.VK_LEFT -> left = true;
-            case KeyEvent.VK_RIGHT -> right = true;
+            case KeyEvent.VK_UP -> {if (!up) upPressed = true; up = true;}
+            case KeyEvent.VK_DOWN -> {if (!down) downPressed = true;down = true;}
+            case KeyEvent.VK_LEFT -> {if (!left) leftPressed = true; left = true;}
+            case KeyEvent.VK_RIGHT -> {if (!right) rightPressed = true; right = true;}
             case KeyEvent.VK_ENTER -> select = true;
             case KeyEvent.VK_ESCAPE -> back = true;
         }
@@ -41,9 +43,13 @@ public class Teclado implements KeyListener {
         }
     }
 
-    public void resetActions() {
-        select = false;
-        back = false;
+    public void resetPressed() {
+        upPressed = false;
+        downPressed = false;
+        leftPressed = false;
+        rightPressed = false;
+        selectPressed = false;
+        backPressed = false;
     }
 
 

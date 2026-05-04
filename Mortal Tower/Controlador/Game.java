@@ -31,6 +31,7 @@ public class Game extends JPanel implements Runnable {
         this.overlayState = overlay;
     }
 
+    
     public void setState(GameState newState) {
         this.currentState = newState;
     }
@@ -67,6 +68,7 @@ public class Game extends JPanel implements Runnable {
     if (currentState != null) {
         currentState.update();
     }
+
 }
 
     @Override
@@ -83,4 +85,9 @@ public class Game extends JPanel implements Runnable {
             overlayState.draw(g2);
         }
     } 
+
+    public void playSound(int id) {efectos.play(id);}
+    public void stopSound(int id) {efectos.stop(id);}
+    public void playLoop(int id) {musica.loop(id);}
+    public void stopLoop(int id) {musica.stop(id);}
 }

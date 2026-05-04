@@ -36,6 +36,7 @@ public class SonidoControlador {
     // PLAY
     public void play(int i) {
         if (clips[i] != null) {
+            
             clips[i].stop();
             clips[i].setFramePosition(0);
             clips[i].start();

@@ -50,10 +50,7 @@ public class MenuPrincipal {
     public void draw(Graphics2D g) {
 
         // Fondo
-        g.drawImage(fondo, 0, 0,
-                (int) g.getClipBounds().getWidth(),
-                (int) g.getClipBounds().getHeight(),
-                null);
+        g.drawImage(fondo, 0, 0, (int) g.getClipBounds().getWidth(), (int) g.getClipBounds().getHeight(),null);
 
         BufferedImage[] imgs = {nueva, opciones, salir};
 

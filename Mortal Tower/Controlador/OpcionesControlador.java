@@ -26,16 +26,28 @@ public class OpcionesControlador {
             teclado.down = false;
         }
 
-        if (teclado.back){
+        /*if (teclado.back){
             game.setOverlay(null);
             teclado.back = false;
             
-        }
+        }*/
+
+            if (teclado.back){
+
+    if (modelo.getEstado() == OpcionesModelo.EstadoMenu.OPCIONES) {
+        game.setOverlay(null); // salir del menú opciones
+    } else {
+        modelo.atras(); // volver dentro del menú
+    }
+
+    teclado.back = false;
+}
 
         if (teclado.right) {
             modelo.derecha();
             actualizarVolumen();
             teclado.right = false;
+            System.out.println(modelo.getVolumenMusica());
         }
 
         if (teclado.left) {
@@ -43,10 +55,16 @@ public class OpcionesControlador {
             actualizarVolumen();
             teclado.left = false;
         }
+
+        if (teclado.select) {
+            modelo.aceptar();
+            teclado.select = false;
+        }
     }
 
     private void actualizarVolumen() {
         game.musica.setVolumen(modelo.getVolumenMusica() / 10f);
         game.efectos.setVolumen(modelo.getVolumenFX() / 10f);
     }
+
 }
