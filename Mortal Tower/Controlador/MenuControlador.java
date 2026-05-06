@@ -59,7 +59,7 @@ public class MenuControlador {
                 game.playSound(2);;
                 game.stopLoop(0);
                 System.out.println("Nueva partida");
-                //game.setState(new PlayState(game, teclado)); // 👈 cambio de estado
+
             }
 
             case 1 -> {System.out.println("Opciones");

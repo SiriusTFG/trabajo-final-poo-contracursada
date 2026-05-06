@@ -24,21 +24,18 @@ public class Game extends JPanel implements Runnable {
         setFocusable(true);
         addKeyListener(input);
 
-        setState(new MenuState(input, this)); //nos muestra la primer pantalla(menuPrincipal)
+        setState(new MenuState(input, this)); // nos muestra la primer pantalla(menuPrincipal)
     }
 
-    public void setOverlay(GameState overlay) {
-        this.overlayState = overlay;
-    }
+    // Cambia el estado Principal
+    public void setOverlay(GameState overlay) {this.overlayState = overlay;}
 
-    
-    public void setState(GameState newState) {
-        this.currentState = newState;
-    }
+    // Cambia el estado Superpuesto(capa)
+    public void setState(GameState newState) {this.currentState = newState;}
 
     public void startGame() {
         running = true;
-        thread = new Thread(this);
+        thread = new Thread(this); // maneja logica y loop del Juego
         thread.start();
     }
 
@@ -60,18 +57,18 @@ public class Game extends JPanel implements Runnable {
 
     public void update() {
 
-    if (overlayState != null) {
-        overlayState.update();
-        return; // bloquea el juego debajo
+        if (overlayState != null) {
+            overlayState.update();
+            return; // bloquea el juego debajo
+        }
+
+        if (currentState != null) {
+            currentState.update();
+        }
+
     }
 
-    if (currentState != null) {
-        currentState.update();
-    }
-
-}
-
-    @Override
+    @Override // Repaint()
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
