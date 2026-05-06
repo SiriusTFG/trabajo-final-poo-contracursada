@@ -28,7 +28,7 @@ public class Game extends JPanel implements Runnable {
     }
 
     // Cambia el estado Principal
-    public void setOverlay(GameState overlay) {this.overlayState = overlay;}
+    public void setOverlay(GameState overlay) {this.overlayState = overlay; System.out.println("ejecutado");}
 
     // Cambia el estado Superpuesto(capa)
     public void setState(GameState newState) {this.currentState = newState;}
@@ -81,6 +81,7 @@ public class Game extends JPanel implements Runnable {
         if (overlayState != null) {
             overlayState.draw(g2);
         }
+
     } 
 
     public void playSound(int id) {efectos.play(id);}
