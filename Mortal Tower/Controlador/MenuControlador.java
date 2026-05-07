@@ -12,7 +12,7 @@ public class MenuControlador {
 
     private boolean bloqueado = false;
     private long inicioBloqueo;
-    private final long duracionBloqueo = 3000; // 1 segundo
+    private final long duracionBloqueo = 1500; // 1 segundo
 
     private MenuModelo menuModelo;
     private Teclado teclado;
@@ -23,7 +23,7 @@ public class MenuControlador {
         this.teclado = teclado;
         this.game = game;
 
-        game.playLoop(0); // música de fondo
+        game.playLoop(3); // música de fondo
     }
 
     public void update() {
@@ -71,7 +71,7 @@ public class MenuControlador {
                     System.out.println("Nueva partida");
 
                     game.playSound(2);
-                    game.stopLoop(0);
+                    //game.stopLoop(0);
                     // Activa congelamiento
                     bloqueado = true;
                     inicioBloqueo = now;
@@ -82,32 +82,11 @@ public class MenuControlador {
                     game.setOverlay(new OpcioneState(teclado, game));
                 }
 
-                case 2 -> System.exit(0);
+                case 3 -> System.exit(0);
             }
 
             //ejecutar();
             teclado.select = false;
         }
     }
-
-    /*private void ejecutar() {
-
-        switch (menuModelo.getSeleccion()) {
-
-            case 0 -> {
-                
-                System.out.println("Nueva partida");
-
-
-                game.setOverlay(new TransicionState(game,() -> game.setState(new SeleccionState(teclado, game))));
-
-            }
-
-            case 1 -> {System.out.println("Opciones");
-                game.setOverlay(new OpcioneState(teclado, game));
-            }
-
-            case 2 -> System.exit(0);
-        }
-    }*/
 }

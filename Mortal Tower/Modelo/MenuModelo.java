@@ -2,7 +2,7 @@ package Modelo;
 
 public class MenuModelo {
     
-    private String[] opciones = {"nuevaPartida", "opciones", "salir"};
+    private String[] opciones = {"nuevaPartida", "opciones", "creditos", "salir"};
     private int seleccion = 0;
 
     

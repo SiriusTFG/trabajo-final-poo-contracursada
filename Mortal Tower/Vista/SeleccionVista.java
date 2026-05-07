@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import Modelo.MenuModelo;
 import Modelo.SeleccionModelo;
 
 public class SeleccionVista {

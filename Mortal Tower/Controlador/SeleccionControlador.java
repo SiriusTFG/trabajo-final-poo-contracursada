@@ -1,10 +1,7 @@
 package Controlador;
 
 import GameState.MenuState;
-import GameState.SeleccionState;
 import GameState.TransicionState;
-import Modelo.MenuModelo;
-import Modelo.OpcionesModelo;
 import Modelo.SeleccionModelo;
 
 public class SeleccionControlador {
@@ -18,7 +15,6 @@ public class SeleccionControlador {
         this.teclado = teclado;
         this.game = game;
 
-        game.playLoop(3); // música de fondo
     }
 
     public void update(){

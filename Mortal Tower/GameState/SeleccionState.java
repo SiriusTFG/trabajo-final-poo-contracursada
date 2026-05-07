@@ -1,7 +1,6 @@
 package GameState;
 
 import Modelo.SeleccionModelo;
-import Vista.OpcionesVista;
 import Vista.SeleccionVista;
 
 import java.awt.Graphics2D;

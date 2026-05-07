@@ -12,10 +12,10 @@ public class SonidoControlador {
 
     public SonidoControlador() {
 
-        sonido[0] = getClass().getResource("/assets/Sonidos/Intro/PushForward.wav");
+        sonido[0] = getClass().getResource("/assets/Sonidos/Intro/untitled2.wav");
         sonido[1] = getClass().getResource("/assets/Sonidos/Fx/vgmenuhighlight.wav");
         sonido[2] = getClass().getResource("/assets/Sonidos/Fx/Fantasy_UI (21).wav");
-        sonido[3] = getClass().getResource("/assets/Sonidos/Intro/UntilDeath_16bit.wav");
+        sonido[3] = getClass().getResource("/assets/Sonidos/Intro/untitled.wav");
 
         cargarSonidos();
     }

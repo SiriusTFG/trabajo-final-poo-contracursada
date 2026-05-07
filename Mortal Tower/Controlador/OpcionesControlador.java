@@ -16,14 +16,14 @@ public class OpcionesControlador {
 
     public void update() {
 
-        if (teclado.up) {
+        if (teclado.upPressed) {
             modelo.arriba();
-            teclado.up = false;
+            teclado.upPressed = false;
         }
 
-        if (teclado.down) {
+        if (teclado.downPressed) {
             modelo.abajo();
-            teclado.down = false;
+            teclado.downPressed = false;
         }
 
         if (teclado.back){
@@ -40,17 +40,17 @@ public class OpcionesControlador {
             teclado.back = false;
         }
 
-        if (teclado.right) {
+        if (teclado.rightPressed) {
             modelo.derecha();
             actualizarVolumen();
-            teclado.right = false;
+            teclado.rightPressed = false;
             System.out.println(modelo.getVolumenMusica());
         }
 
-        if (teclado.left) {
+        if (teclado.leftPressed) {
             modelo.izquierda();
             actualizarVolumen();
-            teclado.left = false;
+            teclado.leftPressed = false;
         }
 
         if (teclado.select) {
