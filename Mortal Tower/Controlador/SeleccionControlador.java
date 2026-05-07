@@ -21,6 +21,18 @@ public class SeleccionControlador {
 
     public void update(){
 
+        if (teclado.right){
+
+            modelo.derecha();
+            teclado.right = false;
+        }
+
+        if (teclado.left){
+
+            modelo.izquierda();
+            teclado.left = false;
+        }
+
         if (teclado.back){
             
             game.stopLoop(3);
