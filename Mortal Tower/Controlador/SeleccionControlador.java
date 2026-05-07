@@ -1,6 +1,8 @@
 package Controlador;
 
 import GameState.MenuState;
+import GameState.SeleccionState;
+import GameState.TransicionState;
 import Modelo.MenuModelo;
 import Modelo.OpcionesModelo;
 import Modelo.SeleccionModelo;
@@ -36,7 +38,7 @@ public class SeleccionControlador {
         if (teclado.back){
             
             game.stopLoop(3);
-            game.setState(new MenuState(teclado, game)); // salir del menú opciones
+            game.setOverlay(new TransicionState(game,() -> game.setState(new MenuState(teclado, game)))); // salir del menú opciones
             teclado.back = false;
         }
     }

@@ -47,6 +47,7 @@ public class SeleccionVista {
 
         // Fondo
         g.drawImage(fondo, 0, 0, (int) g.getClipBounds().getWidth(), (int) g.getClipBounds().getHeight(),null);
+        
 
         BufferedImage[] imgs = {caballero, mago};
 

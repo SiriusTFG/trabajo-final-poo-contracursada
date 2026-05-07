@@ -25,6 +25,7 @@ public class Game extends JPanel implements Runnable {
         addKeyListener(input);
 
         setState(new MenuState(input, this)); // nos muestra la primer pantalla(menuPrincipal)
+        
     }
 
     // Cambia el estado Principal
