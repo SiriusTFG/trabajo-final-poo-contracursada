@@ -17,7 +17,7 @@ public class CombateState implements GameState {
     //constructor
     public CombateState(Teclado teclado, Game game) {
         model = new CombateModelo();
-        view = new CombateVista();
+        view = new CombateVista(model);
         controller = new CombateControlador(model, teclado, game);
     }
 

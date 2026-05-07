@@ -18,23 +18,38 @@ public class CombateVista {
 
         // Sprites
         try {
-            Fondo = new ImageIcon(getClass().getResource("/assets/Imagenes/Combate/Fondo.jpg")).getImage();
+            Fondo = new ImageIcon(getClass().getResource("/assets/Imagenes/Combate/FondoCombate.png")).getImage();
 
             luchar = ImageIO.read(getClass().getResource("/assets/Imagenes/Combate/luchar.png"));
-            habilidad = ImageIO.read(getClass().getResource("/assets/Imagenes/Combate/habilidad.png"));
-            opciones = ImageIO.read(getClass().getResource("/assets/Imagenes/Combate/opciones.png"));
+            habilidad = ImageIO.read(getClass().getResource("/assets/Imagenes/Combate/habilidades.png"));
+            opciones = ImageIO.read(getClass().getResource("/assets/Imagenes/MenuInicio/opciones.png"));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    //Atributos como botones etc
-    public CombateVista() {
-        //Inicializar componentes gráficos
+    //Convertir sprite (normal / seleccionado)
+    private Image getSprite(BufferedImage img, boolean selected) {
+        int width = img.getWidth();
+        int height = img.getHeight() / 2;
+        int y = selected ? height : 0;
+        return img.getSubimage(0, y, width, height);
     }
 
     public void draw(Graphics2D g) {
-        //Dibujar la interfaz de combate
+        // Fondo
+        g.drawImage(Fondo, 0, 0, (int) g.getClipBounds().getWidth(), (int) g.getClipBounds().getHeight(), null);
+
+        BufferedImage[] imgs = {luchar, habilidad, opciones};
+
+        int x = 150;
+        int y = 920;
+        int spacing = 550;
+
+        for (int i = 0; i < imgs.length; i++) {
+            boolean selected = (i == model.getSeleccion());
+            g.drawImage(getSprite(imgs[i], selected), x + (i * spacing), y, null);
+        }
     }
 }
