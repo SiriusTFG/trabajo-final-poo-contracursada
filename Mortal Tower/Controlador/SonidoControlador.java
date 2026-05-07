@@ -15,6 +15,7 @@ public class SonidoControlador {
         sonido[0] = getClass().getResource("/assets/Sonidos/Intro/PushForward.wav");
         sonido[1] = getClass().getResource("/assets/Sonidos/Fx/vgmenuhighlight.wav");
         sonido[2] = getClass().getResource("/assets/Sonidos/Fx/Fantasy_UI (21).wav");
+        sonido[3] = getClass().getResource("/assets/Sonidos/Intro/UntilDeath_16bit.wav");
 
         cargarSonidos();
     }
@@ -54,6 +55,7 @@ public class SonidoControlador {
     public void stop(int i) {
         if (clips[i] != null) {
             clips[i].stop();
+             clips[i].setFramePosition(0); // vuelve al inicio
         }
     }
 

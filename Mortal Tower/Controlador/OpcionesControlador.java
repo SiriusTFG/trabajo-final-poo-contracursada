@@ -26,16 +26,19 @@ public class OpcionesControlador {
             teclado.down = false;
         }
 
-            if (teclado.back){
+        if (teclado.back){
 
-    if (modelo.getEstado() == OpcionesModelo.EstadoMenu.OPCIONES) {
-        game.setOverlay(null); // salir del menú opciones
-    } else {
-        modelo.atras(); // volver dentro del menú
-    }
+            System.out.println(modelo.getEstado());
 
-    teclado.back = false;
-}
+            if (modelo.getEstado() == OpcionesModelo.EstadoMenu.OPCIONES) {
+                System.out.println("atrasss");
+                game.setOverlay(null); // salir del menú opciones
+            } else {
+                modelo.atras(); // volver dentro del menú
+            }
+
+            teclado.back = false;
+        }
 
         if (teclado.right) {
             modelo.derecha();

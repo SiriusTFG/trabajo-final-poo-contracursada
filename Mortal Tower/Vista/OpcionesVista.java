@@ -1,13 +1,13 @@
 package Vista;
 
 import Modelo.OpcionesModelo;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 
+import java.awt.*;
+import javax.swing.*;
+
+import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
+
 
 public class OpcionesVista {
 

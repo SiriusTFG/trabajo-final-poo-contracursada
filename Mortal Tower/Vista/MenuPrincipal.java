@@ -15,9 +15,7 @@ public class MenuPrincipal {
 
     private Image fondo;
 
-    private BufferedImage nueva;
-    private BufferedImage opciones;
-    private BufferedImage salir;
+    private BufferedImage nueva, opciones, salir;
 
     public MenuPrincipal(MenuModelo menuModelo) {
         this.menuModelo = menuModelo;

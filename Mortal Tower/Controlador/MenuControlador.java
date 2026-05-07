@@ -1,6 +1,7 @@
 package Controlador;
 
 import GameState.OpcioneState;
+import GameState.SeleccionState;
 import Modelo.MenuModelo;
 
 public class MenuControlador {
@@ -17,7 +18,7 @@ public class MenuControlador {
         this.teclado = teclado;
         this.game = game;
 
-        //game.playLoop(0); // música de fondo
+        game.playLoop(0); // música de fondo
     }
 
     public void update() {
@@ -56,9 +57,10 @@ public class MenuControlador {
         switch (menuModelo.getSeleccion()) {
 
             case 0 -> {
-                game.playSound(2);;
+                //game.playSound(2);;
                 game.stopLoop(0);
                 System.out.println("Nueva partida");
+                game.setState(new SeleccionState(teclado, game));
 
             }
 
