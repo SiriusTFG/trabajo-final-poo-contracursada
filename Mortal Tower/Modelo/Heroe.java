@@ -23,76 +23,80 @@ public class Heroe extends Entidad {
         this.defensa = defensa;
     }
 
-public void atacar(Entidad objetivo) {
-    int danio = 10; // Ejemplo de da
+    public void atacar(Entidad objetivo) {
+        int danio = 10; // Ejemplo de da
     
     
-    System.out.println(
-    this.getNombre() + " ataca a " + objetivo.getNombre() + " causando " + danio + " puntos de daño.");
-    objetivo.recibirDanio(danio);
+        System.out.println(
+        this.getNombre() + " ataca a " + objetivo.getNombre() + " causando " + danio + " puntos de daño.");
+        objetivo.recibirDanio(danio);
 
-}
-public boolean usarHabilidad(int indice, Entidad objetivo) {
-    if (indice < 0 || indice >= habilidades.length) return false;
-    
-    Habilidad habilidad = habilidades[indice];
-    if (habilidad == null) {
-    System.out.println("no hay habilidad equipada en ese slot.");
-    return false;
     }
 
-    if (!habilidad.puedeUsarse (this)) {
+    public boolean usarHabilidad(int indice, Entidad objetivo) {
+        if (indice < 0 || indice >= habilidades.length) return false;
+    
+        Habilidad habilidad = habilidades[indice];
+        if (habilidad == null) {
+            System.out.println("no hay habilidad equipada en ese slot.");
+            return false;
+        }
+
+        if (!habilidad.puedeUsarse (this)) {
         System.out.println(nombre + " no puede usar " + habilidad.getNombre() + " por falta de mana");
-        return false;
+            return false;
+        }
+
+        usarMana (habilidad.getCostoMana());
+        habilidad.activarCooldown();
+        habilidad.ejecutarHabilidad(this, objetivo);
+        return true;
+
     }
 
-    usarMana (habilidad.getCostoMana());
-    habilidad.activarCooldown();
-    habilidad.ejecutarHabilidad(this, objetivo);
-    return true;
-
-}
-public void avanzarCooldowns() {
-    for (Habilidad habilidad : habilidades) {
-        if (habilidad != null) habilidad.tickCooldown();
+    public void avanzarCooldowns() {
+        for (Habilidad habilidad : habilidades) {
+            if (habilidad != null) habilidad.tickCooldown();
         }
     }
 
-public void ganarExperiencia(int puntos){
-    experiencia += puntos;
+    public void ganarExperiencia(int puntos){
+        experiencia += puntos;
     
-    while (experiencia >= experienciaNecesaria) {
-        experiencia -= experienciaNecesaria; // Resta la experiencia necesaria para subir de nivel
-        subirNivel();
+        while (experiencia >= experienciaNecesaria) {
+            experiencia -= experienciaNecesaria; // Resta la experiencia necesaria para subir de nivel
+            subirNivel();
+        }
     }
-}
 
-private void subirNivel() {
-    nivel++;
-    experienciaNecesaria += 50; // Incrementa la experiencia necesaria para el siguiente nivel
-    System.out.println(this.getNombre() + " ha subido al nivel " + nivel + "!");
+    private void subirNivel() {
+        nivel++;
+        experienciaNecesaria += 50; // Incrementa la experiencia necesaria para el siguiente nivel
+        System.out.println(this.getNombre() + " ha subido al nivel " + nivel + "!");
  
-    vidaMax += 20; // Incrementa la vida máxima al subir de nivel
-    manaMax += 10; // Incrementa el mana máximo al subir de nivel
+        vidaMax += 20; // Incrementa la vida máxima al subir de nivel
+        manaMax += 10; // Incrementa el mana máximo al subir de nivel
 
-    vidaActual = vidaMax; // Restaura la vida al subir de nivel
-    manaActual = manaMax; // Restaura el mana al subir de nivel
+        vidaActual = vidaMax; // Restaura la vida al subir de nivel
+        manaActual = manaMax; // Restaura el mana al subir de nivel
     
-}
-@Override
-public void realizarTurno (Entidad objetivo) {
-    usarHabilidad(0, objetivo); // Intenta usar la primera habilidad equipada
-}
+    }
 
-public int getNivel() {
-    return nivel;
-}
+    @Override
+    public void realizarTurno (Entidad objetivo) {
+        usarHabilidad(0, objetivo); // Intenta usar la primera habilidad equipada
+    }
 
-public int getExperiencia() {
-    return experiencia;
-}
-public int getExperienciaNecesaria() {
-    return experienciaNecesaria;
-}
+    public int getNivel() {
+        return nivel;
+    }
+
+    public int getExperiencia() {
+        return experiencia;
+    }
+
+    public int getExperienciaNecesaria() {
+        return experienciaNecesaria;
+    }
 
 }

@@ -1,10 +1,13 @@
 package Controlador;
 
+import DAO.GestorDeConexion;
 import Vista.Ventana;
 
 public class Main {
 
     public static void main(String[] args) {
+
+        GestorDeConexion.getInstancia();
 
         Teclado input = new Teclado();
         Ventana ventana = new Ventana();
