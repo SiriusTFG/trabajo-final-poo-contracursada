@@ -10,7 +10,7 @@ public class CargarModelo {
     private int seleccion = 0;
     private PartidaDao partidaDao = new PartidaDao();
 
-    public void CargarModelo() {
+    public CargarModelo() {
         actualizarLista();
     }
 

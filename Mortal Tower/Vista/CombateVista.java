@@ -23,7 +23,6 @@ public class CombateVista {
             luchar = ImageIO.read(getClass().getResource("/assets/Imagenes/Combate/luchar.png"));
             habilidad = ImageIO.read(getClass().getResource("/assets/Imagenes/Combate/habilidades.png"));
             opciones = ImageIO.read(getClass().getResource("/assets/Imagenes/MenuInicio/opciones.png"));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -45,7 +44,7 @@ public class CombateVista {
 
         int x = 150;
         int y = 920;
-        int spacing = 550;
+        int spacing = 525;
 
         for (int i = 0; i < imgs.length; i++) {
             boolean selected = (i == model.getSeleccion());

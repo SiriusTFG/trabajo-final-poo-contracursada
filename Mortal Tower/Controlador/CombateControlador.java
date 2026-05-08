@@ -18,7 +18,33 @@ public class CombateControlador {
         game.playLoop(3);
     }
 
-    public void update(){}
+    public void update(){
+
+        if (teclado.leftPressed) {
+            model.izquierda();
+            teclado.leftPressed = false;
+        }
+        
+            model.derecha();
+            teclado.rightPressed = false;
+        }
+
+        if(teclado.select){
+            System.out.println("Enter");
+
+            switch(model.getSeleccion()){
+                case 0:
+                    System.out.println("Luchar");
+                    break;
+                case 1:
+                    System.out.println("Habilidad");
+                    break;
+                case 2:
+                    System.out.println("Opciones");
+                    break;
+            }
+        }
+    }
 
     public void ejecutar(){}
     
