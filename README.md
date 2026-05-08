@@ -101,3 +101,8 @@ de comportamiento sin modificar la clase Enemigo.
 - **Framework de IGU:** Java Swing
 - *Base de datos:* PostgreSQL
 - **Control de Versiones:** Git y GitHub
+
+
+**Diagrama de Base de datos**
+![base](basededatos.png)
+
