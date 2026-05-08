@@ -1,8 +1,6 @@
 package Controlador;
 
 import Modelo.CombateModelo;
-import GameState.CombateState;
-import Vista.CombateVista;
 
 public class CombateControlador {
     
@@ -25,9 +23,11 @@ public class CombateControlador {
             teclado.leftPressed = false;
         }
         
+        if (teclado.rightPressed) {
             model.derecha();
             teclado.rightPressed = false;
         }
+            
 
         if(teclado.select){
             System.out.println("Enter");
@@ -48,4 +48,5 @@ public class CombateControlador {
 
     public void ejecutar(){}
     
+
 }
