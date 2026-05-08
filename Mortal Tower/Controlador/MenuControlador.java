@@ -10,12 +10,9 @@ import java.util.List;
 
 public class MenuControlador {
 
-    private long ultimoInput = 0;
-    private final long cooldown = 120;
-
     private boolean bloqueado = false;
     private long inicioBloqueo;
-    private final long duracionBloqueo = 1500; // 1 segundo
+    private final long duracionBloqueo = 1500; // 1,5 segundos
 
     private MenuModelo menuModelo;
     private Teclado teclado;
@@ -31,7 +28,7 @@ public class MenuControlador {
 
     public void update() {
 
-        long now = System.currentTimeMillis();
+        long now = System.currentTimeMillis(); // el tiempo actual del sistema en milisegundos.
 
         // congelar menú temporalmente
         if (bloqueado) {
@@ -46,22 +43,20 @@ public class MenuControlador {
             return;
         }
 
-        if (teclado.upPressed && now - ultimoInput > cooldown) {
+        if (teclado.upPressed) {
+
             //game.playSound(1);
             System.out.println("arriba");
             menuModelo.arriba();
             teclado.upPressed = false;
-
-            ultimoInput = now;
         }
 
-        if (teclado.downPressed && now - ultimoInput > cooldown) {
+        if (teclado.downPressed) {
+
             //game.playSound(1);
             System.out.println("abajo");
             menuModelo.abajo();
             teclado.downPressed = false;
-
-            ultimoInput = now;
         }
 
         if (teclado.select) {

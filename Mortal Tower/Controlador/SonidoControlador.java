@@ -55,33 +55,33 @@ public class SonidoControlador {
     public void stop(int i) {
         if (clips[i] != null) {
             clips[i].stop();
-             clips[i].setFramePosition(0); // vuelve al inicio
+            clips[i].setFramePosition(0); // vuelve al inicio
         }
     }
 
     // VOLUMEN GLOBAL
     public void setVolumen(float volumen) {
-    this.volumen = volumen;
+        this.volumen = volumen;
 
-    for (Clip clip : clips) {
-        if (clip != null && clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+        for (Clip clip : clips) {
+            if (clip != null && clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
 
-            FloatControl control = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+                FloatControl control = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
 
-            float min = control.getMinimum();
-            float max = control.getMaximum();
+                float min = control.getMinimum();
+                float max = control.getMaximum();
 
-            // evitar 0 absoluto (silencio total)
-            if (volumen <= 0.0f) {
+               // evitar 0 absoluto (silencio total)
+                if (volumen <= 0.0f) {
                 control.setValue(min);
-            } else {
-                float gain = (float) (20f * Math.log10(volumen));
-                gain = Math.max(min, Math.min(max, gain));
-                control.setValue(gain);
+                } else {
+                    float gain = (float) (20f * Math.log10(volumen));
+                    gain = Math.max(min, Math.min(max, gain));
+                    control.setValue(gain);
+                }
             }
         }
     }
-}
 
     public float getVolumen() {
         return volumen;

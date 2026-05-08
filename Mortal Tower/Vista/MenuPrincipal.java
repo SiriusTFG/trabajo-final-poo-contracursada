@@ -40,13 +40,12 @@ public class MenuPrincipal {
         int width = img.getWidth()/ 2;
         int height = img.getHeight() ;
 
-          int x = selected ? width : 0;
+          int x = selected ? width : 0; // decide donde cortar, por ejemplo si esta selec' corta mitad-derecha
 
 
-        return img.getSubimage(x, 0, width, height);
+        return img.getSubimage(x, 0, width, height); // devuelve la parte de la imagen
     }
 
-    // ahora es draw(), no paintComponent()
     public void draw(Graphics2D g) {
 
         // Fondo
