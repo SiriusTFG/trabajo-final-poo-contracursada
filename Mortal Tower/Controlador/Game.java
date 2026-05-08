@@ -1,14 +1,16 @@
 package Controlador;
 
-import javax.swing.*;
-import java.awt.*;
 import GameState.GameState;
 import GameState.MenuState;
+import Modelo.Partida;
+import java.awt.*;
+import javax.swing.*;
 
 public class Game extends JPanel implements Runnable {
 
     private Thread thread;
     private boolean running;
+    private Partida partidaActual;
 
     public SonidoControlador musica = new SonidoControlador();
     public SonidoControlador efectos = new SonidoControlador();
@@ -89,4 +91,6 @@ public class Game extends JPanel implements Runnable {
     public void stopSound(int id) {efectos.stop(id);}
     public void playLoop(int id) {musica.loop(id);}
     public void stopLoop(int id) {musica.stop(id);}
+
+    public void setPartida(Partida partida) {partidaActual = partida;}
 }

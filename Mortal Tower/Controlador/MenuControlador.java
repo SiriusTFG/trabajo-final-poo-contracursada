@@ -1,9 +1,12 @@
 package Controlador;
 
+import DAO.PartidaDao;
 import GameState.OpcioneState;
 import GameState.SeleccionState;
 import GameState.TransicionState;
 import Modelo.MenuModelo;
+import java.sql.SQLException;
+import java.util.List;
 
 public class MenuControlador {
 
@@ -80,6 +83,26 @@ public class MenuControlador {
 
                 case 1 -> {System.out.println("Opciones");
                     game.setOverlay(new OpcioneState(teclado, game));
+                }
+
+                case 2 -> {System.out.println("Cargar Partida");
+                    System.out.println("\n===== REVISANDO MEMORIA DE LA TORRE =====");
+                    try {
+                        PartidaDao pDao = new PartidaDao();
+                        List<String> resumenes = pDao.obtenerResumenPartidas();
+
+                        if (resumenes.isEmpty()) {
+                            System.out.println("No se encontraron partidas en la base de datos.");
+                        } else {
+                            System.out.println("Partidas encontradas:");
+                            for (String info : resumenes) {
+                                System.out.println("    > " + info);
+                            }
+                        }
+                    } catch (SQLException e) {
+                        System.err.println("[X] Error al acceder a la base de datos: " + e.getMessage());
+                    }
+                    System.out.println("==========================================\n");
                 }
 
                 case 3 -> System.exit(0);
