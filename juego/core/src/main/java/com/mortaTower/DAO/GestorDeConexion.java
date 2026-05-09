@@ -1,5 +1,6 @@
 package com.mortaTower.DAO;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -9,7 +10,7 @@ public class GestorDeConexion {
 
     private static GestorDeConexion instancia;
     private Connection conexion;
-    private static final String URL = "jdbc:sqlite:MortalTower.db";
+    private static final String URL = "jdbc:sqlite:database/MortalTower.db";
 
     private GestorDeConexion() {
         try {

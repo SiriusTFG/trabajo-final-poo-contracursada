@@ -30,6 +30,8 @@ public class SeleccionScreen extends Screens {
 
         switch (action) {
 
+            case ATRAS -> {game.setScreen(new MenuScreen(game)); dispose();}
+
             case CABALLERO -> System.out.println("Comienza");
 
             case MAGO -> System.out.println("Comienza");
@@ -46,5 +48,7 @@ public class SeleccionScreen extends Screens {
         vista.draw(spriteBatch);
 
     }
+
+    
     
 }

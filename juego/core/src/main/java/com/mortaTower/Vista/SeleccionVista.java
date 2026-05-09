@@ -13,8 +13,8 @@ public class SeleccionVista {
     private SeleccionModelo modelo;
 
     // ESTADOS VISUALES
-    private static final int NORMAL = 0;
-    private static final int SELECTED = 1;
+    private static final int NORMAL = 1;
+    private static final int SELECTED = 0;
 
     private Texture fondo;
     private final Texture[] texturas;
@@ -41,7 +41,7 @@ public class SeleccionVista {
         };
 
         columnas = new int[] {2,2};
-        filas = new int[] {2,2};
+        filas = new int[] {1,1};
 
         sprites = new TextureRegion[texturas.length][][];
 
@@ -72,12 +72,12 @@ public class SeleccionVista {
 
         batch.draw(fondo, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
-        float x = WORLD_WIDTH * 0.33f;
-        float y = WORLD_HEIGHT * 0.60f;
-        float separacion = WORLD_HEIGHT * 0.15f;
+        float x = WORLD_HEIGHT * 0.19f;
+        float y = WORLD_WIDTH * 0.394f;
+        float separacion = WORLD_HEIGHT * 0.36f;
 
-        float ancho = WORLD_WIDTH * 0.35f;
-        float alto = WORLD_HEIGHT * 0.12f;
+        float ancho = WORLD_WIDTH * 0.18f;
+        float alto = WORLD_HEIGHT * 0.10f;
 
         // opción seleccionada
         int seleccion = modelo.getOpcionActual().ordinal(); //conecta el enum del modelo con un índice numérico.
@@ -85,9 +85,9 @@ public class SeleccionVista {
 
         for (int i = 0; i < sprites.length; i++) {
 
-            int estado = (i == seleccion) ? SELECTED : NORMAL;
+            int estado = (i == seleccion) ? NORMAL : SELECTED;
             int nivel = 0;
-            batch.draw(sprites[i][estado][nivel], x, y - separacion * i, ancho, alto);
+            batch.draw(sprites[i][estado][nivel], x + separacion * i, y, ancho, alto);
         }
     }
 
