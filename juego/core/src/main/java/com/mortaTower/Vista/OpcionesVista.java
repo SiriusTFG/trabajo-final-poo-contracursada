@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mortaTower.Modelo.OpcionesModelo;
+import com.mortaTower.Modelo.OpcionesModelo.OpcionesEnum;
 
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
@@ -13,8 +14,8 @@ public class OpcionesVista {
     private OpcionesModelo modelo;
 
     // ESTADOS VISUALES
-    private static final int NORMAL = 0;
-    private static final int SELECTED = 1;
+    private static final int NORMAL = 1;
+    private static final int SELECTED = 0;
 
     private Texture fondo;
     private final Texture[] texturas;
@@ -42,7 +43,7 @@ public class OpcionesVista {
         };
 
         columnas = new int[] {2,2,2};
-        filas = new int[] {11,11,1};
+        filas = new int[] {12,12,1};
 
         sprites = new TextureRegion[texturas.length][][];
 
@@ -82,12 +83,21 @@ public class OpcionesVista {
 
         // opción seleccionada
         int seleccion = modelo.getOpcionActual().ordinal(); //conecta el enum del modelo con un índice numérico.
+        int nivelMusica = modelo.getseleccionMusica();
+        int nivelFx = modelo.getseleccionFx();
 
 
         for (int i = 0; i < sprites.length; i++) {
 
             int estado = (i == seleccion) ? SELECTED : NORMAL;
             int nivel = 0;
+
+            if(i == OpcionesEnum.MUSICA.ordinal()){
+                nivel = nivelMusica;
+            }else if(i == OpcionesEnum.EFECTOS.ordinal()){
+                nivel = nivelFx;
+            }
+
             batch.draw(sprites[i][estado][nivel], x, y - separacion * i, ancho, alto);
         }
     }

@@ -21,9 +21,30 @@ public class OpcionesControlador {
 
         teclado.update();
 
-        if (teclado.backPressed){
+        if(teclado.upPressed){
 
+            modelo.arriba();
+            teclado.upPressed = false;
         }
+
+        if(teclado.downPressed){
+
+            modelo.abajo();
+            teclado.downPressed = false;
+        }
+
+        if(teclado.leftPressed){
+
+            modelo.izquierda();
+            teclado.leftPressed = false;
+        }
+
+        if(teclado.rightPressed){
+
+            modelo.derecha();
+            teclado.rightPressed = false;
+        }
+
 
     }
     
