@@ -1,0 +1,72 @@
+package com.mortaTower.Controlador;
+
+import com.mortaTower.Modelo.MenuModelo;
+
+public class MenuControlador {
+
+    public enum Action {NONE, START_GAME, OPTIONS, CREDITS,EXIT}
+
+    //private long ultimoInput = 0;
+    //private final long cooldown = 120;
+
+    private final MenuModelo menuModelo;
+    private final Teclado teclado;
+    private final Audio audio;
+
+    public MenuControlador(MenuModelo model, Teclado teclado, Audio audio) {
+        this.menuModelo = model;
+        this.teclado = teclado;
+        this.audio = audio;
+
+        //audio.loop(3);
+    }
+
+    public Action update() {
+
+        //long now = TimeUtils.millis();
+
+        teclado.update();
+
+        // mover arriba
+        if (teclado.upPressed) {
+            menuModelo.arriba();
+            
+            audio.play(1); // hover menu
+        }
+
+        // mover abajo
+        if (teclado.downPressed) {
+            menuModelo.abajo();
+            
+            audio.play(1);
+        }
+
+        // seleccionar opción
+        if (teclado.selectPressed) {
+
+            switch (menuModelo.getOpcionActual()) {
+
+                case JUGAR -> {
+                    audio.play(2); // confirm
+                    return Action.START_GAME;
+                }
+
+                case OPCIONES -> {
+                    return Action.OPTIONS;
+                }
+
+                case CREDITOS -> {
+                    return Action.CREDITS;
+                }
+
+                case SALIR -> {
+                    return Action.EXIT;
+                }
+
+                
+            }
+        }
+
+        return Action.NONE;
+    }
+}

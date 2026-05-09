@@ -1,0 +1,28 @@
+package com.mortaTower.Modelo;
+
+import com.badlogic.gdx.scenes.scene2d.Action;
+
+public class MenuModelo {
+
+    public enum OpcionesEnum {JUGAR, OPCIONES, CREDITOS, SALIR}
+    public enum Action {NONE, START_GAME, OPTIONS, CREDITS,EXIT}
+    private static final OpcionesEnum[] valores = OpcionesEnum.values();
+
+    private OpcionesEnum seleccion = OpcionesEnum.JUGAR;
+
+    // mover hacia arriba
+    public void arriba() {
+        int index = (seleccion.ordinal() - 1 + valores.length) % valores.length;
+        seleccion = valores[index];
+    }
+
+    // mover hacia abajo
+    public void abajo() {
+        int index = (seleccion.ordinal() + 1) % valores.length;
+        seleccion = valores[index];
+    }
+
+    // GETTERS
+    public OpcionesEnum[] getOpciones() {return valores;}
+    public OpcionesEnum getOpcionActual() {return seleccion;}
+}
