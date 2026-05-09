@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 public class CombateVista {
     private CombateModelo model;
     private Image Fondo;
-    private BufferedImage luchar, habilidad, opciones;
+    private BufferedImage habilidad, opciones;
 
     //Constructor
     public CombateVista(CombateModelo model) {
@@ -20,7 +20,6 @@ public class CombateVista {
         try {
             Fondo = new ImageIcon(getClass().getResource("/assets/Imagenes/Combate/FondoCombate.png")).getImage();
 
-            luchar = ImageIO.read(getClass().getResource("/assets/Imagenes/Combate/luchar.png"));
             habilidad = ImageIO.read(getClass().getResource("/assets/Imagenes/Combate/habilidades.png"));
             opciones = ImageIO.read(getClass().getResource("/assets/Imagenes/MenuInicio/opciones.png"));
         } catch (Exception e) {
@@ -40,7 +39,7 @@ public class CombateVista {
         // Fondo
         g.drawImage(Fondo, 0, 0, (int) g.getClipBounds().getWidth(), (int) g.getClipBounds().getHeight(), null);
 
-        BufferedImage[] imgs = {luchar, habilidad, opciones};
+        BufferedImage[] imgs = {habilidad, opciones};
 
         int x = 150;
         int y = 920;

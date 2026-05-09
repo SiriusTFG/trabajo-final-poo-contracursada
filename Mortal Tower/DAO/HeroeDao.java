@@ -2,6 +2,8 @@ package DAO;
 
 import Modelo.Habilidad;
 import Modelo.Heroe;
+import Modelo.Sprite;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,6 +16,7 @@ public class HeroeDao implements EntidadDao<Heroe> {
     
     private Connection conexion = GestorDeConexion.getInstancia().getConexion();
     private HabilidadDao habilidadDao = new HabilidadDao();
+    private SpriteDao spriteDao = new SpriteDao();
 
     @Override
     public Heroe obtenerPorId(int id) throws SQLException {
@@ -50,6 +53,9 @@ public class HeroeDao implements EntidadDao<Heroe> {
         heroe.setAtaque(rs.getInt("ataque"));
         heroe.activarDefensa(rs.getDouble("defensa_base"));
         heroe.setRutaImagen(rs.getString("ruta_imagen"));
+        heroe.setAnimaciones(spriteDao.obtenerPorEntidad(heroe.getId(), "Heroe"));
+        List <Sprite> listaSprites = spriteDao.obtenerPorEntidad(heroe.getId(), "Heroe");
+        heroe.setAnimaciones(listaSprites);
 
         List<Habilidad> habilidades = habilidadDao.obtenerPorEntidad(heroe.getId(), "Heroe");
 

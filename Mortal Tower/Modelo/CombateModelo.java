@@ -2,7 +2,7 @@ package Modelo;
 
 public class CombateModelo {
     
-    private String[] opciones = {"Luchar", "Habilidad", "Opciones"};
+    private String[] opciones = {"Habilidad", "Opciones"};
     private int seleccion = 0;
 
     public void izquierda(){seleccion = (seleccion - 1 + opciones.length) % opciones.length;}

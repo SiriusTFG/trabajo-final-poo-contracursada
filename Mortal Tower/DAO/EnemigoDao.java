@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import Modelo.Enemigo;
 import Modelo.Habilidad;
+import Modelo.Sprite;
 
 import java.sql.Statement;
 import java.util.List;
@@ -16,6 +17,7 @@ public class EnemigoDao implements EntidadDao<Enemigo> {
 
     private Connection conexion = GestorDeConexion.getInstancia().getConexion();
     private HabilidadDao habilidadDao = new HabilidadDao();
+    private SpriteDao spriteDao = new SpriteDao();
 
     public Enemigo obtenerEnemigoPorPiso(int piso) throws SQLException {
         String sql = "SELECT * FROM enemigos WHERE nivel_torre = ?";
@@ -70,11 +72,12 @@ public class EnemigoDao implements EntidadDao<Enemigo> {
         enemigo.setRutaImagen(rs.getString("ruta_imagen"));
 
         List<Habilidad> habilidades = habilidadDao.obtenerPorEntidad(enemigo.getId(), "Enemigo");
-            
+        List <Sprite> listaSprites = spriteDao.obtenerPorEntidad(enemigo.getId(), "Enemigo");
+        enemigo.setAnimaciones(listaSprites);  
+
         for (int i = 0; i < habilidades.size(); i++) {
             enemigo.setHabilidad(i, habilidades.get(i));
         }
         return enemigo;
     }
-    
 }

@@ -34,12 +34,9 @@ public class CombateControlador {
 
             switch(model.getSeleccion()){
                 case 0:
-                    System.out.println("Luchar");
-                    break;
-                case 1:
                     System.out.println("Habilidad");
                     break;
-                case 2:
+                case 1:
                     System.out.println("Opciones");
                     break;
             }

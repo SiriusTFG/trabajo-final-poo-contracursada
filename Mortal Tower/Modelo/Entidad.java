@@ -1,5 +1,8 @@
 package Modelo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Entidad {
     protected int id;
     protected String nombre;
@@ -9,6 +12,7 @@ public abstract class Entidad {
     protected double defensa = 1.0;
     protected Habilidad[] habilidades = new Habilidad[4];
     protected String rutaImagenPerfil;
+    protected List <Sprite> animaciones = new ArrayList<>();
 
     public Entidad(String nombre, int vida, int mana) {
         ataque = 0;
@@ -50,6 +54,19 @@ public abstract class Entidad {
         defensa = cantidad;
     }
 
+    public String getRutaSprites(String estado,int orden){
+        for (Sprite s : animaciones){
+            if ( s.getEstado().equalsIgnoreCase(estado) && s.getOrden() == orden){
+                return s.getRutaImagen();
+            }
+        }
+        return rutaImagenPerfil;
+    }
+
+    public void setAnimaciones(List<Sprite> animaciones) {
+        this.animaciones = animaciones;
+    }
+
     public void setHabilidad(int indice, Habilidad habilidad) {
         if (indice >= 0 && indice < 4) {
             habilidades[indice] = habilidad;
@@ -66,8 +83,8 @@ public abstract class Entidad {
     public int getAtaque() {return ataque;}
     public double getDefensa() {return defensa;}
     public int getId() {return id;}
+    public List <Sprite> getAnimaciones(){return animaciones;}
     public void setId(int id) {this.id = id;}
     public void setAtaque(int ataque) {this.ataque = ataque;}
-    public void setRutaImagen(String ruta) {this.rutaImagenPerfil = ruta;}
-
+    public void setRutaImagen(String ruta) {this.rutaImagenPerfil = ruta;}     
 }
