@@ -18,7 +18,7 @@ public class SeleccionScreen extends Screens {
 
         this.modelo = new SeleccionModelo();
         this.controlador = new SeleccionControlador(modelo, game.teclado, game.audio);
-        this.vista = new SeleccionVista(modelo);
+        this.vista = new SeleccionVista(modelo, stage);
         
     }
 

@@ -46,10 +46,12 @@ public class SeleccionControlador {
             //return Action.MAGO;
         }
 
-        /*if (teclado.select) {
-            confirmarSeleccion();
+        if (teclado.select) {
+            
+            modelo.aceptar();
+            //confirmarSeleccion();
             teclado.select = false;
-        }*/
+        }
 
         if (teclado.backPressed){
             

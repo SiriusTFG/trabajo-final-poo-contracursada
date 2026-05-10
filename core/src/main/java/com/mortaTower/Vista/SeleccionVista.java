@@ -1,8 +1,16 @@
 package com.mortaTower.Vista;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mortaTower.Modelo.SeleccionModelo;
 
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
@@ -12,11 +20,15 @@ public class SeleccionVista {
     
     private SeleccionModelo modelo;
 
+    private final TextField nameField;
+    private final BitmapFont font;
+    private final TextField.TextFieldStyle style;
+
     // ESTADOS VISUALES
     private static final int NORMAL = 1;
     private static final int SELECTED = 0;
 
-    private Texture fondo;
+    private Texture fondo, cuadro;
     private final Texture[] texturas;
     // cantidad de columnas (estados)
     private int[] columnas;
@@ -28,11 +40,12 @@ public class SeleccionVista {
     private TextureRegion[][][] sprites;
 
 
-    public SeleccionVista(SeleccionModelo modelo){
+    public SeleccionVista(SeleccionModelo modelo, Stage stage){
 
         this.modelo = modelo;
 
         fondo = new Texture("Imagenes/SeleccionPersonaje/seleccionPersonaje.png");
+        cuadro = new Texture("Imagenes/SeleccionPersonaje/nombrePersonaje.png");
 
         texturas = new Texture[] {
             new Texture("Imagenes/SeleccionPersonaje/seleccionCaballero.png"),
@@ -65,6 +78,30 @@ public class SeleccionVista {
                 }
             }
         }
+        
+        font = new BitmapFont();
+
+        style = new TextField.TextFieldStyle();
+        style.font = font;
+        style.fontColor = Color.GOLD;
+
+        // cursor invisible
+        style.cursor = crearCursor(Color.GOLD, 2, 20);
+
+        // sin fondo
+        style.background = null;
+        style.focusedBackground = null;
+
+        nameField = new TextField("", style);
+        nameField.setSize(400, 100);
+        nameField.setPosition(WORLD_WIDTH / 2f - 200, WORLD_HEIGHT / 2.7f);
+        nameField.setMaxLength(25);
+        nameField.setVisible(false);
+        stage.setKeyboardFocus(nameField);
+
+        stage.addActor(nameField);
+
+        Gdx.input.setInputProcessor(stage);
 
     }
 
@@ -82,12 +119,22 @@ public class SeleccionVista {
         // opción seleccionada
         int seleccion = modelo.getOpcionActual().ordinal(); //conecta el enum del modelo con un índice numérico.
 
+        if(modelo.getEstadoActual() == SeleccionModelo.Estado.NOMBRE){
+
+            batch.draw(cuadro, 350, 150, WORLD_WIDTH - 700, WORLD_HEIGHT - 300);
+
+            nameField.setVisible(true);
+        }else{
+
+            nameField.setVisible(false);
+        }
 
         for (int i = 0; i < sprites.length; i++) {
 
             int estado = (i == seleccion) ? NORMAL : SELECTED;
             int nivel = 0;
             batch.draw(sprites[i][estado][nivel], x + separacion * i, y, ancho, alto);
+
         }
     }
 
@@ -99,4 +146,21 @@ public class SeleccionVista {
             tex.dispose();
         }
     }
+
+    private Drawable crearCursor(Color color, int width, int height) {
+
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+
+        pixmap.setColor(color);
+
+        pixmap.fill();
+
+        Texture texture = new Texture(pixmap);
+
+        pixmap.dispose();
+
+        return new TextureRegionDrawable(new TextureRegion(texture));
+    }
+
+    public String getNombre() {return nameField.getText();}
 }

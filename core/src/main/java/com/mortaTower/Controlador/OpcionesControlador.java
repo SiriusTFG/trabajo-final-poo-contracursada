@@ -1,6 +1,7 @@
 package com.mortaTower.Controlador;
 
 import com.mortaTower.Modelo.OpcionesModelo;
+import com.mortaTower.Modelo.OpcionesModelo.EstadoEnum;
 
 public class OpcionesControlador {
 
@@ -21,6 +22,8 @@ public class OpcionesControlador {
 
         teclado.update();
 
+        if (modelo.getEstadoActual() != EstadoEnum.CONTROLES){
+
         if(teclado.upPressed){
 
             modelo.arriba();
@@ -36,16 +39,36 @@ public class OpcionesControlador {
         if(teclado.leftPressed){
 
             modelo.izquierda();
+            actualizarVolumen();
             teclado.leftPressed = false;
         }
 
         if(teclado.rightPressed){
 
             modelo.derecha();
+            actualizarVolumen();
             teclado.rightPressed = false;
+        }
+
+        if (teclado.selectPressed){
+
+            modelo.aceptar();
+            teclado.selectPressed = false;
+        }
+        }
+
+
+        if (teclado.backPressed){
+
+            modelo.atras();
+            teclado.backPressed = false;
         }
 
 
     }
     
+    private void actualizarVolumen() {
+        audio.setVolumenMusica(modelo.getVolMusica() / 10f);
+        audio.setVolumenFx(modelo.getVolFx() / 10f);
+    }
 }

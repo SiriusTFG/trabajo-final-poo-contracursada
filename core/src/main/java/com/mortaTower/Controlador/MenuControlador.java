@@ -55,7 +55,7 @@ public class MenuControlador {
                     return Action.OPTIONS;
                 }
 
-                case CREDITOS -> {
+                case CARGAR -> {
                     return Action.CREDITS;
                 }
 

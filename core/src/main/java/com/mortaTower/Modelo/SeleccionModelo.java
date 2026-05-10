@@ -3,9 +3,11 @@ package com.mortaTower.Modelo;
 public class SeleccionModelo {
 
     public enum Heroe {CABALLERO, MAGO};
+    public enum Estado {MENU, SELECCION, NOMBRE}
     public static final Heroe[] valores = Heroe.values();
 
     private Heroe seleccion = Heroe.CABALLERO;
+    private Estado estado = Estado.SELECCION;
 
     public void izquierda(){
         
@@ -19,9 +21,20 @@ public class SeleccionModelo {
         seleccion = valores[index];
     }
 
+    public void aceptar(){
+
+        if(estado == Estado.SELECCION){
+
+            estado = Estado.NOMBRE;
+        }
+
+    }
+
 
     // GETTERS
     public Heroe[] getOpciones() {return valores;}
     public Heroe getOpcionActual() {return seleccion;}
+
+    public Estado getEstadoActual() {return estado;}
     
 }

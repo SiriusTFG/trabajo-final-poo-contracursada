@@ -17,7 +17,7 @@ public class OpcionesVista {
     private static final int NORMAL = 1;
     private static final int SELECTED = 0;
 
-    private Texture fondo;
+    private Texture fondo, controles;
     private final Texture[] texturas;
     // cantidad de columnas (estados)
     private int[] columnas;
@@ -34,6 +34,7 @@ public class OpcionesVista {
         this.modelo = modelo;
 
         fondo = new Texture("Imagenes/Opciones/menuOpciones.png");
+        controles = new Texture("Imagenes/Opciones/menuControles.png");
 
         texturas = new Texture[] {
             new Texture("Imagenes/Opciones/volMusica.png"),
@@ -72,8 +73,6 @@ public class OpcionesVista {
 
     public void draw(SpriteBatch batch) {
 
-        batch.draw(fondo, 350, 100, WORLD_WIDTH - 700, WORLD_HEIGHT - 200);
-
         float x = WORLD_WIDTH * 0.33f;
         float y = WORLD_HEIGHT * 0.60f;
         float separacion = WORLD_HEIGHT * 0.15f;
@@ -86,25 +85,34 @@ public class OpcionesVista {
         int nivelMusica = modelo.getseleccionMusica();
         int nivelFx = modelo.getseleccionFx();
 
+        if (modelo.getEstadoActual() == OpcionesModelo.EstadoEnum.CONTROLES){
 
-        for (int i = 0; i < sprites.length; i++) {
+            batch.draw(controles, 350, 100, WORLD_WIDTH - 700, WORLD_HEIGHT - 200);
 
-            int estado = (i == seleccion) ? SELECTED : NORMAL;
-            int nivel = 0;
+        }else{
 
-            if(i == OpcionesEnum.MUSICA.ordinal()){
-                nivel = nivelMusica;
-            }else if(i == OpcionesEnum.EFECTOS.ordinal()){
-                nivel = nivelFx;
+            batch.draw(fondo, 350, 100, WORLD_WIDTH - 700, WORLD_HEIGHT - 200);
+
+            for (int i = 0; i < sprites.length; i++) {
+
+                int estado = (i == seleccion) ? SELECTED : NORMAL;
+                int nivel = 0;
+
+                if(i == OpcionesEnum.MUSICA.ordinal()){
+                    nivel = nivelMusica;
+                }else if(i == OpcionesEnum.EFECTOS.ordinal()){
+                    nivel = nivelFx;
+                }
+
+                batch.draw(sprites[i][estado][nivel], x, y - separacion * i, ancho, alto);
             }
-
-            batch.draw(sprites[i][estado][nivel], x, y - separacion * i, ancho, alto);
         }
     }
 
     public void dispose() {
 
         fondo.dispose();
+        controles.dispose();
 
         for (Texture tex : texturas) {
             tex.dispose();

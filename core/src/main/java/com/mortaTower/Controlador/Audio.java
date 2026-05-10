@@ -11,6 +11,9 @@ public class Audio {
 
     private float volumen = 1.0f;
 
+    private float volFx = 1.0f;
+    private float volMusica = 1.0f;
+
     public Audio() {
 
         sounds[0] = Gdx.audio.newSound(Gdx.files.internal("assets/Sonidos/Intro/untitled2.wav"));
@@ -23,7 +26,7 @@ public class Audio {
     // PLAY (SFX)
     public void play(int i) { 
         if (sounds[i] != null) {
-            sounds[i].play(volumen);
+            sounds[i].play(volFx);
         }
     }
 
@@ -31,7 +34,7 @@ public class Audio {
     public void loop(int i) {
         if (music[i] != null) {
             music[i].setLooping(true);
-            music[i].setVolume(volumen);
+            music[i].setVolume(volMusica);
             music[i].play();
         }
     }
@@ -43,25 +46,23 @@ public class Audio {
     }
 
     // VOLUMEN GLOBAL
-    public void setVolumen(float volumen) {
-        this.volumen = volumen;
-
-        for (Sound s : sounds) {
-            if (s != null) {
-                s.setVolume(s.play(), volumen); // alternativa simple
-            }
-        }
+    public void setVolumenMusica(float volMusica) {
+        this.volMusica = Math.max(0f, Math.min(volMusica, 1f));
 
         for (Music m : music) {
             if (m != null) {
-                m.setVolume(volumen);
+                m.setVolume(this.volMusica);
             }
         }
     }
 
-    public float getVolumen() {
-        return volumen;
-    }
+    public void setVolumenFx(float volFx) {
+        this.volFx = Math.max(0f, Math.min(volFx, 1f));
+    }  
+    
+
+    public float getVolumenMusica() {return volMusica;}
+    public float getVolumenFx() {return volFx;}
 
     public void dispose() {
         for (Sound s : sounds) if (s != null) s.dispose();

@@ -4,8 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 
 public class MenuModelo {
 
-    public enum OpcionesEnum {JUGAR, OPCIONES, CREDITOS, SALIR}
-    public enum Action {NONE, START_GAME, OPTIONS, CREDITS,EXIT}
+    public enum OpcionesEnum {JUGAR, CARGAR, OPCIONES, SALIR}
+    public enum Action {NONE, START_GAME, CARGAR, OPTIONS ,EXIT}
     private static final OpcionesEnum[] valores = OpcionesEnum.values();
 
     private OpcionesEnum seleccion = OpcionesEnum.JUGAR;

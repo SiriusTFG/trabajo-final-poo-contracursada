@@ -25,7 +25,7 @@ public class MenuScreen extends Screens {
         this.controlador = new MenuControlador(modelo, game.teclado, game.audio);
         this.vista = new MenuVista(modelo);
 
-       opcionesOverlay = new OpcionesOverlay(game);
+        opcionesOverlay = new OpcionesOverlay(game);
     }
 
     @Override
@@ -35,9 +35,7 @@ public class MenuScreen extends Screens {
 
             opcionesOverlay.update(delta);
 
-            if (opcionesOverlay.shouldClose()) {
-                mostrarOpciones = false;
-            }
+            if (opcionesOverlay.shouldClose()) {mostrarOpciones = false;}
 
             return;
         }
@@ -48,10 +46,7 @@ public class MenuScreen extends Screens {
 
             case START_GAME -> game.setScreen(new SeleccionScreen(game));
 
-            case OPTIONS -> {
-                mostrarOpciones = true;
-                opcionesOverlay.open();
-            }
+            case OPTIONS -> { mostrarOpciones = true; opcionesOverlay.open();}
 
             case CREDITS -> System.out.println("Ir a créditos (futuro screen)");
 

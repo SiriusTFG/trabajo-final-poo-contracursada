@@ -6,6 +6,7 @@ import com.mortaTower.Controlador.OpcionesControlador.Action;
 import com.mortaTower.Controlador.Teclado;
 import com.mortaTower.Controlador.OpcionesControlador;
 import com.mortaTower.Modelo.OpcionesModelo;
+import com.mortaTower.Modelo.OpcionesModelo.EstadoEnum;
 import com.mortaTower.Vista.OpcionesVista;
 
 public class OpcionesOverlay {
@@ -30,22 +31,18 @@ public class OpcionesOverlay {
 
         controlador.update();
 
-        if (teclado.backPressed) {
-            cerrar = true;
-            teclado.backPressed = false;
-        }
-
+       if (modelo.getEstadoActual() == EstadoEnum.MENU) {cerrar = true;}
         
     }
 
+    public void draw(SpriteBatch batch) {
+        vista.draw(batch);
+    }
+    
     public void open() {
        cerrar = false;
     }
     
-    public void draw(SpriteBatch batch) {
-        vista.draw(batch);
-    }
-
     public boolean shouldClose() {
         return cerrar;
     }
