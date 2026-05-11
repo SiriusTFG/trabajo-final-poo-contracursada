@@ -11,8 +11,6 @@ import com.mortaTower.Modelo.SeleccionModelo.Heroe;
 
 public class SeleccionControlador {
 
-    public enum Action {NONE,ATRAS, CABALLERO, MAGO}
-
     private SeleccionModelo modelo;
     private Teclado teclado;
     private Audio audio;
@@ -26,7 +24,7 @@ public class SeleccionControlador {
         partidaDao = new PartidaDao();
     }
 
-    public Action update(){
+    public void update(){
 
         teclado.update();
 
@@ -56,12 +54,10 @@ public class SeleccionControlador {
         if (teclado.backPressed){
             
             audio.stop(3);
-            
-            //game.setOverlay(new TransicionState(game,() -> game.setState(new MenuState(teclado, game)))); // salir del menú opciones
+            modelo.atras();
             teclado.backPressed = false;
-            return Action.ATRAS;
         }
-       return Action.NONE;
+
     }
 
     private void confirmarSeleccion() {

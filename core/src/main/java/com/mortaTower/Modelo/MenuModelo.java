@@ -1,6 +1,5 @@
 package com.mortaTower.Modelo;
 
-import com.badlogic.gdx.scenes.scene2d.Action;
 
 public class MenuModelo {
 

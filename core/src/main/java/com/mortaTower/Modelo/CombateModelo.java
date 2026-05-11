@@ -2,12 +2,16 @@ package com.mortaTower.Modelo;
 
 public class CombateModelo {
     
-    private String[] opciones = {"Luchar", "Habilidad", "Opciones"};
-    private int seleccion = 0;
+    public enum Opciones {LUCHAR, HABILIDADES, OPCIONES};
+    private Opciones seleccion = Opciones.LUCHAR;
+    public static final Opciones[] valores = Opciones.values();
 
-    public void izquierda(){seleccion = (seleccion - 1 + opciones.length) % opciones.length;}
-    public void derecha(){seleccion = (seleccion + 1) % opciones.length;}
+    public void izquierda(){int index = (seleccion.ordinal() - 1 + valores.length) % valores.length;
+        seleccion = valores[index];}
 
-    public String[] getOpciones() {return opciones;}
-    public int getSeleccion() {return seleccion;}
+    public void derecha(){int index = (seleccion.ordinal() + 1) % valores.length;
+        seleccion = valores[index];}
+
+    public Opciones getOpcionActual() {return seleccion;}
+    public Opciones[] getOpciones() {return valores;}
 }  

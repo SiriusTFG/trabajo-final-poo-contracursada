@@ -1,5 +1,7 @@
 package com.mortaTower.Modelo;
 
+import com.mortaTower.Modelo.OpcionesModelo.EstadoEnum;
+
 public class SeleccionModelo {
 
     public enum Heroe {CABALLERO, MAGO};
@@ -28,6 +30,17 @@ public class SeleccionModelo {
             estado = Estado.NOMBRE;
         }
 
+    }
+
+    public void atras(){
+
+        if(estado == Estado.NOMBRE){
+
+            estado = Estado.SELECCION;
+        }else{
+
+            estado = Estado.MENU;
+        }
     }
 
 
