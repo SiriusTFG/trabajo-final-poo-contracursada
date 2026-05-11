@@ -1,61 +1,59 @@
 package com.mortaTower.Screens;
 
 import com.mortaTower.Main;
+import com.mortaTower.Controlador.SeleccionControlador.Action;
 import com.mortaTower.Controlador.SeleccionControlador;
 import com.mortaTower.Modelo.SeleccionModelo;
-import com.mortaTower.Modelo.SeleccionModelo.Estado;
 import com.mortaTower.Vista.NombreVista;
 import com.mortaTower.Vista.SeleccionVista;
 
 public class SeleccionScreen extends Screens {
 
     private final SeleccionModelo modelo;
-    private final SeleccionVista vista;
-    private final NombreVista nombreVista;
     private final SeleccionControlador controlador;
 
-    public SeleccionScreen(Main game){
+    private final SeleccionVista seleccionVista;
+    private final NombreVista nombreVista;
+
+    public SeleccionScreen(Main game) {
 
         super(game);
 
-        this.modelo = new SeleccionModelo();
-        this.controlador = new SeleccionControlador(modelo, game.teclado, game.audio);
-        this.vista = new SeleccionVista(modelo, stage);
-        this.nombreVista= new NombreVista(modelo, stage);
-        
+        modelo = new SeleccionModelo();
+        controlador = new SeleccionControlador(modelo, game.teclado);
+        seleccionVista = new SeleccionVista(modelo, stage);
+        nombreVista = new NombreVista(modelo, stage);
     }
 
     @Override
     public void update(float delta) {
 
-        controlador.update();
+        Action action = controlador.update();
 
-        if (modelo.getEstadoActual() == Estado.MENU){
+        switch (action) {
 
-            game.setScreen(new MenuScreen(game));
-            dispose();
+            case IR_MENU -> { game.setScreen(new TransicionScreen(game,this,new MenuScreen(game))); }
 
+            case INICIAR_PARTIDA -> { System.out.println("Comenzar partida"); }
+
+            case NONE -> {}
         }
-
     }
 
     @Override
     public void draw(float delta) {
-       // menu principal
-        vista.draw(spriteBatch);
 
-        if (modelo.getEstadoActual() == Estado.NOMBRE){
-            
-            nombreVista.draw(spriteBatch);
-            
-        }else{
-            nombreVista.getNamTextField().setVisible(false);
+        switch (modelo.getEstadoActual()) {
+
+            case SELECCION -> { seleccionVista.draw(spriteBatch); }
+
+            case NOMBRE -> {
+
+                seleccionVista.draw(spriteBatch);
+
+                nombreVista.draw(spriteBatch);
+            }
+
         }
-
-        
-
     }
-
-    
-    
 }

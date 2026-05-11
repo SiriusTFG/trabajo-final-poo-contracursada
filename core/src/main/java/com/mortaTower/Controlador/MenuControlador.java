@@ -6,9 +6,6 @@ public class MenuControlador {
 
     public enum Action {NONE, START_GAME, OPTIONS, CREDITS,EXIT}
 
-    //private long ultimoInput = 0;
-    //private final long cooldown = 120;
-
     private final MenuModelo menuModelo;
     private final Teclado teclado;
     private final Audio audio;
@@ -18,12 +15,10 @@ public class MenuControlador {
         this.teclado = teclado;
         this.audio = audio;
 
-        //audio.loop(3);
+        audio.loop(3);
     }
 
     public Action update() {
-
-        //long now = TimeUtils.millis();
 
         teclado.update();
 
@@ -49,6 +44,7 @@ public class MenuControlador {
                 case JUGAR -> {
                     audio.play(2); // confirm
                     return Action.START_GAME;
+                    
                 }
 
                 case OPCIONES -> {

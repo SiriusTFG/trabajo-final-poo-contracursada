@@ -44,7 +44,7 @@ public class MenuScreen extends Screens {
 
         switch (action) {
 
-            case START_GAME -> game.setScreen(new SeleccionScreen(game));
+            case START_GAME -> game.setScreen(new TransicionScreen( game,this, new SeleccionScreen(game)));
 
             case OPTIONS -> { mostrarOpciones = true; opcionesOverlay.open();}
 

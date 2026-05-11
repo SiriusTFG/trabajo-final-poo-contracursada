@@ -14,9 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.mortaTower.Modelo.NombreModelo;
 import com.mortaTower.Modelo.SeleccionModelo;
-import com.mortaTower.Modelo.SeleccionModelo.Estado;
 
 public class NombreVista {
     

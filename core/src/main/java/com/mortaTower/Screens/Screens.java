@@ -48,9 +48,9 @@ public abstract class Screens implements Screen {
 
         update(delta);
 
-        camera.update(); // 👈 clave
+        camera.update();
 
-        spriteBatch.setProjectionMatrix(camera.combined); // 👈 clave
+        spriteBatch.setProjectionMatrix(camera.combined); 
 
         spriteBatch.begin();
         draw(delta);

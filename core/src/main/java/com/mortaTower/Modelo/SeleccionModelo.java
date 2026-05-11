@@ -1,53 +1,46 @@
 package com.mortaTower.Modelo;
 
-import com.mortaTower.Modelo.OpcionesModelo.EstadoEnum;
-
 public class SeleccionModelo {
 
-    public enum Heroe {CABALLERO, MAGO};
-    public enum Estado {MENU, SELECCION, NOMBRE}
-    public static final Heroe[] valores = Heroe.values();
+    public enum Heroe {CABALLERO, MAGO}
+    public enum Estado {SELECCION, NOMBRE}
 
-    private Heroe seleccion = Heroe.CABALLERO;
-    private Estado estado = Estado.SELECCION;
+    private static final Heroe[] heroes = Heroe.values();
 
-    public void izquierda(){
-        
-        int index = (seleccion.ordinal() - 1 + valores.length) % valores.length;
-        seleccion = valores[index];
+    private Heroe heroeActual = Heroe.CABALLERO;
+    private Estado estadoActual = Estado.SELECCION;
+
+    private String nombreJugador = "";
+
+    public void izquierda() {
+
+        if (estadoActual != Estado.SELECCION) return;
+
+        int index = (heroeActual.ordinal() - 1 + heroes.length) % heroes.length;
+        heroeActual = heroes[index];
     }
 
-    public void derecha(){
-        
-        int index = (seleccion.ordinal() + 1) % valores.length;
-        seleccion = valores[index];
+    public void derecha() {
+
+        if (estadoActual != Estado.SELECCION) return;
+
+        int index = (heroeActual.ordinal() + 1) % heroes.length;
+        heroeActual = heroes[index];
     }
 
-    public void aceptar(){
+    public void confirmarHeroe() {
 
-        if(estado == Estado.SELECCION){
-
-            estado = Estado.NOMBRE;
-        }
-
-    }
-
-    public void atras(){
-
-        if(estado == Estado.NOMBRE){
-
-            estado = Estado.SELECCION;
-        }else{
-
-            estado = Estado.MENU;
+        if (estadoActual == Estado.SELECCION) {
+            estadoActual = Estado.NOMBRE;
         }
     }
 
+    public void volverSeleccion() {estadoActual = Estado.SELECCION;}
 
-    // GETTERS
-    public Heroe[] getOpciones() {return valores;}
-    public Heroe getOpcionActual() {return seleccion;}
+    // GETTERS / SETTERS
+    public Heroe getHeroeActual() {return heroeActual;}
+    public Estado getEstadoActual() {return estadoActual;}
+    public String getNombreJugador() {return nombreJugador;}
 
-    public Estado getEstadoActual() {return estado;}
-    
+    public void setNombreJugador(String nombreJugador) {this.nombreJugador = nombreJugador;}
 }

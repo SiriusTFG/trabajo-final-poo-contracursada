@@ -81,7 +81,7 @@ public class SeleccionVista {
         float alto = WORLD_HEIGHT * 0.10f;
 
         // opción seleccionada
-        int seleccion = modelo.getOpcionActual().ordinal(); //conecta el enum del modelo con un índice numérico.
+        int seleccion = modelo.getHeroeActual().ordinal(); //conecta el enum del modelo con un índice numérico.
 
         for (int i = 0; i < sprites.length; i++) {
 
