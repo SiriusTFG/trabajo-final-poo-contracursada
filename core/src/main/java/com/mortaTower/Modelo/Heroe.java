@@ -5,6 +5,7 @@ public class Heroe extends Entidad {
     private int experiencia;
     private int nivel;
     private int experienciaNecesaria;
+    private Habilidad habilidadSeleccionada;
     
     public Heroe(String nombre, int vida, int mana) {
         super(nombre, vida, mana);
@@ -82,9 +83,20 @@ public class Heroe extends Entidad {
     
     }
 
+    public void seleccionarHabilidad(int indice) {
+        if (indice < 0 || indice >= habilidades.length) {
+            habilidadSeleccionada = null;
+            return;
+        }
+        habilidadSeleccionada = habilidades[indice];
+    }
+
     @Override
     public void realizarTurno (Entidad objetivo) {
-        usarHabilidad(0, objetivo); // Intenta usar la primera habilidad equipada
+        if (habilidadSeleccionada == null) return;
+
+        habilidadSeleccionada.ejecutarHabilidad(this, objetivo);
+        habilidadSeleccionada = null;
     }
 
     public int getNivel() {

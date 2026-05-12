@@ -39,4 +39,5 @@ public class Main extends Game {
     }
 
     public void setPartida(Partida partida) {partidaActual = partida;}
+    public Partida getPartidaActual() {return partidaActual;}
 }

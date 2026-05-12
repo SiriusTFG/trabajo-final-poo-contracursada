@@ -1,20 +1,19 @@
 package com.mortaTower.Vista;
 
-import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
-import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
-
-import javax.imageio.ImageIO;
-
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.mortaTower.Modelo.CombateModelo;
+import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
+import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
 public class CombateVista {
 
     private CombateModelo modelo;
+    private ShapeRenderer sr;
 
     // ESTADOS VISUALES
     private static final int NORMAL = 1;
@@ -29,9 +28,16 @@ public class CombateVista {
     // [objeto][estado][nivel]
     private TextureRegion[][][] sprites;
 
+    //Fuente
+    private BitmapFont fuente;
+
     //Constructor
     public CombateVista(CombateModelo modelo) {
         this.modelo = modelo;
+        sr = new ShapeRenderer();
+        fuente = new BitmapFont();
+        fuente.getData().setScale(1.5f);
+        fuente.setColor(Color.WHITE);
 
         // Sprites
         fondo = new Texture("/assets/Imagenes/Combate/FondoCombate.png");
@@ -78,17 +84,57 @@ public class CombateVista {
         float ancho = WORLD_WIDTH * 0.35f;
         float alto = WORLD_HEIGHT * 0.12f;
 
+        // configuracion para botones de habilidad
+        float anchoHab = 250f;
+        float altoHab = 80f;
+        float xInicialHab = (WORLD_WIDTH - (anchoHab * 4 + 30 * 3)) / 2;
+        float yHab = 150f;
+
+        // configuracion para bortones de opciones
+        float anchoOpt = 300f;
+        float xOpt = (WORLD_WIDTH - anchoOpt) / 2;
+        float yOpt = 50f;
+
+        int estadoOpt = (modelo.getOpcionActual() == CombateModelo.Opciones.OPCIONES) ? SELECTED : NORMAL;
+
         int seleccion = modelo.getOpcionActual().ordinal();
 
         batch.draw(fondo, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
-        for (int i = 0; i < sprites.length; i++) {
+        for (int i = 0; i < 4; i++) {
 
-            int estado = (i == seleccion) ? SELECTED : NORMAL;
-            int nivel = 0;
+            int estado = (modelo.getOpcionActual().ordinal() == i) ? SELECTED : NORMAL;
 
-            batch.draw(sprites[i][estado][nivel], x, y - separacion * i, ancho, alto);
+            batch.draw(sprites[1][estado][0], xInicialHab + i * (anchoHab + 30), yHab - separacion * i, anchoHab, altoHab);
+
+            String texto = modelo.getNombreHabilidad(i);
+            fuente.draw(batch, texto, xInicialHab + i * (anchoHab + 30) + 20, yHab + 50); 
         }
+
+        batch.draw(sprites[2][estadoOpt][0], xOpt, yOpt, anchoOpt, altoHab);
+    }
+
+    public void dibujarInterfaz(SpriteBatch batch) {
+        batch.end(); //pausa el batch oara usar el ShapeRenderer
+
+        sr.setProjectionMatrix(batch.getProjectionMatrix());
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+
+        //dibuja barra de vida del heroe
+        dibujarBarraVida(50, 100, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), Color.GREEN);
+
+        //dibuja barra de vida del enemigo
+        dibujarBarraVida(WORLD_WIDTH - 250, 500, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
+    }
+
+    private void dibujarBarraVida(float x, float y, int actual, int max, Color color) {
+        float ancho = 200f;
+        float porcentaje = (float) actual / max;
+
+        sr.setColor(Color.BLACK);
+        sr.rect(x, y, ancho, 20);
+        sr.setColor(color);
+        sr.rect(x, y, ancho * porcentaje, 20);
     }
 }
 
