@@ -1,8 +1,10 @@
 package com.mortaTower.Screens;
 
-import com.mortaTower.Main;
-import com.mortaTower.Controlador.SeleccionControlador.Action;
 import com.mortaTower.Controlador.SeleccionControlador;
+import com.mortaTower.Controlador.SeleccionControlador.Action;
+import com.mortaTower.DAO.PartidaDao;
+import com.mortaTower.Main;
+import com.mortaTower.Modelo.Partida;
 import com.mortaTower.Modelo.SeleccionModelo;
 import com.mortaTower.Vista.NombreVista;
 import com.mortaTower.Vista.SeleccionVista;
@@ -34,7 +36,22 @@ public class SeleccionScreen extends Screens {
 
             case IR_MENU -> { game.setScreen(new TransicionScreen(game,this,new MenuScreen(game))); }
 
-            case INICIAR_PARTIDA -> { game.setScreen(new CombateScreen(game)); System.out.println("comienza"); }
+            case INICIAR_PARTIDA -> { 
+                try {
+                    String nombre = modelo.getNombreJugador();
+                    int idHeroe = (modelo.getHeroeActual() == SeleccionModelo.Heroe.CABALLERO) ? 1 : 2;
+
+                    PartidaDao pDao = new PartidaDao();
+                    int id = pDao.nuevaPartida(nombre, idHeroe);
+
+                    Partida pNueva = pDao.cargarPartida(id);
+                    game.setPartida(pNueva);
+
+                    game.setScreen(new CombateScreen(game)); System.out.println("comienza");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }   
 
             case NONE -> {}
         }

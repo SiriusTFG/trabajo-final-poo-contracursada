@@ -40,7 +40,7 @@ public class CombateVista {
         fuente.setColor(Color.WHITE);
 
         // Sprites
-        fondo = new Texture("/assets/Imagenes/Combate/FondoCombate.png");
+        fondo = new Texture("/assets/Imagenes/Combate/fondoCombate.png");
 
         texturas = new Texture[] {
             new Texture("/assets/Imagenes/Combate/luchar.png"),
