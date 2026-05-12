@@ -16,7 +16,7 @@ public class Teclado {
 
     public void update() {
 
-        // RESET DE PRESSED CADA FRAME
+        // RESET DE PRESSED EN CADA FRAME
         upPressed = false;
         downPressed = false;
         leftPressed = false;
@@ -24,7 +24,7 @@ public class Teclado {
         selectPressed = false;
         backPressed = false;
 
-        // HOLD (estado continuo)
+        // MANTENER (estado continuo)
         up = Gdx.input.isKeyPressed(Input.Keys.UP);
         down = Gdx.input.isKeyPressed(Input.Keys.DOWN);
         left = Gdx.input.isKeyPressed(Input.Keys.LEFT);
@@ -33,7 +33,7 @@ public class Teclado {
         select = Gdx.input.isKeyPressed(Input.Keys.ENTER);
         back = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
 
-        // JUST PRESSED (equivalente a tu KeyPressed)
+        // PRESIONA UNA VEZ
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) upPressed = true;
         if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) downPressed = true;
         if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) leftPressed = true;

@@ -71,6 +71,7 @@ public class OpcionesModelo {
     public OpcionesEnum getOpcionActual() {return seleccion;}
 
     public EstadoEnum getEstadoActual() {return estado;}
+    public void EstadoEnum(EstadoEnum estado) {this.estado = estado;}
 
 
     public int getseleccionMusica() {return seleccionMusica;}

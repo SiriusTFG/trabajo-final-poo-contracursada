@@ -1,24 +1,16 @@
 package com.mortaTower.Vista;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.*;
+
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.mortaTower.Modelo.SeleccionModelo;
-
 public class NombreVista {
-    
-    private SeleccionModelo modelo;
 
     private final TextField nameField;
     private final BitmapFont font;
@@ -26,9 +18,7 @@ public class NombreVista {
 
     private Texture cuadro;
 
-    public NombreVista(SeleccionModelo modelo, Stage stage){
-
-        this.modelo = modelo;
+    public NombreVista(Stage stage){
 
         cuadro = new Texture("Imagenes/SeleccionPersonaje/nombrePersonaje.png");
 

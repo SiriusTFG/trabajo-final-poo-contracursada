@@ -2,8 +2,6 @@ package com.mortaTower.Screens;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mortaTower.Main;
-import com.mortaTower.Controlador.OpcionesControlador.Action;
-import com.mortaTower.Controlador.Teclado;
 import com.mortaTower.Controlador.OpcionesControlador;
 import com.mortaTower.Modelo.OpcionesModelo;
 import com.mortaTower.Modelo.OpcionesModelo.EstadoEnum;
@@ -15,7 +13,6 @@ public class OpcionesOverlay {
     private final OpcionesVista vista;
     private final OpcionesControlador controlador;
 
-    private final Teclado teclado;
     private boolean cerrar = false;
 
     public OpcionesOverlay(Main game) {
@@ -24,14 +21,13 @@ public class OpcionesOverlay {
         controlador = new OpcionesControlador(modelo,game.teclado,game.audio);
         vista = new OpcionesVista(modelo);
 
-        this.teclado = game.teclado;
     }
 
     public void update(float delta) {
 
         controlador.update();
 
-       if (modelo.getEstadoActual() == EstadoEnum.MENU) {cerrar = true;}
+       if (modelo.getEstadoActual() == EstadoEnum.MENU) {cerrar = true; modelo.EstadoEnum(EstadoEnum.OPCIONES);}
         
     }
 

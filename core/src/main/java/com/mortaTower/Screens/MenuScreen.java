@@ -2,7 +2,6 @@ package com.mortaTower.Screens;
 
 import com.mortaTower.Modelo.MenuModelo;
 import com.mortaTower.Vista.MenuVista;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mortaTower.Main;
 import com.mortaTower.Controlador.MenuControlador;
 import com.mortaTower.Controlador.MenuControlador.Action;
@@ -52,9 +51,7 @@ public class MenuScreen extends Screens {
 
             case EXIT -> System.exit(0);
 
-            case NONE -> {
-                // no hacer nada
-            }
+            case NONE -> {}
         }
     }
 

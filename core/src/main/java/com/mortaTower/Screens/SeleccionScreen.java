@@ -22,7 +22,7 @@ public class SeleccionScreen extends Screens {
         modelo = new SeleccionModelo();
         controlador = new SeleccionControlador(modelo, game.teclado);
         seleccionVista = new SeleccionVista(modelo, stage);
-        nombreVista = new NombreVista(modelo, stage);
+        nombreVista = new NombreVista(stage);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class SeleccionScreen extends Screens {
 
             case IR_MENU -> { game.setScreen(new TransicionScreen(game,this,new MenuScreen(game))); }
 
-            case INICIAR_PARTIDA -> { System.out.println("Comenzar partida"); }
+            case INICIAR_PARTIDA -> { game.setScreen(new CombateScreen(game)); System.out.println("comienza"); }
 
             case NONE -> {}
         }

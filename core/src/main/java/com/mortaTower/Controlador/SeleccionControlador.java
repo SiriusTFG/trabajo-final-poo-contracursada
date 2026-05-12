@@ -33,14 +33,14 @@ public class SeleccionControlador {
             teclado.rightPressed = false;
         }
 
-        if (teclado.select) {
+        if (teclado.selectPressed) {
             
             if (modelo.getEstadoActual() == Estado.SELECCION){
             modelo.confirmarHeroe();
             }else{
                 return Action.INICIAR_PARTIDA;
             }
-            teclado.select = false;
+            teclado.selectPressed = false;
         }
 
         if (teclado.backPressed) {

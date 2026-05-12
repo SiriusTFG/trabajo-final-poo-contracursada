@@ -9,8 +9,6 @@ public class Audio {
     private Sound[] sounds = new Sound[10];
     private Music[] music = new Music[10];
 
-    private float volumen = 1.0f;
-
     private float volFx = 1.0f;
     private float volMusica = 1.0f;
 
