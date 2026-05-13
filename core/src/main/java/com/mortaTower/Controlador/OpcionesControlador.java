@@ -25,13 +25,13 @@ public class OpcionesControlador {
         if (modelo.getEstadoActual() != EstadoEnum.CONTROLES){
 
         if(teclado.upPressed){
-
+            audio.play(0);
             modelo.arriba();
             teclado.upPressed = false;
         }
 
         if(teclado.downPressed){
-
+            audio.play(0);
             modelo.abajo();
             teclado.downPressed = false;
         }
@@ -51,7 +51,7 @@ public class OpcionesControlador {
         }
 
         if (teclado.selectPressed){
-
+            audio.play(5);
             modelo.aceptar();
             teclado.selectPressed = false;
         }
@@ -59,7 +59,7 @@ public class OpcionesControlador {
 
 
         if (teclado.backPressed){
-
+            audio.play(4);
             modelo.atras();
             teclado.backPressed = false;
         }
