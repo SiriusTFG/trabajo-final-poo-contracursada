@@ -14,7 +14,7 @@ public class Audio {
 
     public Audio() {
 
-        sounds[0] = Gdx.audio.newSound(Gdx.files.internal("assets/Sonidos/Intro/untitled2.wav"));
+        sounds[0] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Intro/untitled2.wav"));
         sounds[1] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/vgmenuhighlight.wav"));
         sounds[2] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/Fantasy_UI (21).wav"));
         

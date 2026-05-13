@@ -14,7 +14,6 @@ public class CombateControlador {
         this.modelo = model;
         this.teclado = teclado;
 
-        audio.loop(3);
     }
 
     public void update(){
@@ -32,7 +31,7 @@ public class CombateControlador {
         if (teclado.upPressed) {modelo.arriba();}
 
         if (teclado.selectPressed) {
-            audio.play(2);
+            //audio.play(2);
             Opciones opt = modelo.getOpcionActual();
 
             if (opt == Opciones.OPCIONES) {

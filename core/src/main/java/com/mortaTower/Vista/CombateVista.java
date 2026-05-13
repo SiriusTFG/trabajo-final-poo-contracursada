@@ -40,12 +40,12 @@ public class CombateVista {
         fuente.setColor(Color.WHITE);
 
         // Sprites
-        fondo = new Texture("/assets/Imagenes/Combate/fondoCombate.png");
+        fondo = new Texture("Imagenes/Combate/fondoCombate.png");
 
         texturas = new Texture[] {
-            new Texture("/assets/Imagenes/Combate/luchar.png"),
-            new Texture("/assets/Imagenes/Combate/habilidades.png"),
-            new Texture("/assets/Imagenes/MenuInicio/opciones.png"),
+            new Texture("Imagenes/Combate/luchar.png"),
+            new Texture("Imagenes/Combate/habilidades.png"),
+            new Texture("Imagenes/MenuInicio/op.png"),
         };
 
         columnas = new int[] {2,2,2};
@@ -125,6 +125,8 @@ public class CombateVista {
 
         //dibuja barra de vida del enemigo
         dibujarBarraVida(WORLD_WIDTH - 250, 500, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
+
+        batch. begin();
     }
 
     private void dibujarBarraVida(float x, float y, int actual, int max, Color color) {

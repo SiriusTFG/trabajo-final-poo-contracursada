@@ -23,7 +23,7 @@ public class MenuVista {
     public MenuVista(MenuModelo menuModelo) {
         this.menuModelo = menuModelo;
 
-        fondo = new Texture("Imagenes/MenuInicio/Fondo.jpg");
+        fondo = new Texture("Imagenes/MenuInicio/Fondo.png");
 
          texturas = new Texture[] {
             new Texture("Imagenes/MenuInicio/nueva.png"),

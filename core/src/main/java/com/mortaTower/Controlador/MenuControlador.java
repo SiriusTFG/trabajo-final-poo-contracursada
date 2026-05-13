@@ -15,7 +15,7 @@ public class MenuControlador {
         this.teclado = teclado;
         this.audio = audio;
 
-        audio.loop(3);
+        //audio.loop(3);
     }
 
     public Action update() {

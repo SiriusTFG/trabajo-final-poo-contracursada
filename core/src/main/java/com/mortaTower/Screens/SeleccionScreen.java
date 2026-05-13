@@ -5,8 +5,11 @@ import com.mortaTower.Controlador.SeleccionControlador.Action;
 import com.mortaTower.DAO.PartidaDao;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.Partida;
+import com.mortaTower.Controlador.RecompensaControlador;
+import com.mortaTower.Modelo.RecompensasModelo;
 import com.mortaTower.Modelo.SeleccionModelo;
 import com.mortaTower.Vista.NombreVista;
+import com.mortaTower.Vista.RecompensasVista;
 import com.mortaTower.Vista.SeleccionVista;
 
 public class SeleccionScreen extends Screens {
@@ -17,6 +20,10 @@ public class SeleccionScreen extends Screens {
     private final SeleccionVista seleccionVista;
     private final NombreVista nombreVista;
 
+    private RecompensasVista recoVista;
+    private RecompensasModelo modelo2;
+    private RecompensaControlador cont;
+
     public SeleccionScreen(Main game) {
 
         super(game);
@@ -25,12 +32,17 @@ public class SeleccionScreen extends Screens {
         controlador = new SeleccionControlador(modelo, game.teclado);
         seleccionVista = new SeleccionVista(modelo, stage);
         nombreVista = new NombreVista(stage);
+
+        modelo2 = new RecompensasModelo();
+        recoVista = new RecompensasVista(modelo2);
+        cont = new RecompensaControlador(modelo2, game.teclado);
     }
 
     @Override
     public void update(float delta) {
 
         Action action = controlador.update();
+        //cont.update();
 
         switch (action) {
 
@@ -68,6 +80,7 @@ public class SeleccionScreen extends Screens {
 
                 seleccionVista.draw(spriteBatch);
 
+                //recoVista.draw(spriteBatch);
                 nombreVista.draw(spriteBatch);
             }
 
