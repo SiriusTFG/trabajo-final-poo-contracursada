@@ -15,7 +15,7 @@ public class MenuControlador {
         this.teclado = teclado;
         this.audio = audio;
 
-        //audio.loop(3);
+        //audio.loop(0);
     }
 
     public Action update() {
@@ -26,14 +26,14 @@ public class MenuControlador {
         if (teclado.upPressed) {
             menuModelo.arriba();
             
-            audio.play(1); // hover menu
+            audio.play(0); // hover menu
         }
 
         // mover abajo
         if (teclado.downPressed) {
             menuModelo.abajo();
             
-            audio.play(1);
+            audio.play(0);
         }
 
         // seleccionar opción
@@ -42,12 +42,15 @@ public class MenuControlador {
             switch (menuModelo.getOpcionActual()) {
 
                 case JUGAR -> {
-                    audio.play(2); // confirm
+                    audio.play(3); // confirm
+                    audio.stop(0);
                     return Action.START_GAME;
                     
                 }
 
                 case OPCIONES -> {
+                    
+                    audio.play(5);
                     return Action.OPTIONS;
                 }
 
