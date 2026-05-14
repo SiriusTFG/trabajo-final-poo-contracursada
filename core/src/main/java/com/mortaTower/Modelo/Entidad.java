@@ -22,9 +22,11 @@ public abstract class Entidad {
     public abstract void realizarTurno(Entidad objetivo);
 
     public void recibirDanio(int cantidad) {
+        System.out.println("DEBUG " + nombre + " -> Atacado con: " + cantidad + " | Mi defensa: " + defensa);
         int danioFinal = (int) (cantidad * defensa);
         vidaActual -= danioFinal;
         if (this.vidaActual < 0) this.vidaActual = 0;
+        defensa = 1.0;
         System.out.println(nombre + ": recibio daño, su vida actual es: " + vidaActual);
     }
 

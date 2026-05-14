@@ -24,37 +24,6 @@ public class Heroe extends Entidad {
         this.defensa = defensa;
     }
 
-    public void atacar(Entidad objetivo) {
-        int danio = 10; // Ejemplo de da
-    
-    
-        System.out.println(
-        this.getNombre() + " ataca a " + objetivo.getNombre() + " causando " + danio + " puntos de daño.");
-        objetivo.recibirDanio(danio);
-
-    }
-
-    public boolean usarHabilidad(int indice, Entidad objetivo) {
-        if (indice < 0 || indice >= habilidades.length) return false;
-    
-        Habilidad habilidad = habilidades[indice];
-        if (habilidad == null) {
-            System.out.println("no hay habilidad equipada en ese slot.");
-            return false;
-        }
-
-        if (!habilidad.puedeUsarse (this)) {
-        System.out.println(nombre + " no puede usar " + habilidad.getNombre() + " por falta de mana");
-            return false;
-        }
-
-        usarMana (habilidad.getCostoMana());
-        habilidad.activarCooldown();
-        habilidad.ejecutarHabilidad(this, objetivo);
-        return true;
-
-    }
-
     public void avanzarCooldowns() {
         for (Habilidad habilidad : habilidades) {
             if (habilidad != null) habilidad.tickCooldown();

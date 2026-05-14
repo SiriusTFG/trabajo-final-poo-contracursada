@@ -43,12 +43,14 @@ public class HeroeDao implements EntidadDao<Heroe> {
     }
 
     private Heroe mapearHeroe(ResultSet rs) throws SQLException {
-        Heroe heroe = new Heroe(rs.getString("nombre"),
+        Heroe heroe = new Heroe(rs.getInt("id"),
+            rs.getString("nombre"),
             rs.getInt("vida_max"),
-            rs.getInt("mana_max"));
-        heroe.setId(rs.getInt("id"));
-        heroe.setAtaque(rs.getInt("ataque"));
-        heroe.activarDefensa(rs.getDouble("defensa_base"));
+            rs.getInt("mana_max"),
+            rs.getInt("nivel"),
+            rs.getInt("experiencia"),
+            rs.getInt("ataque"),
+            rs.getDouble("defensa_base"));
         heroe.setRutaImagen(rs.getString("ruta_imagen"));
 
         List<Habilidad> habilidades = habilidadDao.obtenerPorEntidad(heroe.getId(), "Heroe");

@@ -119,15 +119,16 @@ public class CombateVista {
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
         if (modelo.getHeroe() != null && modelo.getEnemigo() != null) {
-            dibujarBarraVida(50, 100, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), Color.GREEN);
-            dibujarBarraVida(WORLD_WIDTH - 250, 500, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
+            dibujarBarra(50, 100, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), Color.GREEN);
+            dibujarBarra(50, 130, modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax(), Color.BLUE);
+            dibujarBarra(WORLD_WIDTH - 250, 500, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
         }
         
         sr.end();
         batch. begin();
     }
 
-    private void dibujarBarraVida(float x, float y, int actual, int max, Color color) {
+    private void dibujarBarra(float x, float y, int actual, int max, Color color) {
         float ancho = 200f;
         float porcentaje = (float) actual / max;
 

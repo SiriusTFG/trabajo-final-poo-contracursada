@@ -6,9 +6,11 @@ public class Enemigo extends Entidad {
 
     private ComportamientoEnemigo comportamiento;
 
-    public Enemigo(String nombre, int vida, int mana, ComportamientoEnemigo comportamiento) {
+    public Enemigo(int id, String nombre, int vida, int mana, int ataque, double defensa) {
         super(nombre, vida, mana);
-        this.comportamiento = comportamiento;
+        this.id = id;
+        this.ataque = ataque;
+        this.defensa = defensa;
     }
 
     @Override
