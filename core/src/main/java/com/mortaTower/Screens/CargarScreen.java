@@ -43,8 +43,7 @@ public class CargarScreen extends Screens {
 
                     if (partida != null) {
                         game.setPartida(partida);
-                        game.setScreen(new TransicionScreen (game, this, new SeleccionScreen(game)));
-
+                        game.setScreen(new TransicionScreen(game, this, new CombateScreen(game)));
                     }
 
                 } catch (Exception e) {
