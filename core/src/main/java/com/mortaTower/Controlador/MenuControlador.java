@@ -4,7 +4,7 @@ import com.mortaTower.Modelo.MenuModelo;
 
 public class MenuControlador {
 
-    public enum Action {NONE, START_GAME, OPTIONS, CREDITS,EXIT}
+    public enum Action {NONE, START_GAME, OPTIONS, LOAD_GAME,CREDITS,EXIT}
 
     private final MenuModelo menuModelo;
     private final Teclado teclado;
@@ -52,7 +52,8 @@ public class MenuControlador {
                 }
 
                 case CARGAR -> {
-                    return Action.CREDITS;
+                    audio.play(2);
+                    return Action.LOAD_GAME;
                 }
 
                 case SALIR -> {
