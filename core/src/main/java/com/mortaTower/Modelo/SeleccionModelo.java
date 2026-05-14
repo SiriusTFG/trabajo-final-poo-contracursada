@@ -1,5 +1,7 @@
 package com.mortaTower.Modelo;
 
+import com.mortaTower.DAO.PartidaDao;
+
 public class SeleccionModelo {
 
     public enum Heroe {CABALLERO, MAGO}
@@ -36,6 +38,18 @@ public class SeleccionModelo {
     }
 
     public void volverSeleccion() {estadoActual = Estado.SELECCION;}
+
+    public Partida confirmarYCrearPartida() throws Exception {
+        if (nombreJugador == null || nombreJugador.trim().isEmpty()) {
+            throw new Exception("El nombre no puede estar vacio");
+        }
+
+        int idHeroe = (heroeActual == Heroe.CABALLERO) ? 1 : 2;
+
+        PartidaDao pDao = new PartidaDao();
+        int idPartida = pDao.nuevaPartida(nombreJugador, idHeroe);
+        return pDao.cargarPartida(idPartida);
+    }
 
     // GETTERS / SETTERS
     public Heroe getHeroeActual() {return heroeActual;}
