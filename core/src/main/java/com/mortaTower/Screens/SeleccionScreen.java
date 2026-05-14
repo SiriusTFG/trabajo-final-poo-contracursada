@@ -29,7 +29,7 @@ public class SeleccionScreen extends Screens {
         super(game);
 
         modelo = new SeleccionModelo();
-        controlador = new SeleccionControlador(modelo, game.teclado);
+        controlador = new SeleccionControlador(modelo, game.teclado, game.audio);
         seleccionVista = new SeleccionVista(modelo, stage);
         nombreVista = new NombreVista(stage);
 
