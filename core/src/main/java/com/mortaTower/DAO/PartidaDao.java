@@ -1,8 +1,5 @@
 package com.mortaTower.DAO;
 
-import com.mortaTower.Modelo.Habilidad;
-import com.mortaTower.Modelo.Heroe;
-import com.mortaTower.Modelo.Partida;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +9,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mortaTower.Modelo.Habilidad;
+import com.mortaTower.Modelo.Heroe;
+import com.mortaTower.Modelo.Partida;
+
 
 public class PartidaDao {
 
@@ -20,8 +21,8 @@ public class PartidaDao {
 
     public int nuevaPartida(String nombrePartida, int idHeroe) throws SQLException {
         String sqlpartida = "INSERT INTO partidas (nombre_partida, id_heroe, nivel_actual, " +
-                     "experiencia_actual, vida_actual, mana_actual, ataque_actual, piso_torre) " +
-                     "SELECT ?, id, 1, 0, vida_max, mana_max, ataque, 1 FROM heroes WHERE id = ?";
+                     "experiencia_actual, vida_actual, mana_actual, ataque_actual, defensa_actual, piso_torre) " +
+                     "SELECT ?, id, 1, 0, vida_max, mana_max, ataque, defensa_base, 1 FROM heroes WHERE id = ?";
 
         String sqlCopiaHabilidades = "INSERT INTO partida_habilidades (id_partida, id_habilidad, slot) " +
                                      "SELECT ?, id_habilidad, slot FROM heroe_habilidades WHERE id_heroe = ?";
@@ -101,7 +102,7 @@ public class PartidaDao {
 
     public void guardarProgreso(Partida partida) throws SQLException {
         String sql = "UPDATE partidas SET nivel_actual = ?, experiencia_actual = ?, " +
-                     "vida_actual = ?, mana_actual = ?, ataque_actual = ?, piso_torre = ? " +
+                     "vida_actual = ?, mana_actual = ?, ataque_actual = ?, defensa_actual = ?, piso_torre = ? " +
                      "WHERE id = ?";
         
         Heroe heroe = partida.getHeroe();
@@ -111,6 +112,7 @@ public class PartidaDao {
             pstmt.setInt(3, heroe.getVidaMax());
             pstmt.setInt(4, heroe.getManaMax());
             pstmt.setInt(5, heroe.getAtaque());
+            pstmt.setDouble(6, heroe.getDefensa());
             pstmt.setInt(6, partida.getPisoActual());
             pstmt.setInt(7, partida.getId());
             pstmt.executeUpdate();

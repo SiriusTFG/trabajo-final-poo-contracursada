@@ -4,13 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.mortaTower.Modelo.Enemigo;
 import com.mortaTower.Modelo.Habilidad;
-
-import java.sql.Statement;
-import java.util.List;
 
 public class EnemigoDao implements EntidadDao<Enemigo> {
 
@@ -59,10 +58,12 @@ public class EnemigoDao implements EntidadDao<Enemigo> {
     }
 
     private Enemigo mapearEnemigo(ResultSet rs) throws SQLException {
-        Enemigo enemigo = new Enemigo(rs.getString("nombre"), 
-            rs.getInt("vida_max"), 
-            rs.getInt("mana_max"), 
-            null);
+        Enemigo enemigo = new Enemigo(rs.getInt("id"),
+            rs.getString("nombre"),
+            rs.getInt("vida_max"),
+            rs.getInt("mana_max"),
+            rs.getInt("ataque"),
+            rs.getDouble("defensa_base"));
 
         enemigo.setId(rs.getInt("id"));
         enemigo.setAtaque(rs.getInt("ataque"));

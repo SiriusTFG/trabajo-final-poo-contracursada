@@ -1,6 +1,5 @@
 package com.mortaTower.Controlador;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.CombateModelo.Opciones;
 import com.mortaTower.Modelo.Heroe;
@@ -23,11 +22,9 @@ public class CombateControlador {
 
     public void update(float delta){
         teclado.update();
+
         switch (modelo.getTurnoActual()) {
-            case JUGADOR -> {
-                manejarEntradaJugador();
-                proximoTurnoJugador = false;
-            }
+            case JUGADOR -> manejarEntradaJugador();
 
             case ENEMIGO -> {
                 contador += delta;
@@ -47,11 +44,7 @@ public class CombateControlador {
                     } else if (modelo.getHeroe().getVidaActual() <= 0) {
                         System.out.println("Game Over");
                     } else {
-                        if (proximoTurnoJugador) {
-                            modelo.setTurnoActual(CombateModelo.Turno.JUGADOR);
-                        } else {
-                            modelo.setTurnoActual(CombateModelo.Turno.ENEMIGO); 
-                        }   
+                        modelo.setTurnoActual(proximoTurnoJugador ? CombateModelo.Turno.JUGADOR : CombateModelo.Turno.ENEMIGO);  
                     }
                     contador = 0;
                 }
@@ -75,7 +68,10 @@ public class CombateControlador {
                 Heroe heroe = modelo.getHeroe();
 
                 if (heroe.getHabilidades()[indiceHabilidad] != null && heroe.getHabilidades()[indiceHabilidad].puedeUsarse(heroe)) {
-                    heroe.usarHabilidad(indiceHabilidad, modelo.getEnemigo());
+                    System.out.println("Turno del " + modelo.getHeroe().getNombre());
+                    heroe.seleccionarHabilidad(indiceHabilidad);
+                    heroe.realizarTurno(modelo.getEnemigo());
+                    proximoTurnoJugador = false;
                     modelo.setTurnoActual(CombateModelo.Turno.PROCESANDO);
                     contador = 0;
                 }
@@ -89,7 +85,6 @@ public class CombateControlador {
             System.out.println("Turno del " + modelo.getEnemigo().getNombre());
             modelo.getEnemigo().realizarTurno(modelo.getHeroe());
 
-            modelo.setTurnoActual(CombateModelo.Turno.JUGADOR);
             teclado.resetPresiones();
         }
     }
