@@ -1,10 +1,10 @@
 package com.mortaTower.Screens;
 
-import com.mortaTower.Modelo.MenuModelo;
-import com.mortaTower.Vista.MenuVista;
-import com.mortaTower.Main;
 import com.mortaTower.Controlador.MenuControlador;
 import com.mortaTower.Controlador.MenuControlador.Action;
+import com.mortaTower.Main;
+import com.mortaTower.Modelo.MenuModelo;
+import com.mortaTower.Vista.MenuVista;
 
 
 public class MenuScreen extends Screens {
@@ -47,6 +47,8 @@ public class MenuScreen extends Screens {
 
             case OPTIONS -> { mostrarOpciones = true; opcionesOverlay.open();}
 
+            case LOAD_GAME -> game.setScreen(new TransicionScreen(game, this, new CargarScreen(game, this)));
+            
             case CREDITS -> System.out.println("Ir a créditos (futuro screen)");
 
             case EXIT -> System.exit(0);
