@@ -57,7 +57,7 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
             tipo, 
             rs.getInt("costo_mana"), 
             rs.getInt("valor_base"), 
-            rs.getInt("reduccion_danio"), 
+            rs.getDouble("reduccion_danio"), 
             rs.getInt("cooldown_max"));
         } else if (tipo.equalsIgnoreCase("Curacion")) {
             return new HabilidadCuracion(rs.getString("nombre"), 
