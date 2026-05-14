@@ -42,4 +42,13 @@ public class Teclado {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) selectPressed = true;
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) backPressed = true;
     }
+
+    public void resetPresiones() {
+        upPressed = false;
+        downPressed = false;
+        leftPressed = false;
+        rightPressed = false;
+        selectPressed = false;
+        backPressed = false;
+    }
 }

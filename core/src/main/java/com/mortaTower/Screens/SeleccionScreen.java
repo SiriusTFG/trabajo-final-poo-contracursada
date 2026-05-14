@@ -1,11 +1,10 @@
 package com.mortaTower.Screens;
 
+import com.mortaTower.Controlador.RecompensaControlador;
 import com.mortaTower.Controlador.SeleccionControlador;
 import com.mortaTower.Controlador.SeleccionControlador.Action;
-import com.mortaTower.DAO.PartidaDao;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.Partida;
-import com.mortaTower.Controlador.RecompensaControlador;
 import com.mortaTower.Modelo.RecompensasModelo;
 import com.mortaTower.Modelo.SeleccionModelo;
 import com.mortaTower.Vista.NombreVista;
@@ -29,7 +28,7 @@ public class SeleccionScreen extends Screens {
         super(game);
 
         modelo = new SeleccionModelo();
-        controlador = new SeleccionControlador(modelo, game.teclado);
+        controlador = new SeleccionControlador(modelo, game.teclado, game.audio);
         seleccionVista = new SeleccionVista(modelo, stage);
         nombreVista = new NombreVista(stage);
 
@@ -50,15 +49,11 @@ public class SeleccionScreen extends Screens {
 
             case INICIAR_PARTIDA -> { 
                 try {
-                    String nombre = modelo.getNombreJugador();
-                    int idHeroe = (modelo.getHeroeActual() == SeleccionModelo.Heroe.CABALLERO) ? 1 : 2;
-
-                    PartidaDao pDao = new PartidaDao();
-                    int id = pDao.nuevaPartida(nombre, idHeroe);
-
-                    Partida pNueva = pDao.cargarPartida(id);
+                    String nombrePartida = nombreVista.getNombre();
+                    modelo.setNombreJugador(nombrePartida);
+                    Partida pNueva = modelo.confirmarYCrearPartida();
+                    
                     game.setPartida(pNueva);
-
                     game.setScreen(new CombateScreen(game)); System.out.println("comienza");
                 } catch (Exception e) {
                     e.printStackTrace();

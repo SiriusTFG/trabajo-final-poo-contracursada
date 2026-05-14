@@ -14,11 +14,14 @@ public class Audio {
 
     public Audio() {
 
-        sounds[0] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Intro/untitled2.wav"));
+        sounds[0] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/sound1.wav"));
         sounds[1] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/vgmenuhighlight.wav"));
         sounds[2] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/Fantasy_UI (21).wav"));
+        sounds[3] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/sound2.wav"));
+        sounds[4] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/sound3.wav"));
+        sounds[5] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/sound4.wav"));
         
-        music[3] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/untitled.wav"));
+        music[0] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/untitled.wav"));
     }
 
     // PLAY (SFX)

@@ -1,16 +1,17 @@
 package com.mortaTower.DAO;
 
-import com.mortaTower.Modelo.Habilidad;
-import com.mortaTower.Modelo.HabilidadAtaque;
-import com.mortaTower.Modelo.HabilidadCuracion;
-import com.mortaTower.Modelo.HabilidadDefensa;
-import com.mortaTower.Modelo.HabilidadMana;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mortaTower.Modelo.Habilidad;
+import com.mortaTower.Modelo.HabilidadAtaque;
+import com.mortaTower.Modelo.HabilidadCuracion;
+import com.mortaTower.Modelo.HabilidadDefensa;
+import com.mortaTower.Modelo.HabilidadMana;
 
 public class HabilidadDao implements ObjetoDao<Habilidad> {
 
@@ -20,7 +21,7 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
     public List<Habilidad> obtenerPorEntidad(int idEntidad, String tipoEntidad) throws SQLException {
         List<Habilidad> habilidades = new ArrayList<>();
 
-        String tablaRelacion = tipoEntidad.equalsIgnoreCase("Heroe") ? "heroe_habilidades" : "enemigo_habilidades";
+        String tablaRelacion = tipoEntidad.equalsIgnoreCase("Heroe") ? "heroe_habilidades" : "enemigos_habilidades";
         String columnaId = tipoEntidad.equalsIgnoreCase("Heroe") ? "id_heroe" : "id_enemigo";
 
         String sql = "SELECT h. * FROM habilidades h " + 
