@@ -1,9 +1,9 @@
 package com.mortaTower.Screens;
 
+import com.badlogic.gdx.Gdx;
 import com.mortaTower.Controlador.CombateControlador;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
-import com.mortaTower.Modelo.Enemigo;
 import com.mortaTower.Modelo.Heroe;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
@@ -18,18 +18,22 @@ public class CombateScreen extends Screens {
     public CombateScreen(Main game) {
 
         super(game);
+        Gdx.input.setInputProcessor(null);
+        game.teclado.resetPresiones();
         Heroe heroe = game.getPartidaActual().getHeroe();
-        Enemigo zombie = new Enemigo("Zombie Herrero", 100, 20, new ComportamientoAgresivo());
-        zombie.setAtaque(10);
         
-        modelo = new CombateModelo(heroe, zombie);
+        modelo = new CombateModelo(heroe, 1);
+        if (modelo.getEnemigo() != null) {
+            modelo.getEnemigo().cambiarComportamiento(new ComportamientoAgresivo());
+        }
         vista = new CombateVista(modelo);
         controlador = new CombateControlador(modelo, game.teclado, game.audio);
+        
     }
 
     @Override
     public void update(float delta) {
-        controlador.update();
+        controlador.update(delta);
     }
 
     @Override

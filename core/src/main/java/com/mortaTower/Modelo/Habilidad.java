@@ -18,7 +18,7 @@ public abstract class Habilidad {
         this.valorBase = valorBase;
 
         this.cooldownMax = cooldownMax;
-        this.cooldownActual = cooldownMax;
+        this.cooldownActual = 0;
     }
 
     public abstract void ejecutarHabilidad(Entidad usuario, Entidad objetivo); //atributos necesarios para ejecutar la habilidad, como el personaje objetivo, el personaje que la ejecuta, etc.

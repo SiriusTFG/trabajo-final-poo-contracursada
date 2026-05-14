@@ -1,30 +1,33 @@
 package com.mortaTower.Modelo;
 
+import com.mortaTower.DAO.EnemigoDao;
+
 public class CombateModelo {
     
     public enum Opciones {HAB_1, HAB_2, HAB_3, HAB_4, OPCIONES};
     public enum Turno {JUGADOR, ENEMIGO, PROCESANDO};
 
+    private static final Opciones[] valores = Opciones.values();
     private Opciones seleccion = Opciones.HAB_1;
     private Turno turnoActual = Turno.JUGADOR;
     private Heroe heroe;
     private Enemigo enemigo;
 
-    public CombateModelo(Heroe heroe, Enemigo enemigo) {
+    public CombateModelo(Heroe heroe, int numPiso) {
         this.heroe = heroe;
-        this.enemigo = enemigo;
+        this.enemigo = cargarEnemigo(numPiso);
     }
 
     public void izquierda() {
         if (seleccion == Opciones.OPCIONES) return;
         int indice = (seleccion.ordinal() - 1 + 4) % 4;
-        seleccion = Opciones.values()[indice];
+        seleccion = valores[indice];
     }
 
     public void derecha() {
         if (seleccion == Opciones.OPCIONES) return;
         int indice = (seleccion.ordinal() + 1 + 4) % 4;
-        seleccion = Opciones.values()[indice];
+        seleccion = valores[indice];
     }
 
     public void abajo() {
@@ -44,6 +47,17 @@ public class CombateModelo {
             return heroe.getHabilidades()[indice].getNombre();
         }
         return "---";
+    }
+
+    private Enemigo cargarEnemigo(int numPiso) {
+        try {
+            EnemigoDao eDao = new EnemigoDao();
+            Enemigo enemigo = eDao.obtenerEnemigoPorPiso(numPiso);
+            return enemigo;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     // Getters

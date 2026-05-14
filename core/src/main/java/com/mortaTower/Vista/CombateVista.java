@@ -85,47 +85,45 @@ public class CombateVista {
         float alto = WORLD_HEIGHT * 0.12f;
 
         // configuracion para botones de habilidad
-        float anchoHab = 250f;
-        float altoHab = 80f;
-        float xInicialHab = (WORLD_WIDTH - (anchoHab * 4 + 30 * 3)) / 2;
-        float yHab = 150f;
+        float anchoHab = 280f;
+        float altoHab = 85f;
+        float margen = 20f;
+        float xInicialHab = (WORLD_WIDTH - (anchoHab * 4 + margen * 3)) / 2;
+        float yHab = 160f;
 
         // configuracion para bortones de opciones
         float anchoOpt = 300f;
         float xOpt = (WORLD_WIDTH - anchoOpt) / 2;
         float yOpt = 50f;
 
-        int estadoOpt = (modelo.getOpcionActual() == CombateModelo.Opciones.OPCIONES) ? SELECTED : NORMAL;
-
-        int seleccion = modelo.getOpcionActual().ordinal();
+        int estadoOpt = (modelo.getOpcionActual() == CombateModelo.Opciones.OPCIONES) ? NORMAL : SELECTED;
 
         batch.draw(fondo, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
         for (int i = 0; i < 4; i++) {
+            int estado = (modelo.getOpcionActual().ordinal() == i) ? NORMAL : SELECTED;
 
-            int estado = (modelo.getOpcionActual().ordinal() == i) ? SELECTED : NORMAL;
-
-            batch.draw(sprites[1][estado][0], xInicialHab + i * (anchoHab + 30), yHab - separacion * i, anchoHab, altoHab);
+            batch.draw(sprites[1][estado][0], xInicialHab + i * (anchoHab + margen), yHab, anchoHab, altoHab);
 
             String texto = modelo.getNombreHabilidad(i);
-            fuente.draw(batch, texto, xInicialHab + i * (anchoHab + 30) + 20, yHab + 50); 
+            fuente.draw(batch, texto, xInicialHab + i * (anchoHab + margen) + 35, yHab + 55); 
         }
 
         batch.draw(sprites[2][estadoOpt][0], xOpt, yOpt, anchoOpt, altoHab);
     }
 
     public void dibujarInterfaz(SpriteBatch batch) {
-        batch.end(); //pausa el batch oara usar el ShapeRenderer
+        batch.end(); //pausa el batch para usar el ShapeRenderer
 
         sr.setProjectionMatrix(batch.getProjectionMatrix());
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        //dibuja barra de vida del heroe
-        dibujarBarraVida(50, 100, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), Color.GREEN);
-
-        //dibuja barra de vida del enemigo
-        dibujarBarraVida(WORLD_WIDTH - 250, 500, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
-
+        if (modelo.getHeroe() != null && modelo.getEnemigo() != null) {
+            dibujarBarraVida(50, 100, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), Color.GREEN);
+            dibujarBarraVida(WORLD_WIDTH - 250, 500, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
+        }
+        
+        sr.end();
         batch. begin();
     }
 
