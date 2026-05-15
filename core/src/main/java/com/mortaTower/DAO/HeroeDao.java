@@ -1,5 +1,6 @@
 package com.mortaTower.DAO;
 
+import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
 import java.sql.Connection;
@@ -54,11 +55,31 @@ public class HeroeDao implements EntidadDao<Heroe> {
         heroe.setRutaImagen(rs.getString("ruta_imagen"));
 
         List<Habilidad> habilidades = habilidadDao.obtenerPorEntidad(heroe.getId(), "Heroe");
-
+        cargarSprites(heroe);
         for (int i = 0; i < habilidades.size(); i++) {
             heroe.setHabilidad(i, habilidades.get(i));
         }              
         return heroe;
     }
 
+    private void cargarSprites(Heroe heroe) throws SQLException {
+    String sql = "SELECT estado, ruta_imagen FROM sprites WHERE id_heroe = ?";
+    try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+        pstmt.setInt(1, heroe.getId());
+        try (ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                String estadoCrudo = rs.getString("estado");
+                String estadoStr = estadoCrudo.toUpperCase().replace(" ", "_");
+               String ruta = rs.getString("ruta_imagen");
+                try {
+                    Entidad.Estado estadoEnum = Entidad.Estado.valueOf(estadoStr);
+                    heroe.agregarImagenEstado(estadoEnum, ruta);
+                    //System.out.println("Cargando en BD -> Héroe: " + heroe.getNombre() + " | Estado: " + estadoEnum + " | Ruta: " + ruta);
+                    } catch (IllegalArgumentException e) {
+                    //System.err.println("Estado desconocido en la BD: " + estadoCrudo + " (Intentamos buscar: " + estadoStr + ")");
+                    }
+                }
+            }
+        }
+    }
 }

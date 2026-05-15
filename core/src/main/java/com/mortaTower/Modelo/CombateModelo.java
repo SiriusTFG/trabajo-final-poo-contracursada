@@ -1,6 +1,7 @@
 package com.mortaTower.Modelo;
 
 import com.mortaTower.DAO.EnemigoDao;
+import com.mortaTower.DAO.HeroeDao;
 
 public class CombateModelo {
     
@@ -14,8 +15,14 @@ public class CombateModelo {
     private Enemigo enemigo;
 
     public CombateModelo(Heroe heroe, int numPiso) {
-        this.heroe = heroe;
-        this.enemigo = cargarEnemigo(numPiso);
+    //De forma temporal,optimizar despues.
+    try {
+    HeroeDao hDao = new HeroeDao();
+    this.heroe = hDao.obtenerPorId(heroe.getId());
+    } catch (Exception e) {
+    e.printStackTrace();
+    this.heroe = heroe;}
+    this.enemigo = cargarEnemigo(numPiso);
     }
 
     public void izquierda() {

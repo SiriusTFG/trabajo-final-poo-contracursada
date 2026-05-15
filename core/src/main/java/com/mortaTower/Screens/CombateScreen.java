@@ -40,5 +40,6 @@ public class CombateScreen extends Screens {
     public void draw(float delta) {
         vista.draw(spriteBatch);
         vista.dibujarInterfaz(spriteBatch);
+        vista.dibujarSprite(spriteBatch);
     }
 }
