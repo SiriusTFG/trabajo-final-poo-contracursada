@@ -64,7 +64,7 @@ public class MenuScreen extends Screens {
 
         // overlay
         if(mostrarOpciones) {
-
+            vista.draw(spriteBatch);
             opcionesOverlay.draw(spriteBatch);
         }
     }

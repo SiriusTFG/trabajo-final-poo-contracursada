@@ -2,17 +2,24 @@ package com.mortaTower.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.mortaTower.Controlador.CombateControlador;
+import com.mortaTower.Controlador.InventarioControlador;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Heroe;
+import com.mortaTower.Modelo.InventarioModelo;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
+import com.mortaTower.Vista.InventarioVista;
 
 public class CombateScreen extends Screens {
 
     private CombateModelo modelo;
     private CombateVista vista;
     private CombateControlador controlador;
+
+    private InventarioControlador controlador2;
+    private InventarioModelo modelo2;
+    private InventarioVista vista2;
 
     //constructor
     public CombateScreen(Main game) {
@@ -28,17 +35,23 @@ public class CombateScreen extends Screens {
         }
         vista = new CombateVista(modelo);
         controlador = new CombateControlador(modelo, game.teclado, game.audio);
+
+        modelo2 = new InventarioModelo(heroe);
+        controlador2 = new InventarioControlador(modelo2, game.teclado, game.audio);
+        vista2 = new InventarioVista(modelo2);
         
     }
 
     @Override
     public void update(float delta) {
         controlador.update(delta);
+        controlador2.update();
     }
 
     @Override
     public void draw(float delta) {
         vista.draw(spriteBatch);
         vista.dibujarInterfaz(spriteBatch);
+        vista2.draw(spriteBatch);
     }
 }

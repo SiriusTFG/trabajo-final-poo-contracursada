@@ -12,14 +12,14 @@ import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
 public class CombateVista {
 
-    private CombateModelo modelo;
+     private CombateModelo modelo;
     private ShapeRenderer sr;
 
     // ESTADOS VISUALES
     private static final int NORMAL = 1;
     private static final int SELECTED = 0;
 
-    private Texture fondo;
+    private Texture fondo, inventario, vidaHeroe, vidaEnemigo;
     private final Texture[] texturas;
     
     private int[] columnas;
@@ -31,6 +31,7 @@ public class CombateVista {
     //Fuente
     private BitmapFont fuente;
 
+
     //Constructor
     public CombateVista(CombateModelo modelo) {
         this.modelo = modelo;
@@ -40,16 +41,19 @@ public class CombateVista {
         fuente.setColor(Color.WHITE);
 
         // Sprites
-        fondo = new Texture("Imagenes/Combate/fondoCombate.png");
+        fondo = new Texture("Imagenes/Combate/nivel1.png");
+        inventario =  new Texture("Imagenes/Combate/inventario.png");
+        vidaHeroe = new Texture("Imagenes/Combate/vidaHeroe.png");
+        vidaEnemigo = new Texture("Imagenes/Combate/vidaEnemigo.png");
 
         texturas = new Texture[] {
             new Texture("Imagenes/Combate/luchar.png"),
             new Texture("Imagenes/Combate/habilidades.png"),
-            new Texture("Imagenes/MenuInicio/op.png"),
+            //new Texture("Imagenes/MenuInicio/op.png"),
         };
 
-        columnas = new int[] {2,2,2};
-        filas = new int[] {1,1,1};
+        columnas = new int[] {2,2};
+        filas = new int[] {1,1};
 
         sprites = new TextureRegion[texturas.length][][];
 
@@ -99,19 +103,10 @@ public class CombateVista {
         int estadoOpt = (modelo.getOpcionActual() == CombateModelo.Opciones.OPCIONES) ? NORMAL : SELECTED;
 
         batch.draw(fondo, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-
-        for (int i = 0; i < 4; i++) {
-            int estado = (modelo.getOpcionActual().ordinal() == i) ? NORMAL : SELECTED;
-
-            batch.draw(sprites[1][estado][0], xInicialHab + i * (anchoHab + margen), yHab, anchoHab, altoHab);
-
-            String texto = modelo.getNombreHabilidad(i);
-            fuente.draw(batch, texto, xInicialHab + i * (anchoHab + margen) + 35, yHab + 55); 
-        }
-
-        batch.draw(sprites[2][estadoOpt][0], xOpt, yOpt, anchoOpt, altoHab);
+        batch.draw(vidaHeroe, 30, 50, 400, 200);
+        batch.draw(vidaEnemigo, 860, 50, 400, 200);
+        
     }
-
     public void dibujarInterfaz(SpriteBatch batch) {
         batch.end(); //pausa el batch para usar el ShapeRenderer
 
@@ -119,9 +114,9 @@ public class CombateVista {
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
         if (modelo.getHeroe() != null && modelo.getEnemigo() != null) {
-            dibujarBarra(50, 100, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), Color.GREEN);
-            dibujarBarra(50, 130, modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax(), Color.BLUE);
-            dibujarBarra(WORLD_WIDTH - 250, 500, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
+            dibujarBarra(120, 132, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), Color.GREEN);
+            dibujarBarra(120, 106, modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax(), Color.BLUE);
+            dibujarBarra(978, 136, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
         }
         
         sr.end();
@@ -133,9 +128,9 @@ public class CombateVista {
         float porcentaje = (float) actual / max;
 
         sr.setColor(Color.BLACK);
-        sr.rect(x, y, ancho, 20);
+        sr.rect(x, y, ancho, 15);
         sr.setColor(color);
-        sr.rect(x, y, ancho * porcentaje, 20);
+        sr.rect(x, y, ancho * porcentaje, 15);
     }
 }
 
