@@ -18,7 +18,7 @@ public class CargarVista {
     private Texture slotNormal;
     private Texture slotSelected;
 
-    //private TextureRegion slotNormal;
+
   
 
     public CargarVista(CargarModelo cargarModelo) {
@@ -37,10 +37,6 @@ public class CargarVista {
         
         batch.draw(fondo, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
 
-        float titleX = WORLD_WIDTH * 0.35f;
-        float titleY = WORLD_HEIGHT * 0.85f;
-        font.setColor(Color.YELLOW);
-        font.draw(batch, "CARGAR PARTIDA", titleX, titleY);
 
         float optionX = WORLD_WIDTH * 0.42f;
         float optionY = WORLD_HEIGHT * 0.7f;
@@ -52,11 +48,10 @@ public class CargarVista {
         font.setColor(Color.WHITE);
         for (int i = 0; i < partidas.size(); i++) {
 
-            //TextureRegion slot = (i == seleccion) ? slotSelected : slotNormal;
+          
             Texture slot = (i == seleccion) ? slotSelected : slotNormal;
             
-            //float ajusteX = (i == seleccion) ? -4 : 0; // Ajuste para centrar el texto en el slot seleccionado
-             //  batch.draw( slot, WORLD_WIDTH * 0.28f, optionY - separacion * i - 45, WORLD_WIDTH * 0.44f, 70);
+        
             float slotWidth = WORLD_WIDTH * 0.44f;
             float slotHeight = 90;
 
@@ -65,11 +60,11 @@ public class CargarVista {
 
             if(i == seleccion){
                font.setColor(Color.YELLOW);
-                //font.draw(batch, "> " + partidas.get(i), optionX, optionY - separacion * i);
+               
                 font.draw(batch, partidas.get(i), WORLD_WIDTH * 0.37f, optionY - separacion * i);
                 font.setColor(Color.WHITE);
             } else {
-                //font.draw(batch, " " + partidas.get(i), optionX, optionY - separacion * i);
+             
                 font.draw(batch, partidas.get (i), WORLD_WIDTH * 0.37f, optionY - separacion * i);
             }
             }
