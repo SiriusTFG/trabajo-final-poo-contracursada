@@ -1,5 +1,6 @@
 package com.mortaTower.Vista;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mortaTower.Modelo.CombateModelo;
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CombateVista {
 
@@ -31,6 +34,8 @@ public class CombateVista {
     //Fuente
     private BitmapFont fuente;
 
+    //Texturas de enem y heroe.
+    private Map<String, Texture> texturasEntidades = new HashMap<>();
 
     //Constructor
     public CombateVista(CombateModelo modelo) {
@@ -78,6 +83,23 @@ public class CombateVista {
             }
         }
     }
+
+   private Texture getTextureEntidad(String ruta) {
+    if (ruta == null || ruta.isEmpty()) return null;
+        String rutaCorregida = ruta;
+    if (ruta.startsWith("assets/")) {
+        rutaCorregida = ruta.substring(7);
+    }
+    if (!Gdx.files.internal(rutaCorregida).exists()) {
+        System.err.println("ERROR: No se encontró la imagen en: " + rutaCorregida);
+        return null; 
+    }
+    if (!texturasEntidades.containsKey(rutaCorregida)) {
+        texturasEntidades.put(rutaCorregida, new Texture(rutaCorregida));
+        System.out.println("Sprite cargado exitosamente: " + rutaCorregida);
+    }
+    return texturasEntidades.get(rutaCorregida);
+}
 
     public void draw(SpriteBatch batch) {
 
@@ -130,7 +152,26 @@ public class CombateVista {
         sr.setColor(Color.BLACK);
         sr.rect(x, y, ancho, 15);
         sr.setColor(color);
-        sr.rect(x, y, ancho * porcentaje, 15);
+        sr.rect(x, y, ancho * porcentaje, 20);
+    }
+
+    public void dibujarSprite(SpriteBatch batch) {
+        if (modelo.getHeroe() != null) {
+            String rutaHeroe = modelo.getHeroe().getRutaImagenEstadoActual();
+            Texture texHeroe = getTextureEntidad(rutaHeroe);
+            if (texHeroe != null) {
+                // Ajusta estas coordenadas (X, Y, Ancho, Alto) según el tamaño de pantalla
+                batch.draw(texHeroe, WORLD_WIDTH * 0.15f, WORLD_HEIGHT * 0.40f, 150, 150);
+            }
+        }
+        if (modelo.getEnemigo() != null) {
+            String rutaEnemigo = modelo.getEnemigo().getRutaImagenEstadoActual();
+            Texture texEnemigo = getTextureEntidad(rutaEnemigo);   
+            if (texEnemigo != null) {
+                // Ajusta las coordenadas para que quede del lado derecho
+                batch.draw(texEnemigo, WORLD_WIDTH * 0.70f, WORLD_HEIGHT * 0.40f, 150, 150);
+            }
+        }
     }
 }
 

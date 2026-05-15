@@ -1,5 +1,8 @@
 package com.mortaTower.Modelo;
 
+import java.util.Map;
+import java.util.HashMap;
+
 public abstract class Entidad {
     protected int id;
     protected String nombre;
@@ -9,6 +12,10 @@ public abstract class Entidad {
     protected double defensa = 1.0;
     protected Habilidad[] habilidades = new Habilidad[4];
     protected String rutaImagenPerfil;
+    public enum Estado {PARADO, ATAQUE, DEFENSA, DANIO, MUERTE, MANA, CURACION, VIDA};    
+    protected Estado estadoActual = Estado.PARADO;
+    //protected Estado estadoInicial = Estado.PARADO; //Estado inicial solo se utilizara al momento de crear el combate,despues todo con EstadoActual.
+    protected Map<Estado,String> imagenesEstado = new HashMap<>();
 
     public Entidad(String nombre, int vida, int mana) {
         ataque = 0;
@@ -58,6 +65,15 @@ public abstract class Entidad {
         }
     }
 
+    public void agregarImagenEstado(Estado estado, String ruta) {
+        imagenesEstado.put(estado, ruta);
+    }
+    public String getRutaImagenEstado(){
+        return imagenesEstado.get(estadoActual);
+    }
+
+    protected abstract void inicializarSprites(); //metodo abstracto,no se si es necesario todavia.
+
     //Getters y Setters
     public String getNombre() {return nombre;}
     public Habilidad[] getHabilidades() {return habilidades;}
@@ -68,8 +84,11 @@ public abstract class Entidad {
     public int getAtaque() {return ataque;}
     public double getDefensa() {return defensa;}
     public int getId() {return id;}
+    public String getRutaImagen() {return rutaImagenPerfil;}
+    public Estado getEstadoActual() {return estadoActual;}
+    public String getRutaImagenEstadoActual() {return imagenesEstado.get(estadoActual);}
     public void setId(int id) {this.id = id;}
     public void setAtaque(int ataque) {this.ataque = ataque;}
     public void setRutaImagen(String ruta) {this.rutaImagenPerfil = ruta;}
-
+    public void setEstadoActual(Estado estadoActual) {this.estadoActual = estadoActual;}
 }

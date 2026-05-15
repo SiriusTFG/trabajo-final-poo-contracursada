@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mortaTower.Modelo.Enemigo;
+import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Habilidad;
 
 public class EnemigoDao implements EntidadDao<Enemigo> {
@@ -71,11 +72,31 @@ public class EnemigoDao implements EntidadDao<Enemigo> {
         enemigo.setRutaImagen(rs.getString("ruta_imagen"));
 
         List<Habilidad> habilidades = habilidadDao.obtenerPorEntidad(enemigo.getId(), "Enemigo");
-            
+        cargarSprites(enemigo);
         for (int i = 0; i < habilidades.size(); i++) {
             enemigo.setHabilidad(i, habilidades.get(i));
         }
         return enemigo;
     }
     
+    private void cargarSprites(Enemigo enemigo) throws SQLException {
+        String sql = "SELECT estado, ruta_imagen FROM sprites WHERE id_enemigo = ?";
+        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
+        pstmt.setInt(1, enemigo.getId());
+        try (ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                String estadoCrudo = rs.getString("estado");
+                String estadoStr = estadoCrudo.toUpperCase().replace(" ", "_");
+                String ruta = rs.getString("ruta_imagen");
+                try {
+                    Entidad.Estado estadoEnum = Entidad.Estado.valueOf(estadoStr);
+                    enemigo.agregarImagenEstado(estadoEnum, ruta);
+                    //System.out.println("Cargando en BD -> Enemigo: " + enemigo.getNombre() + " | Estado: " + estadoEnum + " | Ruta: " + ruta);
+                } catch (IllegalArgumentException e) {
+                    //System.err.println("Estado desconocido en la BD: " + estadoCrudo + " (Intentamos buscar: " + estadoStr + ")");                
+                }
+            }
+            }
+        }
+    }
 }
