@@ -7,9 +7,11 @@ import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Heroe;
 import com.mortaTower.Modelo.InventarioModelo;
+import com.mortaTower.Modelo.CombateModelo.Opciones;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
 import com.mortaTower.Vista.InventarioVista;
+import com.mortaTower.Vista.PausaVista;
 
 public class CombateScreen extends Screens {
 
@@ -20,6 +22,8 @@ public class CombateScreen extends Screens {
     private InventarioControlador controlador2;
     private InventarioModelo modelo2;
     private InventarioVista vista2;
+
+    private PausaVista vista3;
 
     //constructor
     public CombateScreen(Main game) {
@@ -39,6 +43,8 @@ public class CombateScreen extends Screens {
         modelo2 = new InventarioModelo(heroe);
         controlador2 = new InventarioControlador(modelo2, game.teclado, game.audio);
         vista2 = new InventarioVista(modelo2);
+
+        vista3 = new PausaVista();
         
     }
 
@@ -46,6 +52,7 @@ public class CombateScreen extends Screens {
     public void update(float delta) {
         controlador.update(delta);
         controlador2.update();
+        
     }
 
     @Override
@@ -54,5 +61,10 @@ public class CombateScreen extends Screens {
         vista.dibujarInterfaz(spriteBatch);
         vista2.draw(spriteBatch);
         vista.dibujarSprite(spriteBatch);
+
+        if (modelo.getOpcionActual() == Opciones.PAUSA){
+
+            vista3.draw(spriteBatch);
+        }
     }
 }

@@ -5,7 +5,7 @@ import com.mortaTower.DAO.HeroeDao;
 
 public class CombateModelo {
     
-    public enum Opciones {HAB_1, HAB_2, HAB_3, HAB_4, OPCIONES};
+    public enum Opciones {HAB_1, HAB_2, HAB_3, HAB_4, PAUSA};
     public enum Turno {JUGADOR, ENEMIGO, PROCESANDO};
 
     private static final Opciones[] valores = Opciones.values();
@@ -25,19 +25,17 @@ public class CombateModelo {
     this.enemigo = cargarEnemigo(numPiso);
     }
 
-    public void izquierda() {
-        if (seleccion == Opciones.OPCIONES) return;
+   /* public void izquierda() {
         int indice = (seleccion.ordinal() - 1 + 4) % 4;
         seleccion = valores[indice];
     }
 
     public void derecha() {
-        if (seleccion == Opciones.OPCIONES) return;
         int indice = (seleccion.ordinal() + 1 + 4) % 4;
         seleccion = valores[indice];
-    }
+    }*/
 
-    public void abajo() {
+    /*public void abajo() {
         if (seleccion != Opciones.OPCIONES) {
             seleccion = Opciones.OPCIONES;
         }
@@ -46,6 +44,16 @@ public class CombateModelo {
     public void arriba() {
         if (seleccion == Opciones.OPCIONES) {
             seleccion = Opciones.HAB_1;
+        }
+    }*/
+
+    public void pausa(){
+
+        if(seleccion == Opciones.PAUSA){
+
+            seleccion = Opciones.HAB_1;
+        }else{
+            seleccion = Opciones.PAUSA;
         }
     }
 

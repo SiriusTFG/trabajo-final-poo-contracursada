@@ -40,7 +40,7 @@ public class CargarVista {
 
         float optionX = WORLD_WIDTH * 0.42f;
         float optionY = WORLD_HEIGHT * 0.7f;
-        float separacion = WORLD_HEIGHT * 0.1f;
+        float separacion = WORLD_HEIGHT * 0.15f;
 
         var partidas = cargarModelo.getPartidas();
         int seleccion = cargarModelo.getSeleccion();
@@ -68,8 +68,6 @@ public class CargarVista {
                 font.draw(batch, partidas.get (i), WORLD_WIDTH * 0.37f, optionY - separacion * i);
             }
             }
-            font.setColor(Color.GRAY);
-            font.draw(batch, "ENTER: Cargar / ESC: Volver atras", WORLD_WIDTH * 0.62f, WORLD_HEIGHT * 0.08f);
 
     }
     public void dispose() {

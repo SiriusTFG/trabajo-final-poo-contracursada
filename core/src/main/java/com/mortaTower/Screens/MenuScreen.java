@@ -2,12 +2,15 @@ package com.mortaTower.Screens;
 
 import com.mortaTower.Controlador.MenuControlador;
 import com.mortaTower.Controlador.MenuControlador.Action;
+import com.badlogic.gdx.graphics.Texture;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.MenuModelo;
 import com.mortaTower.Vista.MenuVista;
 
 
 public class MenuScreen extends Screens {
+
+    private boolean loaded;
 
     private final MenuModelo modelo;
     private final MenuControlador controlador;
@@ -28,7 +31,32 @@ public class MenuScreen extends Screens {
     }
 
     @Override
+    public void show() {
+
+        loaded = false;
+
+        game.assets.load("Imagenes/MenuInicio/Fondo.png", Texture.class);
+        game.assets.load("Imagenes/MenuInicio/nueva.png", Texture.class);
+        game.assets.load("Imagenes/MenuInicio/cargar.png", Texture.class);
+        game.assets.load("Imagenes/MenuInicio/opciones.png", Texture.class);
+        game.assets.load("Imagenes/MenuInicio/salir.png", Texture.class);
+    }
+
+    @Override
     public void update(float delta) {
+
+
+        if (!loaded) {
+
+            if (game.assets.update()) {
+
+                loaded = true;
+
+                vista.init(game.assets);
+            }
+
+            return;
+        }
 
         if (mostrarOpciones) {
 
@@ -38,7 +66,7 @@ public class MenuScreen extends Screens {
 
             return;
         }
-
+        
         Action action = controlador.update();
 
         switch (action) {
@@ -59,12 +87,17 @@ public class MenuScreen extends Screens {
 
     @Override
     public void draw(float delta) {
+
+        if (!loaded) {
+            return;
+        }
+
        // menu principal
         vista.draw(spriteBatch);
 
         // overlay
         if(mostrarOpciones) {
-            vista.draw(spriteBatch);
+            //vista.draw(spriteBatch);
             opcionesOverlay.draw(spriteBatch);
         }
     }

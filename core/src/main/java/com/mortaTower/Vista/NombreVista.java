@@ -16,10 +16,11 @@ public class NombreVista {
     private final BitmapFont font;
     private final TextField.TextFieldStyle style;
 
-    private Texture cuadro;
+    private Texture transparencia, cuadro;
 
     public NombreVista(Stage stage){
 
+        transparencia = new Texture("Imagenes/black.png");
         cuadro = new Texture("Imagenes/SeleccionPersonaje/nombrePersonaje.png");
 
         font = new BitmapFont();
@@ -50,7 +51,10 @@ public class NombreVista {
 
     public void draw(SpriteBatch batch) {
 
-
+        batch.setColor(0, 0, 0, 0.8f);
+        batch.draw(transparencia, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+        batch.setColor(1, 1, 1, 1);
+        
         batch.draw(cuadro, 350, 150, WORLD_WIDTH - 700, WORLD_HEIGHT - 300);
         nameField.setVisible(true);
         

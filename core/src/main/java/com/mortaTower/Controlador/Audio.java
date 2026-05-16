@@ -22,6 +22,7 @@ public class Audio {
         sounds[5] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/sound4.wav"));
         
         music[0] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/untitled.wav"));
+        music[1] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/battleLvl1.mp3"));
     }
 
     // PLAY (SFX)

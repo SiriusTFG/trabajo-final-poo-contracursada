@@ -47,7 +47,7 @@ public class CombateVista {
 
         // Sprites
         fondo = new Texture("Imagenes/Combate/nivel1.png");
-        inventario =  new Texture("Imagenes/Combate/inventario.png");
+        //inventario =  new Texture("Imagenes/Combate/inventario.png");
         vidaHeroe = new Texture("Imagenes/Combate/vidaHeroe.png");
         vidaEnemigo = new Texture("Imagenes/Combate/vidaEnemigo.png");
 
@@ -122,7 +122,7 @@ public class CombateVista {
         float xOpt = (WORLD_WIDTH - anchoOpt) / 2;
         float yOpt = 50f;
 
-        int estadoOpt = (modelo.getOpcionActual() == CombateModelo.Opciones.OPCIONES) ? NORMAL : SELECTED;
+        //int estadoOpt = (modelo.getOpcionActual() == CombateModelo.Opciones.PAUSA) ? NORMAL : SELECTED;
 
         batch.draw(fondo, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
         batch.draw(vidaHeroe, 30, 50, 400, 200);
@@ -138,7 +138,7 @@ public class CombateVista {
         if (modelo.getHeroe() != null && modelo.getEnemigo() != null) {
             dibujarBarra(120, 132, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), Color.GREEN);
             dibujarBarra(120, 106, modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax(), Color.BLUE);
-            dibujarBarra(978, 136, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
+            dibujarBarra(977, 136, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
         }
         
         sr.end();

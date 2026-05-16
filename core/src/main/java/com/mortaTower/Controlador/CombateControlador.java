@@ -18,11 +18,18 @@ public class CombateControlador {
     public CombateControlador(CombateModelo model, Teclado teclado, Audio audio) {
         this.modelo = model;
         this.teclado = teclado;
-        //this.audio = audio;
+        
+        //audio.loop(1);
     }
 
     public void update(float delta){
         teclado.update();
+
+        if (teclado.backPressed){
+
+           modelo.pausa();
+        }
+
 
         switch (modelo.getTurnoActual()) {
             case JUGADOR -> manejarEntradaJugador();
@@ -58,15 +65,15 @@ public class CombateControlador {
     }
 
     private void manejarEntradaJugador() {
-        if (teclado.leftPressed) {modelo.izquierda();}
-        if (teclado.rightPressed) {modelo.derecha();}
-        if (teclado.downPressed) {modelo.abajo();}
-        if (teclado.upPressed) {modelo.arriba();}
+        //if (teclado.leftPressed) {modelo.izquierda();}
+        //if (teclado.rightPressed) {modelo.derecha();}
+        //if (teclado.downPressed) {modelo.abajo();}
+        //if (teclado.upPressed) {modelo.arriba();}
 
         if (teclado.selectPressed) {
             Opciones opt = modelo.getOpcionActual();
 
-            if (opt == Opciones.OPCIONES) {
+            if (opt == Opciones.PAUSA) {
                 System.out.println("Menu opciones");
             } else {
                 int indiceHabilidad = opt.ordinal();

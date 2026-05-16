@@ -1,6 +1,7 @@
 package com.mortaTower;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mortaTower.Controlador.Audio;
 import com.mortaTower.Controlador.Teclado;
@@ -11,6 +12,7 @@ import com.mortaTower.Screens.MenuScreen;
 
 public class Main extends Game {
 
+    public AssetManager assets;
     public SpriteBatch batch;
     public Teclado teclado;
     public Audio audio;
@@ -22,6 +24,7 @@ public class Main extends Game {
 
         GestorDeConexion.getInstancia();
         
+        assets = new AssetManager();
         batch = new SpriteBatch();
         teclado = new Teclado();
         audio = new Audio();
