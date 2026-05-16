@@ -55,10 +55,12 @@ public class NombreVista {
         nameField.setVisible(true);
         
     }
+    
     public void dispose() {
 
-        cuadro.dispose();
-    }
+        nameField.setVisible(false);
+
+    } 
 
     private Drawable crearCursor(Color color, int width, int height) {
 

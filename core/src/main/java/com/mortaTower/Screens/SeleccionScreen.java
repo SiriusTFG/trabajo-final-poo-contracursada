@@ -30,6 +30,7 @@ public class SeleccionScreen extends Screens {
         modelo = new SeleccionModelo();
         controlador = new SeleccionControlador(modelo, game.teclado, game.audio);
         seleccionVista = new SeleccionVista(modelo, stage);
+        
         nombreVista = new NombreVista(stage);
 
         modelo2 = new RecompensasModelo();
@@ -49,12 +50,14 @@ public class SeleccionScreen extends Screens {
 
             case INICIAR_PARTIDA -> { 
                 try {
+                    
+                    
                     String nombrePartida = nombreVista.getNombre();
                     modelo.setNombreJugador(nombrePartida);
                     Partida pNueva = modelo.confirmarYCrearPartida();
                     
                     game.setPartida(pNueva);
-                    game.setScreen(new CombateScreen(game)); System.out.println("comienza");
+                    game.setScreen(new TransicionScreen(game, this,new CombateScreen(game)));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -69,7 +72,7 @@ public class SeleccionScreen extends Screens {
 
         switch (modelo.getEstadoActual()) {
 
-            case SELECCION -> { seleccionVista.draw(spriteBatch); }
+            case SELECCION -> { seleccionVista.draw(spriteBatch); nombreVista.dispose(); }
 
             case NOMBRE -> {
 
@@ -78,6 +81,8 @@ public class SeleccionScreen extends Screens {
                 //recoVista.draw(spriteBatch);
                 nombreVista.draw(spriteBatch);
             }
+
+
 
         }
     }
