@@ -12,7 +12,7 @@ import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 public class MenuVista {
 
     private MenuModelo modelo;
-
+    
     // ESTADOS VISUALES
     private static final int NORMAL = 0;
     private static final int SELECTED = 1;

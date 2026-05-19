@@ -73,4 +73,5 @@ public abstract class Screens implements Screen {
 
     public abstract void draw(float delta);
     public abstract void update(float delta);
+    public abstract void input();
 }

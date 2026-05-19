@@ -86,4 +86,10 @@ public class SeleccionScreen extends Screens {
 
         }
     }
+
+    @Override
+    public void input() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'input'");
+    }
 }

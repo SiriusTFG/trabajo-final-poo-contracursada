@@ -3,7 +3,7 @@ package com.mortaTower.Modelo;
 public class OpcionesModelo {
 
     public enum OpcionesEnum {MUSICA, EFECTOS, CONTROLES}
-    public enum EstadoEnum {MENU, OPCIONES, CONTROLES}
+    public enum EstadoEnum {OPCIONES, CONTROLES}
     private static final OpcionesEnum[] valores = OpcionesEnum.values();
 
     private OpcionesEnum seleccion = OpcionesEnum.MUSICA;
@@ -60,8 +60,6 @@ public class OpcionesModelo {
 
         if (estado == EstadoEnum.CONTROLES){
             estado = EstadoEnum.OPCIONES;
-        }else{
-            estado = EstadoEnum.MENU;
         }
 
     }
@@ -71,7 +69,7 @@ public class OpcionesModelo {
     public OpcionesEnum getOpcionActual() {return seleccion;}
 
     public EstadoEnum getEstadoActual() {return estado;}
-    public void EstadoEnum(EstadoEnum estado) {this.estado = estado;}
+    public void setEstadoEnum(EstadoEnum estado) {this.estado = estado;}
 
 
     public int getseleccionMusica() {return seleccionMusica;}

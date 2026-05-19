@@ -4,7 +4,7 @@ package com.mortaTower.Modelo;
 public class MenuModelo {
 
     public enum OpcionesEnum {JUGAR, CARGAR, OPCIONES, SALIR}
-    public enum Estado {MENU, OPCIONES}
+    public enum Estado {MENU, OPCIONES, CONTROLES}
 
     private static final OpcionesEnum[] valores = OpcionesEnum.values();
 
@@ -26,4 +26,5 @@ public class MenuModelo {
     // GETTERS / SETTERS
     public OpcionesEnum getOpcionActual() {return seleccion;}
     public Estado getEstadoActual() {return estado;}
+    public void setEstadoActual(Estado estado) {this.estado = estado;}
 }

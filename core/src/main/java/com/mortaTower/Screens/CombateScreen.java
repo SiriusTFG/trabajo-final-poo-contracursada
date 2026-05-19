@@ -67,4 +67,10 @@ public class CombateScreen extends Screens {
             vista3.draw(spriteBatch);
         }
     }
+
+    @Override
+    public void input() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'input'");
+    }
 }
