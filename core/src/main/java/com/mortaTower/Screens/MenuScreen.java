@@ -1,20 +1,83 @@
 package com.mortaTower.Screens;
 
-import com.mortaTower.Controlador.Audio;
-import com.mortaTower.Controlador.Teclado;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Main;
-import com.mortaTower.Modelo.MenuModelo;
-import com.mortaTower.Modelo.MenuModelo.Estado;
-import com.mortaTower.Modelo.OpcionesModelo.EstadoEnum;
-import com.mortaTower.Modelo.OpcionesModelo;
 import com.mortaTower.Vista.MenuVista;
-import com.mortaTower.Vista.OpcionesVista;
 
 
 public class MenuScreen extends Screens {
 
-    private boolean loaded;
+    //private boolean loaded;
+    private MenuVista vista;
+
+    public MenuScreen(Main game) {
+        super(game);
+    }
+
+   @Override
+    public void show() {
+
+        //loaded = false;
+
+        game.assets.load("Imagenes/MenuInicio/Fondo.png", Texture.class);
+        game.assets.load("Imagenes/MenuInicio/nueva.png", Texture.class);
+        game.assets.load("Imagenes/MenuInicio/cargar.png", Texture.class);
+        game.assets.load("Imagenes/MenuInicio/opciones.png", Texture.class);
+        game.assets.load("Imagenes/MenuInicio/salir.png", Texture.class);
+        game.assets.finishLoading(); //obliga al juego a cargar todo antes de seguir
+
+        vista = new MenuVista(viewport, game); // el viewport es del screen
+        Gdx.input.setInputProcessor(vista.getStage());
+
+        vista.getBtnJugar().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.audio.play(3);
+                game.audio.stop(0);
+                game.setScreen(new TransicionScreen(game, MenuScreen.this, new SeleccionScreen(game)));
+            }
+        });
+
+        vista.getBtnCargar().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.audio.play(3);
+                game.audio.stop(0);
+                game.setScreen(new TransicionScreen(game, MenuScreen.this, new CargarScreen(game, MenuScreen.this)));
+            }
+        });
+
+        vista.getBtnSalir().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
+
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta); //limpia la pantalla
+        vista.render(delta); //dibuja la vista
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        vista.cerrar();
+    }
+
+    @Override
+    public void update(float delta) {}
+    public void draw(float delta) {}
+    public void input(){}
+
+
+/*     
 
     private Teclado teclado;
     private Audio audio;
@@ -41,17 +104,6 @@ public class MenuScreen extends Screens {
         audio.loop(0);
     }
 
-    @Override
-    public void show() {
-
-        loaded = false;
-
-        game.assets.load("Imagenes/MenuInicio/Fondo.png", Texture.class);
-        game.assets.load("Imagenes/MenuInicio/nueva.png", Texture.class);
-        game.assets.load("Imagenes/MenuInicio/cargar.png", Texture.class);
-        game.assets.load("Imagenes/MenuInicio/opciones.png", Texture.class);
-        game.assets.load("Imagenes/MenuInicio/salir.png", Texture.class);
-    }
 
     @Override
     public void update(float delta) {
@@ -177,5 +229,5 @@ public class MenuScreen extends Screens {
             
         }
 
-    }
+    } */
 }
