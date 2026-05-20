@@ -12,6 +12,7 @@ public class TransicionScreen implements Screen {
     private final Game game;
     private final Screen currentScreen;
     private final Screen nextScreen;
+    private boolean nextShown = false;
 
     private ShapeRenderer shapeRenderer;
 
@@ -27,40 +28,47 @@ public class TransicionScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
+   
+public void render(float delta) {
 
-        if (!changing) {
-            currentScreen.render(delta);
+    if (!changing) {
 
-            alpha += delta;
+        currentScreen.render(delta);
 
-            if (alpha >= 1f) {
-                alpha = 1f;
-                changing = true;
-            }
+        alpha += delta;
 
-        } else {
-
-            nextScreen.render(delta);
-
-            alpha -= delta;
-
-            if (alpha <= 0f) {
-                game.setScreen(nextScreen);
-            }
+        if (alpha >= 1f) {
+            alpha = 1f;
+            changing = true;
         }
 
-        Gdx.gl.glEnable(GL20.GL_BLEND);
+    } else {
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(0, 0, 0, alpha);
-        shapeRenderer.rect(0, 0,
-                Gdx.graphics.getWidth(),
-                Gdx.graphics.getHeight());
-        shapeRenderer.end();
+        if (!nextShown) {
+            nextScreen.show();
+            nextShown = true;
+        }
 
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+        nextScreen.render(delta);
+
+        alpha -= delta;
+
+        if (alpha <= 0f) {
+            game.setScreen(nextScreen);
+        }
     }
+
+    Gdx.gl.glEnable(GL20.GL_BLEND);
+
+    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+    shapeRenderer.setColor(0, 0, 0, alpha);
+    shapeRenderer.rect(0, 0,
+            Gdx.graphics.getWidth(),
+            Gdx.graphics.getHeight());
+    shapeRenderer.end();
+
+    Gdx.gl.glDisable(GL20.GL_BLEND);
+}
 
     @Override public void resize(int width, int height) {}
     @Override public void pause() {}
