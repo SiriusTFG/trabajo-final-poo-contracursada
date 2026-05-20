@@ -1,126 +1,92 @@
 package com.mortaTower.Vista;
 
-import com.badlogic.gdx.graphics.Color;
+
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Align;
+
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+import com.mortaTower.Main;
 import com.mortaTower.Modelo.InventarioModelo;
-import com.mortaTower.Modelo.InventarioModelo.PanelFocus;
+
 
 //import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 //import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
 public class InventarioVista {
 
-    private InventarioModelo modelo;
+    private Stage stage;
+
+
+    // BOTONES
+    private ImageButton btnJugar, btnCargar, btnOpciones, btnSalir;
 
     private Texture inventario;
-    private GlyphLayout layout;
-    private String selector = ">";
 
-    private BitmapFont fuente;
-    private BitmapFont nombre, descripcion;
+    public InventarioVista(InventarioModelo modelo, Main game){
 
-    public InventarioVista(InventarioModelo modelo){
+        //this.modelo = modelo;
+        stage = new Stage();
+        
+        inventario = game.assets.get("Imagenes/Combate/inventario.png", Texture.class);
+        Texture categorias = game.assets.get("Imagenes/Combate/categorias.png", Texture.class);
 
-        this.modelo = modelo;
+        //creacion de botones
+        btnJugar = crearBoton(categorias, 0);
+        btnCargar = crearBoton(categorias, 1);
+        btnOpciones = crearBoton(categorias, 2);
+        btnSalir = crearBoton(categorias, 3);
 
-        inventario =
-            new Texture("Imagenes/Combate/inventario.png");
+        // Layout
+        Table tabla = new Table();
+        tabla.setFillParent(true); //ocupa la pantalla
+        //tabla.setDebug(true);
 
-        fuente = new BitmapFont();
-        nombre = new BitmapFont();
-        descripcion = new BitmapFont();
-        layout = new GlyphLayout();
+        // Posicion de tabla
+        tabla.bottom().padBottom(380);
+        tabla.left().padLeft(540);
+
+        tabla.add(btnJugar).width(380).height(80).padBottom(0).row();
+        tabla.add(btnCargar).width(380).height(80).padBottom(0).row();
+        tabla.add(btnOpciones).width(380).height(80).padBottom(0).row();
+        tabla.add(btnSalir).width(380).height(80).padBottom(0).row();
+
+        stage.addActor(tabla);
     }
 
-    public void draw(SpriteBatch batch) {
+    private ImageButton crearBoton(Texture textura, int fila) {
 
-        // panel inventario
-        batch.draw(inventario, 470, 50, 380, 300);
+        int ancho = textura.getWidth() / 2;
+        int alto = textura.getHeight() / 4;
 
-        // selector
-        dibujarSelector(batch);
+        int y = fila * alto;
 
-        // habilidades
-        for (int i = 0; i < 4; i++) {
+        TextureRegion normal = new TextureRegion(textura, 0, y, ancho, alto);
 
-            
-            String texto = modelo.getNombreHabilidad(i);
-            String desc = modelo.getDescripcionHabilidad(i);
+        TextureRegion seleccionado =new TextureRegion(textura, ancho, y, ancho, alto);
 
-            nombre.draw(batch, texto, 600, 285 - 40 * i);
+        ImageButton.ImageButtonStyle style =new ImageButton.ImageButtonStyle();
 
-            if (modelo.getFocus() == PanelFocus.HABILIDADES) {
-                layout.setText(descripcion, desc, Color.WHITE, 180, Align.left, true);
-                descripcion.draw(batch, layout , 500, 116);
-            }
-        }
+        style.imageUp = new TextureRegionDrawable(normal);
+        style.imageOver = new TextureRegionDrawable(seleccionado);
+
+        return new ImageButton(style);
+    }
+    public void render(float delta) {
+        stage.act(delta);
+        stage.getBatch().begin();
+        stage.getBatch().draw(inventario, 640, 200, 680, 560);
+        stage.getBatch().end();
+        stage.draw();
     }
 
-    private void dibujarSelector(SpriteBatch batch) {
-
-        int x = 0;
-        int y = 0;
-
-        // foco categorias
-        if(modelo.getFocus() ==
-                InventarioModelo.PanelFocus.CATEGORIA){
-
-            switch(modelo.getCategoriaActual()){
-
-                case ATAQUE:
-                    x = 488;
-                    y = 286;
-                    break;
-
-                case DEFENSA:
-                    x = 488;
-                    y = 246;
-                    break;
-
-                case CURACION:
-                    x = 488;
-                    y = 206;
-                    break;
-
-                case MANA:
-                    x = 488;
-                    y = 166;
-                    break;
-            }
-
-        }
-
-        // foco habilidades
-        else {
-
-            switch(modelo.getHabilidadActual()){
-
-                case SLOT1:
-                    x = 560;
-                    y = 286;
-                    break;
-
-                case SLOT2:
-                    x = 560;
-                    y = 246;
-                    break;
-
-                case SLOT3:
-                    x = 560;
-                    y = 206;
-                    break;
-
-                case SLOT4:
-                    x = 560;
-                    y = 166;
-                    break;
-            }
-        }
-
-        fuente.draw(batch, selector, x, y);
-    }
+    // GETTERS
+    public Stage getStage() { return stage; }
+    public ImageButton getBtnJugar() { return btnJugar; }
+    public ImageButton getBtnCargar() { return btnCargar; }
+    public ImageButton getBtnOpciones() { return btnOpciones; }
+    public ImageButton getBtnSalir() { return btnSalir; }
 }

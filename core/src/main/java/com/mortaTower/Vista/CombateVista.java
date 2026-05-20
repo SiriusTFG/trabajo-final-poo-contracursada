@@ -52,8 +52,8 @@ public class CombateVista {
         vidaEnemigo = new Texture("Imagenes/Combate/vidaEnemigo.png");
 
         texturas = new Texture[] {
-            new Texture("Imagenes/Combate/luchar.png"),
-            new Texture("Imagenes/Combate/habilidades.png"),
+           // new Texture("Imagenes/Combate/luchar.png"),
+            //new Texture("Imagenes/Combate/habilidades.png"),
             //new Texture("Imagenes/MenuInicio/op.png"),
         };
 

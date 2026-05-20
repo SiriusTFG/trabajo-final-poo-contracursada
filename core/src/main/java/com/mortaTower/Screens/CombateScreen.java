@@ -1,6 +1,7 @@
 package com.mortaTower.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.mortaTower.Controlador.CombateControlador;
 import com.mortaTower.Controlador.InventarioControlador;
 import com.mortaTower.Main;
@@ -11,6 +12,7 @@ import com.mortaTower.Modelo.CombateModelo.Opciones;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
 import com.mortaTower.Vista.InventarioVista;
+import com.mortaTower.Vista.MenuVista;
 import com.mortaTower.Vista.PausaVista;
 
 public class CombateScreen extends Screens {
@@ -42,12 +44,29 @@ public class CombateScreen extends Screens {
 
         modelo2 = new InventarioModelo(heroe);
         controlador2 = new InventarioControlador(modelo2, game.teclado, game.audio);
-        vista2 = new InventarioVista(modelo2);
+       
 
         vista3 = new PausaVista();
         
     }
 
+    @Override
+    public void show() {
+
+        game.assets.load("Imagenes/Combate/categorias.png", Texture.class);
+        game.assets.load("Imagenes/Combate/inventario.png", Texture.class);
+        game.assets.finishLoading(); //obliga al juego a cargar todo antes de seguir
+
+        vista2 = new InventarioVista(modelo2, game);
+        Gdx.input.setInputProcessor(vista2.getStage());
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta); //limpia la pantalla
+        vista2.render(delta); //dibuja la vista
+    }
+    
     @Override
     public void update(float delta) {
         controlador.update(delta);
@@ -59,7 +78,7 @@ public class CombateScreen extends Screens {
     public void draw(float delta) {
         vista.draw(spriteBatch);
         vista.dibujarInterfaz(spriteBatch);
-        vista2.draw(spriteBatch);
+
         vista.dibujarSprite(spriteBatch);
 
         if (modelo.getOpcionActual() == Opciones.PAUSA){
