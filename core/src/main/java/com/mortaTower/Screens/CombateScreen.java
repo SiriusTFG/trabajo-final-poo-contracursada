@@ -3,16 +3,14 @@ package com.mortaTower.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.mortaTower.Controlador.CombateControlador;
-import com.mortaTower.Controlador.InventarioControlador;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Heroe;
-import com.mortaTower.Modelo.InventarioModelo;
+
 import com.mortaTower.Modelo.CombateModelo.Opciones;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
 import com.mortaTower.Vista.InventarioVista;
-import com.mortaTower.Vista.MenuVista;
 import com.mortaTower.Vista.PausaVista;
 
 public class CombateScreen extends Screens {
@@ -21,8 +19,7 @@ public class CombateScreen extends Screens {
     private CombateVista vista;
     private CombateControlador controlador;
 
-    private InventarioControlador controlador2;
-    private InventarioModelo modelo2;
+    
     private InventarioVista vista2;
 
     private PausaVista vista3;
@@ -41,9 +38,6 @@ public class CombateScreen extends Screens {
         }
         vista = new CombateVista(modelo);
         controlador = new CombateControlador(modelo, game.teclado, game.audio);
-
-        modelo2 = new InventarioModelo(heroe);
-        controlador2 = new InventarioControlador(modelo2, game.teclado, game.audio);
        
 
         vista3 = new PausaVista();
@@ -57,7 +51,7 @@ public class CombateScreen extends Screens {
         game.assets.load("Imagenes/Combate/inventario.png", Texture.class);
         game.assets.finishLoading(); //obliga al juego a cargar todo antes de seguir
 
-        vista2 = new InventarioVista(modelo2, game);
+        vista2 = new InventarioVista(viewport, game);
         Gdx.input.setInputProcessor(vista2.getStage());
     }
 
@@ -70,7 +64,6 @@ public class CombateScreen extends Screens {
     @Override
     public void update(float delta) {
         controlador.update(delta);
-        controlador2.update();
         
     }
 
@@ -85,11 +78,5 @@ public class CombateScreen extends Screens {
 
             vista3.draw(spriteBatch);
         }
-    }
-
-    @Override
-    public void input() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'input'");
     }
 }

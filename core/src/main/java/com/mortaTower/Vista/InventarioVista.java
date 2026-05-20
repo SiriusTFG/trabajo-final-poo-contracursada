@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mortaTower.Main;
-import com.mortaTower.Modelo.InventarioModelo;
+
 
 
 //import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
@@ -22,23 +22,23 @@ public class InventarioVista {
 
 
     // BOTONES
-    private ImageButton btnJugar, btnCargar, btnOpciones, btnSalir;
+    private ImageButton btnAtaque, btnDefensa, btnCuracion, btnMana;
 
-    private Texture inventario;
+    private Texture inventario, categorias;
 
-    public InventarioVista(InventarioModelo modelo, Main game){
+    public InventarioVista(Viewport viewport,Main game){
 
         //this.modelo = modelo;
         stage = new Stage();
         
         inventario = game.assets.get("Imagenes/Combate/inventario.png", Texture.class);
-        Texture categorias = game.assets.get("Imagenes/Combate/categorias.png", Texture.class);
+        categorias = game.assets.get("Imagenes/Combate/categorias.png", Texture.class);
 
         //creacion de botones
-        btnJugar = crearBoton(categorias, 0);
-        btnCargar = crearBoton(categorias, 1);
-        btnOpciones = crearBoton(categorias, 2);
-        btnSalir = crearBoton(categorias, 3);
+        btnAtaque = crearBoton(categorias, 0);
+        btnDefensa = crearBoton(categorias, 1);
+        btnCuracion = crearBoton(categorias, 2);
+        btnMana = crearBoton(categorias, 3);
 
         // Layout
         Table tabla = new Table();
@@ -49,10 +49,10 @@ public class InventarioVista {
         tabla.bottom().padBottom(380);
         tabla.left().padLeft(540);
 
-        tabla.add(btnJugar).width(380).height(80).padBottom(0).row();
-        tabla.add(btnCargar).width(380).height(80).padBottom(0).row();
-        tabla.add(btnOpciones).width(380).height(80).padBottom(0).row();
-        tabla.add(btnSalir).width(380).height(80).padBottom(0).row();
+        tabla.add(btnAtaque).width(380).height(80).padBottom(0).row();
+        tabla.add(btnDefensa).width(380).height(80).padBottom(0).row();
+        tabla.add(btnCuracion).width(380).height(80).padBottom(0).row();
+        tabla.add(btnMana).width(380).height(80).padBottom(0).row();
 
         stage.addActor(tabla);
     }
@@ -75,6 +75,7 @@ public class InventarioVista {
 
         return new ImageButton(style);
     }
+    
     public void render(float delta) {
         stage.act(delta);
         stage.getBatch().begin();
@@ -85,8 +86,8 @@ public class InventarioVista {
 
     // GETTERS
     public Stage getStage() { return stage; }
-    public ImageButton getBtnJugar() { return btnJugar; }
-    public ImageButton getBtnCargar() { return btnCargar; }
-    public ImageButton getBtnOpciones() { return btnOpciones; }
-    public ImageButton getBtnSalir() { return btnSalir; }
+    public ImageButton getBtnAtaque() { return btnAtaque; }
+    public ImageButton getBtnDefensa() { return btnDefensa; }
+    public ImageButton getBtnCuracion() { return btnCuracion; }
+    public ImageButton getBtnMana() { return btnMana; }
 }
