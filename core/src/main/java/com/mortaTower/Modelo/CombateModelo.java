@@ -13,6 +13,8 @@ public class CombateModelo {
     private Turno turnoActual = Turno.JUGADOR;
     private Heroe heroe;
     private Enemigo enemigo;
+    private String mensajeCombate = "";
+    private float tiempoMensaje = 0;
 
     public CombateModelo(Heroe heroe, int numPiso) {
     //De forma temporal,optimizar despues.
@@ -74,11 +76,29 @@ public class CombateModelo {
         }
         return null;
     }
-
+ 
+        // Mostrar el mensaje durante
     // Getters
     public Opciones getOpcionActual() {return seleccion;}
     public Turno getTurnoActual() {return turnoActual;}
     public void setTurnoActual(Turno turno) {this.turnoActual = turno;}
     public Heroe getHeroe() {return heroe;}
     public Enemigo getEnemigo() {return enemigo;}
+    public String getMensajeCombate() {return mensajeCombate;}
+    public void mostrarMensaje(String mensaje) {
+        this.mensajeCombate = mensaje;
+        this.tiempoMensaje = 2.0f; // El mensaje se mostrará durante 2 segundos
+    }   
+    public void mostrarMensajeEnemigo (String nombreEnemigo, String habilidad) {
+         this.mensajeCombate = nombreEnemigo + " usa " + habilidad + "!";
+            this.tiempoMensaje = 2.0f; // El mensaje se mostrará
+    }
+    public void actualizarMensaje(float delta) {
+        if (tiempoMensaje > 0) {
+            tiempoMensaje -= delta;
+            if (tiempoMensaje <= 0) {
+                mensajeCombate = "";
+            }
+        }
+    }
 }  

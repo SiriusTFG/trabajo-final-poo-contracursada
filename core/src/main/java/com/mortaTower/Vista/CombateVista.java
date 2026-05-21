@@ -12,6 +12,7 @@ import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 import java.util.HashMap;
 import java.util.Map;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class CombateVista {
 
@@ -33,6 +34,7 @@ public class CombateVista {
 
     //Fuente
     private BitmapFont fuente;
+    private GlyphLayout layout; 
 
     //Texturas de enem y heroe.
     private Map<String, Texture> texturasEntidades = new HashMap<>();
@@ -42,6 +44,7 @@ public class CombateVista {
         this.modelo = modelo;
         sr = new ShapeRenderer();
         fuente = new BitmapFont();
+        layout = new GlyphLayout();
         fuente.getData().setScale(1.5f);
         fuente.setColor(Color.WHITE);
 
@@ -128,6 +131,15 @@ public class CombateVista {
         batch.draw(vidaHeroe, 30, 50, 400, 200);
         batch.draw(vidaEnemigo, 860, 50, 400, 200);
         
+        String mensaje = modelo.getMensajeCombate();
+        if (mensaje != null && !mensaje.isEmpty()) {
+            fuente.setColor(Color.WHITE);
+            layout.setText(fuente, mensaje);
+
+            float xMensaje = (WORLD_WIDTH - layout.width) / 2f;
+            float yMensaje = WORLD_HEIGHT * 0.90f;
+            fuente.draw(batch, mensaje, xMensaje, yMensaje);
+        }
     }
     public void dibujarInterfaz(SpriteBatch batch) {
         batch.end(); //pausa el batch para usar el ShapeRenderer

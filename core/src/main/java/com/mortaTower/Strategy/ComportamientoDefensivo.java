@@ -34,6 +34,7 @@ public class ComportamientoDefensivo implements ComportamientoEnemigo {
         } else {
             mejorHabilidad = buscarHabilidadPorTipo(enemigo, "Mana");
              System.out.println(enemigo.getNombre() + " usa: " + mejorHabilidad.getNombre());
+             enemigo.setUltimaHabilidadUsada(mejorHabilidad.getNombre());
              mejorHabilidad.ejecutarHabilidad(enemigo, objetivo);
         }
         
