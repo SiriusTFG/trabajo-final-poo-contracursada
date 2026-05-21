@@ -1,108 +1,111 @@
 package com.mortaTower.Vista;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mortaTower.Modelo.Habilidad;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.mortaTower.Main;
 import com.mortaTower.Modelo.RecompensasModelo;
 
-import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
-import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 
 public class RecompensasVista {
 
-    private RecompensasModelo modelo;
+     private Stage stage;
 
-    private BitmapFont font;
 
-    private static final int NORMAL = 0;
-    private static final int SELECTED = 1;
+    // BOTONES
+    private ImageButton btnHab1, btnHab2, btnHab3;
+    private Image cat1 , cat2, cat3;
 
-    private final Texture[] texturas;
-    private int[] columnas;
-    private int[] filas;
+    private Texture fondo, categorias, cuadro;
 
-    // [objeto][estado][nivel]
-    private TextureRegion[][][] sprites;
+    public RecompensasVista(Main game) {
 
-    public RecompensasVista(RecompensasModelo modelo) {
+        stage = new Stage();
 
-        this.modelo = modelo;
-        font = new BitmapFont();
+        fondo = game.assets.get("Imagenes/black.png", Texture.class);
 
-        texturas = new Texture[] {
+        Image fondoImg = new Image(new TextureRegionDrawable(fondo));
+        fondoImg.setFillParent(true);
+        fondoImg.setColor(0, 0, 0, 0.6f); // opcional translúcido
+        
+        cuadro = game.assets.get("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
+        categorias = game.assets.get("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
+        
+        
 
-            new Texture("Imagenes/SeccionRecompensa/tipoHabilidad.png"),
-            new Texture("Imagenes/SeccionRecompensa/cuadroHabilidad.png")
+        //creacion de botones
+        btnHab1 = crearBoton(cuadro, 0);
+        btnHab2 = crearBoton(cuadro, 0);
+        btnHab3 = crearBoton(cuadro, 0);
 
-        };
+        cat1 = crearCategoria(categorias, 0);
+        cat2 = crearCategoria(categorias, 1);
+        cat3 = crearCategoria(categorias, 2);
 
-        columnas = new int[] {4, 2};
-        filas = new int[] {1, 1};
+        // Layout
+        Table tabla = new Table();
+        tabla.setFillParent(true); //ocupa la pantalla
+        //tabla.setDebug(true);
 
-        sprites = new TextureRegion[texturas.length][][];
+        // Posicion de tabla
+        tabla.center();
 
-        for (int i = 0; i < texturas.length; i++) {
+        tabla.add(cat1).size(210, 180).pad(30);
+        tabla.add(btnHab1).size(800, 200).row();
 
-            Texture tex = texturas[i];
+        tabla.add(cat2).size(210, 180).pad(30);
+        tabla.add(btnHab2).size(800, 200).row();
 
-            int cols = columnas[i];
-            int rows = filas[i];
+        tabla.add(cat3).size(210, 180).pad(30);
+        tabla.add(btnHab3).size(800, 200).row();
 
-            int width = tex.getWidth() / cols;
-            int height = tex.getHeight() / rows;
-
-            sprites[i] = new TextureRegion[cols][rows];
-
-            for (int estado = 0; estado < cols; estado++) {
-                for (int nivel = 0; nivel < rows; nivel++) {
-                    sprites[i][estado][nivel] =
-                        new TextureRegion(tex, estado * width, nivel * height, width, height);
-                }
-            }
-        }
+        stage.addActor(fondoImg);
+        stage.addActor(tabla);
     }
 
-    public void draw(SpriteBatch batch) {
+    private ImageButton crearBoton(Texture textura, int fila) {
 
-    float x = WORLD_HEIGHT * 0.19f;
-    float y = WORLD_WIDTH * 0.394f;
-    float separacion = WORLD_HEIGHT * 0.3f;
+        int ancho = textura.getWidth() / 2;
+        int alto = textura.getHeight();
 
-    float ancho = WORLD_WIDTH * 0.12f;
-    float alto = WORLD_HEIGHT * 0.20f;
+        int y = fila * alto;
 
-    int seleccion = modelo.getOpcionActual().ordinal();
+        TextureRegion normal = new TextureRegion(textura, 0, y, ancho, alto);
+        TextureRegion seleccionado =new TextureRegion(textura, ancho, y, ancho, alto);
 
-    for (int i = 0; i < 3; i++) {
+        ImageButton.ImageButtonStyle style =new ImageButton.ImageButtonStyle();
 
-        RecompensasModelo.Recompensa tipo = modelo.getTipo(i);
+        style.imageUp = new TextureRegionDrawable(normal);
+        style.imageOver = new TextureRegionDrawable(seleccionado);
 
-        int estado = tipo.ordinal();
-        int estado2 = (i == seleccion) ? SELECTED : NORMAL;
-
-        batch.draw(
-            sprites[0][estado][0],
-            x,
-            y - separacion * i,
-            ancho,
-            alto
-        );
-
-        batch.draw(
-            sprites[1][estado2][0],
-            x + 160,
-            y - separacion * i,
-            ancho + 600,
-            alto - 10
-        );
-
-        Habilidad hab = modelo.getHabilidad(i);
-
-        font.draw(batch, hab.getNombre(), x + 200, (y + 50) - separacion * i + 20);
+        return new ImageButton(style);
     }
-}
 
+    private Image crearCategoria(Texture textura, int columna){
 
+        int ancho = textura.getWidth()/4;
+        int alto = textura.getHeight();
+
+        int x = columna * ancho;
+
+        TextureRegion region = new TextureRegion(textura, x, 0, ancho, alto);
+
+        return new Image(new TextureRegionDrawable(region));
+    }
+
+    public void render(float delta) {
+        stage.act(delta);
+        stage.draw();
+    }
+
+    // GETTERS
+    public Stage getStage() { return stage; }
+    public ImageButton getBtnHab1() { return btnHab1; }
+    public ImageButton getBtnHab2() { return btnHab2; }
+    public ImageButton getBtnHab3() { return btnHab3; }
 }

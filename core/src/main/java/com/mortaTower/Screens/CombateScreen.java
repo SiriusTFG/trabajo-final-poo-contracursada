@@ -8,10 +8,12 @@ import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Heroe;
 
 import com.mortaTower.Modelo.CombateModelo.Opciones;
+import com.mortaTower.Modelo.RecompensasModelo.Recompensa;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
 import com.mortaTower.Vista.InventarioVista;
 import com.mortaTower.Vista.PausaVista;
+import com.mortaTower.Vista.RecompensasVista;
 
 public class CombateScreen extends Screens {
 
@@ -19,8 +21,9 @@ public class CombateScreen extends Screens {
     private CombateVista vista;
     private CombateControlador controlador;
 
-    
+    private RecompensasVista vista4;
     private InventarioVista vista2;
+
 
     private PausaVista vista3;
 
@@ -47,18 +50,28 @@ public class CombateScreen extends Screens {
     @Override
     public void show() {
 
+        // COMBATE
         game.assets.load("Imagenes/Combate/categorias.png", Texture.class);
         game.assets.load("Imagenes/Combate/inventario.png", Texture.class);
+        
+
+        // RECOMPENSA
+        game.assets.load("Imagenes/black.png", Texture.class);
+        game.assets.load("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
+        game.assets.load("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
         game.assets.finishLoading(); //obliga al juego a cargar todo antes de seguir
 
-        vista2 = new InventarioVista(viewport, game);
-        Gdx.input.setInputProcessor(vista2.getStage());
+        vista4 = new RecompensasVista(game);
+        Gdx.input.setInputProcessor(vista4.getStage());
+        //vista2 = new InventarioVista(viewport, game);
+        //Gdx.input.setInputProcessor(vista2.getStage());
     }
 
     @Override
     public void render(float delta) {
         super.render(delta); //limpia la pantalla
-        vista2.render(delta); //dibuja la vista
+        //vista2.render(delta); //dibuja la vista
+        vista4.render(delta);
     }
     
     @Override
