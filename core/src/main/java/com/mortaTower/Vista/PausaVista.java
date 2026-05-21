@@ -3,104 +3,72 @@ package com.mortaTower.Vista;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.mortaTower.Modelo.OpcionesModelo;
-
-import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
-import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.mortaTower.Main;
 
 public class PausaVista {
 
-    private OpcionesModelo modelo;
+    private Stage stage;
+    private Texture fondo;
 
-    private static final int NORMAL = 1;
-    private static final int SELECTED = 0;
-
-    private float x, y;
-    private float ancho, alto;
-    private float separacion;
-
-    private Texture transparencia, fondo, controles;
-    private final Texture[] texturas;
-    private TextureRegion[][][] sprites;
-
-    private int[] columnas;
-    private int[] filas;
+    // BOTONES
+    private ImageButton btnOpciones, btnSalir;
     
-    public PausaVista(){
+    public PausaVista(Main game){
 
-        transparencia = new Texture("Imagenes/black.png");
+        stage = new Stage();
 
-        texturas = new Texture[] {
+        fondo = game.assets.get("Imagenes/black.png", Texture.class);
 
-            new Texture("Imagenes/Opciones/controles.png"),
-            new Texture("Imagenes/MenuInicio/opciones.png"),
-            new Texture("Imagenes/MenuInicio/salir.png"),
-            
-        };
+        Image fondoImg = new Image(new TextureRegionDrawable(fondo));
+        fondoImg.setFillParent(true);
+        fondoImg.setColor(0, 0, 0, 0.6f); // opcional translúcido
 
-        columnas = new int[] {2,2,2};
-        filas = new int[] {1,1,1};
+        btnOpciones = crearBoton(game.assets.get("Imagenes/MenuInicio/opciones.png", Texture.class));
+        btnSalir = crearBoton(game.assets.get("Imagenes/MenuInicio/salir.png", Texture.class));
 
-        sprites = new TextureRegion[texturas.length][][];
+         // Layout
+        Table tabla = new Table();
+        //tabla.setFillParent(true); //ocupa la pantalla
+        //tabla.setDebug(true);
 
-        for (int i = 0; i < texturas.length; i++) {
+        // Posicion de tabla
+        tabla.center();
 
-            Texture tex = texturas[i];
+        tabla.add(btnOpciones).width(380).height(80).padBottom(0).row();
+        tabla.add(btnSalir).width(380).height(80).padBottom(0).row();
 
-            int cols = columnas[i];
-            int rows = filas[i];
-
-            int width = tex.getWidth() / cols;
-            int height = tex.getHeight() / rows;
-
-            sprites[i] = new TextureRegion[cols][rows];
-
-            for (int estado = 0; estado < cols; estado++) {
-
-                for (int nivel = 0; nivel < rows; nivel++) {
-
-                    sprites[i][estado][nivel] = new TextureRegion(tex, estado * width, nivel * height, width, height);
-                }
-            }
-        }
+        stage.addActor(fondoImg);
+        stage.addActor(tabla);
 
     }
 
-    public void draw(SpriteBatch batch) {
+    private ImageButton crearBoton(Texture textura) {
+        int ancho = textura.getWidth() / 2;
+        int alto = textura.getHeight();
 
-        x = WORLD_WIDTH * 0.33f;
-        y = WORLD_HEIGHT * 0.60f;
+        TextureRegion normal = new TextureRegion(textura, 0, 0, ancho, alto);
+        TextureRegion seleccionado = new TextureRegion(textura, ancho, 0, ancho, alto);
 
-        ancho = WORLD_WIDTH * 0.35f;
-        alto = WORLD_HEIGHT * 0.12f;
-
-        separacion = WORLD_HEIGHT * 0.15f;
-        
-        // opción seleccionada
-        //int seleccion = modelo.getOpcionActual().ordinal(); //conecta el enum del modelo con un índice numérico.
-
-        batch.setColor(0, 0, 0, 0.8f);
-        batch.draw(transparencia, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-        batch.setColor(1, 1, 1, 1);
-
-        for (int i = 0; i < sprites.length; i++) {
-
-            //int estado = (i == seleccion) ? SELECTED : NORMAL;
-            int nivel = 0;
-
-            batch.draw(sprites[i][0][nivel], x, y - separacion * i, ancho, alto);
-        }
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.imageUp = new TextureRegionDrawable(normal);
+        style.imageOver = new TextureRegionDrawable(seleccionado);
+        return new ImageButton(style);
     }
 
-    public void dispose() {
-
-        fondo.dispose();
-        controles.dispose();
-
-        for (Texture tex : texturas) {
-            tex.dispose();
-        }
+    public void render(float delta) {
+        stage.act(delta);
+        stage.draw();
     }
+
+    // GETTERS
+    public Stage getStage() { return stage; }
+    public ImageButton getBtnOpciones() { return btnOpciones; }
+    public ImageButton getBtnSalir() { return btnSalir; }
     
 }
 

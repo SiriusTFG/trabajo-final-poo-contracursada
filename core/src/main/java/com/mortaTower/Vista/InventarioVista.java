@@ -42,17 +42,17 @@ public class InventarioVista {
 
         // Layout
         Table tabla = new Table();
-        tabla.setFillParent(true); //ocupa la pantalla
-        //tabla.setDebug(true);
+        //tabla.setFillParent(true); //ocupa la pantalla
+        tabla.setDebug(true);
 
         // Posicion de tabla
         tabla.bottom().padBottom(380);
-        tabla.left().padLeft(540);
+        tabla.left().padLeft(660);
 
-        tabla.add(btnAtaque).width(380).height(80).padBottom(0).row();
-        tabla.add(btnDefensa).width(380).height(80).padBottom(0).row();
-        tabla.add(btnCuracion).width(380).height(80).padBottom(0).row();
-        tabla.add(btnMana).width(380).height(80).padBottom(0).row();
+        tabla.add(btnAtaque).width(180).height(80).padBottom(0).row();
+        tabla.add(btnDefensa).width(180).height(80).padBottom(0).row();
+        tabla.add(btnCuracion).width(180).height(80).padBottom(0).row();
+        tabla.add(btnMana).width(180).height(80).padBottom(0).row();
 
         stage.addActor(tabla);
     }

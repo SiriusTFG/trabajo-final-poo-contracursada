@@ -42,8 +42,6 @@ public class CombateScreen extends Screens {
         vista = new CombateVista(modelo);
         controlador = new CombateControlador(modelo, game.teclado, game.audio);
        
-
-        vista3 = new PausaVista();
         
     }
 
@@ -61,17 +59,22 @@ public class CombateScreen extends Screens {
         game.assets.load("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
         game.assets.finishLoading(); //obliga al juego a cargar todo antes de seguir
 
-        vista4 = new RecompensasVista(game);
-        Gdx.input.setInputProcessor(vista4.getStage());
+        /*vista4 = new RecompensasVista(game);
+        Gdx.input.setInputProcessor(vista4.getStage());*/
+        
         //vista2 = new InventarioVista(viewport, game);
         //Gdx.input.setInputProcessor(vista2.getStage());
+
+        //vista3 = new PausaVista(game);
+        //Gdx.input.setInputProcessor(vista3.getStage());
     }
 
     @Override
     public void render(float delta) {
         super.render(delta); //limpia la pantalla
         //vista2.render(delta); //dibuja la vista
-        vista4.render(delta);
+        //vista4.render(delta);
+        //vista3.render(delta);
     }
     
     @Override
@@ -89,7 +92,7 @@ public class CombateScreen extends Screens {
 
         if (modelo.getOpcionActual() == Opciones.PAUSA){
 
-            vista3.draw(spriteBatch);
+            //vista3.draw(spriteBatch);
         }
     }
 }
