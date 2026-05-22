@@ -52,9 +52,11 @@ public class CombateControlador {
                     modelo.getEnemigo().setEstadoActual(Entidad.Estado.PARADO);
                     if (modelo.getEnemigo().getVidaActual() <= 0) {
                         System.out.println("Victoria");
+                        modelo.setResultado(CombateModelo.Resultado.VICTORIA);
                         modelo.getEnemigo().setEstadoActual(Entidad.Estado.MUERTE);
                     } else if (modelo.getHeroe().getVidaActual() <= 0) {
                         System.out.println("Game Over");
+                        modelo.setResultado(CombateModelo.Resultado.DERROTA);
                         modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
                     } else {
                         modelo.setTurnoActual(proximoTurnoJugador ? CombateModelo.Turno.JUGADOR : CombateModelo.Turno.ENEMIGO);  
