@@ -75,8 +75,9 @@ public class MenuScreen extends Screens {
         vista.getBtnMusicaMenos().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
-                volMusica--;
-                if (volMusica >= 0) {    
+                
+                if (volMusica > 0) {
+                    volMusica--;    
                     game.audio.setVolumenMusica(volMusica / 11f);
                     vista.actualizarBarraMusica(volMusica);
                 } 
