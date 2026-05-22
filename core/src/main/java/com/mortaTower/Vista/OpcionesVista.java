@@ -1,33 +1,159 @@
 package com.mortaTower.Vista;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mortaTower.Main;
 import com.mortaTower.Modelo.OpcionesModelo;
-import com.mortaTower.Modelo.OpcionesModelo.OpcionesEnum;
-
-import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
-import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 
 public class OpcionesVista {
 
     private OpcionesModelo modelo;
 
-    private static final int NORMAL = 1;
-    private static final int SELECTED = 0;
-
-    private float x, y;
-    private float ancho, alto;
-    private float separacion;
-
+    private Stage stage;
     private Texture transparencia, fondo, controles;
     private final Texture[] texturas;
     private TextureRegion[][][] sprites;
 
-    private int[] columnas;
-    private int[] filas;
+    //actores visuales
+    private Image imgMusica, imgEfectos, imgPantallaControles;
+
+    //botones
+    private ImageButton btnMusicaMenos, btnMusicaMas, btnEfectosMenos, btnEfectosMas, btnControles;
+
+
+    public OpcionesVista(FitViewport viewport, Main game) {
+        stage = new Stage(viewport, game.batch);
+
+        //carga de texturas
+        transparencia = new Texture("Imagenes/black.png");
+        fondo = new Texture("Imagenes/Opciones/menuOpciones.png");
+        controles = new Texture("Imagenes/Opciones/menuControles.png");
+
+         texturas = new Texture[] {
+            new Texture("Imagenes/Opciones/volMusica.png"),
+            new Texture("Imagenes/Opciones/volEfectos.png"),
+            new Texture("Imagenes/Opciones/controles.png"),
+            
+        };
+
+        Texture texMenos = new Texture("Imagenes/Opciones/btn_menos.png");
+        Texture texMas = new Texture("Imagenes/Opciones/btn_mas.png");
+
+            int[] cols = {2, 2, 2};
+            int[] fil = {12, 12, 1};
+            sprites = new TextureRegion[texturas.length][][];
+
+            for (int i = 0; i < texturas.length; i++) {
+                int columnas = cols[i];
+                int filas = fil[i];
+                int ancho = texturas[i].getWidth() / columnas;
+                int alto = texturas[i].getHeight() / filas;
+                sprites[i] = new TextureRegion[columnas][filas];
+
+                for (int estado = 0; estado < columnas; estado++) {
+                    for (int nivel = 0; nivel < filas; nivel++) {
+                        sprites[i][estado][nivel] = new TextureRegion(texturas[i], estado * ancho, nivel * alto, ancho, alto);
+                    }
+                }
+            }
+
+            //crear actores
+        imgMusica = new Image(new TextureRegionDrawable(sprites[0][1][11]));
+        imgEfectos = new Image(new TextureRegionDrawable(sprites[1][1][11]));
+
+        btnMusicaMenos = crearBotonSimple(texMenos);
+        btnMusicaMas = crearBotonSimple(texMas);
+        btnEfectosMenos = crearBotonSimple(texMenos);
+        btnEfectosMas = crearBotonSimple(texMas);
+
+        btnControles = crearBotonDoble(texturas[2]);
+
+        imgPantallaControles = new Image(controles);
+        imgPantallaControles.setVisible(false);
+
+        Table tabla = new Table();
+        tabla.setFillParent(true);
+        tabla.center();
+
+        float tamañoBtn = 50f;
+
+        tabla.add(btnMusicaMenos).size(tamañoBtn, tamañoBtn).padRight(15);
+        tabla.add(imgMusica).padBottom(20);
+        tabla.add(btnMusicaMas).size(tamañoBtn, tamañoBtn).padLeft(15).row();
+        
+        tabla.add(btnControles).colspan(3).padTop(20).row();
+
+
+        stage.addActor(tabla);
+        
+        imgPantallaControles.setPosition((stage.getWidth() - imgPantallaControles.getWidth())/2, (stage.getHeight() - imgPantallaControles.getHeight())/2);
+        stage.addActor(imgPantallaControles);
+    }
+
+    private ImageButton crearBotonDoble(Texture textura) {
+        int ancho = textura.getWidth() /2;
+        int alto = textura.getHeight();
+        TextureRegion normal = new TextureRegion(textura, 0, 0, ancho, alto);
+        TextureRegion seleccionado = new TextureRegion(textura, ancho, 0, ancho, alto);
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.imageUp = new TextureRegionDrawable(normal);
+        style.imageOver = new TextureRegionDrawable(seleccionado);
+        return new ImageButton(style);
+    }
+
+    private ImageButton crearBotonSimple(Texture textura) {
+        TextureRegion normal = new TextureRegion(textura);
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.imageUp = new TextureRegionDrawable(normal);
+        return new ImageButton(style);
+    }
+
+    public void actualizarBarraMusica(int nivel) {
+        ((TextureRegionDrawable) imgMusica.getDrawable()).setRegion(sprites[0][1][nivel]);
+    }
+
+    public void actualizarBarraEfectos(int nivel) {
+        ((TextureRegionDrawable) imgEfectos.getDrawable()).setRegion(sprites[1][1][nivel]);
+    }
+
+    public void render(float delta, boolean mostrarControles) {
+        imgPantallaControles.setVisible(mostrarControles);
+
+        stage.getBatch().begin();
+        stage.getBatch().setColor(0,0,0,0f);
+        stage.getBatch().draw(transparencia, 0, 0, stage.getWidth(), stage.getHeight());
+        stage.getBatch().setColor(1, 1, 1, 1);
+        stage.getBatch().draw(fondo, 350, 100, stage.getWidth() - 700, stage.getHeight() - 200);
+        stage.getBatch().end();
+
+        stage.act(delta);
+        stage.draw();
+    }
+
+    public void cerrar() {
+        stage.dispose();
+        transparencia.dispose();
+        fondo.dispose();
+        controles.dispose();
+        for (Texture tex: texturas) tex.dispose();
+    }
     
-    public OpcionesVista(OpcionesModelo modelo){
+    // GETTERS
+    public Stage getStage() { return stage; }
+    public ImageButton getBtnMusicaMenos() { return btnMusicaMenos; }
+    public ImageButton getBtnMusicaMas() { return btnMusicaMas; }
+    public ImageButton getBtnFxMenos() { return btnEfectosMenos; }
+    public ImageButton getBtnFxMas() { return btnEfectosMas; }
+    public ImageButton getBtnControles() { return btnControles; }
+    
+    /* public OpcionesVista(OpcionesModelo modelo){
 
         this.modelo = modelo;
 
@@ -122,6 +248,6 @@ public class OpcionesVista {
         for (Texture tex : texturas) {
             tex.dispose();
         }
-    }
+    } */
     
 }
