@@ -23,10 +23,12 @@ public class ComportamientoAgresivo implements ComportamientoEnemigo {
 
         if (mejorHabilidad != null) {
             System.out.println(enemigo.getNombre() + " usa: " + mejorHabilidad.getNombre());
+            enemigo.setUltimaHabilidadUsada(mejorHabilidad.getNombre());
             mejorHabilidad.ejecutarHabilidad(enemigo, objetivo); 
         } else {
             mejorHabilidad = buscarHabilidad(enemigo);
             System.out.println(enemigo.getNombre() + " usa: " + mejorHabilidad.getNombre());
+            enemigo.setUltimaHabilidadUsada(mejorHabilidad.getNombre());
             mejorHabilidad.ejecutarHabilidad(enemigo, objetivo);
         }
         
