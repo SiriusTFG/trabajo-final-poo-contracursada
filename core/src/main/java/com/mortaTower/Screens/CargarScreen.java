@@ -66,10 +66,5 @@ public class CargarScreen extends Screens {
     public void dispose() {
         vista.dispose();
     }
-    @Override
-    public void input() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'input'");
-    }
 
 }

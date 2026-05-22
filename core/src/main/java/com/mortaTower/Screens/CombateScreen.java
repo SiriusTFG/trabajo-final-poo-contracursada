@@ -1,17 +1,19 @@
 package com.mortaTower.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.mortaTower.Controlador.CombateControlador;
-import com.mortaTower.Controlador.InventarioControlador;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Heroe;
-import com.mortaTower.Modelo.InventarioModelo;
+
 import com.mortaTower.Modelo.CombateModelo.Opciones;
+import com.mortaTower.Modelo.RecompensasModelo.Recompensa;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
 import com.mortaTower.Vista.InventarioVista;
 import com.mortaTower.Vista.PausaVista;
+import com.mortaTower.Vista.RecompensasVista;
 
 public class CombateScreen extends Screens {
 
@@ -19,9 +21,9 @@ public class CombateScreen extends Screens {
     private CombateVista vista;
     private CombateControlador controlador;
 
-    private InventarioControlador controlador2;
-    private InventarioModelo modelo2;
+    private RecompensasVista vista4;
     private InventarioVista vista2;
+
 
     private PausaVista vista3;
 
@@ -39,19 +41,45 @@ public class CombateScreen extends Screens {
         }
         vista = new CombateVista(modelo);
         controlador = new CombateControlador(modelo, game.teclado, game.audio);
-
-        modelo2 = new InventarioModelo(heroe);
-        controlador2 = new InventarioControlador(modelo2, game.teclado, game.audio);
-        vista2 = new InventarioVista(modelo2);
-
-        vista3 = new PausaVista();
+       
         
     }
 
     @Override
+    public void show() {
+
+        // COMBATE
+        game.assets.load("Imagenes/Combate/categorias.png", Texture.class);
+        game.assets.load("Imagenes/Combate/inventario.png", Texture.class);
+        
+
+        // RECOMPENSA
+        game.assets.load("Imagenes/black.png", Texture.class);
+        game.assets.load("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
+        game.assets.load("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
+        game.assets.finishLoading(); //obliga al juego a cargar todo antes de seguir
+
+        /*vista4 = new RecompensasVista(game);
+        Gdx.input.setInputProcessor(vista4.getStage());*/
+        
+        //vista2 = new InventarioVista(viewport, game);
+        //Gdx.input.setInputProcessor(vista2.getStage());
+
+        //vista3 = new PausaVista(game);
+        //Gdx.input.setInputProcessor(vista3.getStage());
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta); //limpia la pantalla
+        //vista2.render(delta); //dibuja la vista
+        //vista4.render(delta);
+        //vista3.render(delta);
+    }
+    
+    @Override
     public void update(float delta) {
         controlador.update(delta);
-        controlador2.update();
         
     }
 
@@ -59,18 +87,12 @@ public class CombateScreen extends Screens {
     public void draw(float delta) {
         vista.draw(spriteBatch);
         vista.dibujarInterfaz(spriteBatch);
-        vista2.draw(spriteBatch);
+
         vista.dibujarSprite(spriteBatch);
 
         if (modelo.getOpcionActual() == Opciones.PAUSA){
 
-            vista3.draw(spriteBatch);
+            //vista3.draw(spriteBatch);
         }
-    }
-
-    @Override
-    public void input() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'input'");
     }
 }

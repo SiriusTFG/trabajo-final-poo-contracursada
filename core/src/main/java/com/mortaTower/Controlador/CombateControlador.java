@@ -1,8 +1,8 @@
 package com.mortaTower.Controlador;
 
 import com.mortaTower.Modelo.CombateModelo;
-import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.CombateModelo.Opciones;
+import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Heroe;
 
 public class CombateControlador {
@@ -24,6 +24,7 @@ public class CombateControlador {
 
     public void update(float delta){
         teclado.update();
+        modelo.actualizarMensaje(delta);
 
         if (teclado.backPressed){
 
@@ -86,6 +87,8 @@ public class CombateControlador {
                     modelo.getEnemigo().setEstadoActual(Entidad.Estado.DANIO);
                     //
                     heroe.seleccionarHabilidad(indiceHabilidad);
+                    String nombreHabilidad = heroe.getHabilidades()[indiceHabilidad].getNombre();
+                    modelo.mostrarMensaje( heroe.getNombre() + " uso " + nombreHabilidad + "!");
                     heroe.realizarTurno(modelo.getEnemigo());
                     proximoTurnoJugador = false;
                     modelo.setTurnoActual(CombateModelo.Turno.PROCESANDO);
@@ -99,11 +102,18 @@ public class CombateControlador {
     private void ejecutarTurnoEnemigo() {
         if (modelo.getEnemigo().getVidaActual() > 0) {
             System.out.println("Turno del " + modelo.getEnemigo().getNombre());
-            //probar sprites y estados.
+
             modelo.getEnemigo().setEstadoActual(Entidad.Estado.ATAQUE);
             modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
-            //
+
             modelo.getEnemigo().realizarTurno(modelo.getHeroe());
+
+            modelo.mostrarMensaje( modelo.getEnemigo().getNombre() + " usó " + modelo.getEnemigo().getUltimaHabilidadUsada() + "!");
+            //probar sprites y estados.
+            //modelo.getEnemigo().setEstadoActual(Entidad.Estado.ATAQUE);
+            //modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
+           // modelo.mostrarMensaje (modelo.getEnemigo().getNombre() + " ataca");
+           // modelo.getEnemigo().realizarTurno(modelo.getHeroe());
             teclado.resetPresiones();
         }
     }

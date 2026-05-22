@@ -34,7 +34,7 @@ public class SeleccionScreen extends Screens {
         nombreVista = new NombreVista(stage);
 
         modelo2 = new RecompensasModelo();
-        recoVista = new RecompensasVista(modelo2);
+        //recoVista = new RecompensasVista(modelo2);
         cont = new RecompensaControlador(modelo2, game.teclado);
     }
 
@@ -83,11 +83,5 @@ public class SeleccionScreen extends Screens {
 
 
         }
-    }
-
-    @Override
-    public void input() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'input'");
     }
 }
