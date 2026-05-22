@@ -33,8 +33,7 @@ public class PausaVista {
 
          // Layout
         Table tabla = new Table();
-        //tabla.setFillParent(true); //ocupa la pantalla
-        //tabla.setDebug(true);
+        tabla.setFillParent(true); //ocupa la pantalla
 
         // Posicion de tabla
         tabla.center();

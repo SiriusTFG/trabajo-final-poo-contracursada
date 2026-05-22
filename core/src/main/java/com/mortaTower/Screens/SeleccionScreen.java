@@ -50,8 +50,6 @@ public class SeleccionScreen extends Screens {
 
             case INICIAR_PARTIDA -> { 
                 try {
-                    
-                    
                     String nombrePartida = nombreVista.getNombre();
                     modelo.setNombreJugador(nombrePartida);
                     Partida pNueva = modelo.confirmarYCrearPartida();
