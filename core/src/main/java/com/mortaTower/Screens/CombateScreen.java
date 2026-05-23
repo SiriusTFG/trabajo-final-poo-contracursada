@@ -8,7 +8,6 @@ import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Heroe;
 
 import com.mortaTower.Modelo.CombateModelo.Opciones;
-import com.mortaTower.Modelo.RecompensasModelo.Recompensa;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
 import com.mortaTower.Vista.InventarioVista;
@@ -21,11 +20,9 @@ public class CombateScreen extends Screens {
     private CombateVista vista;
     private CombateControlador controlador;
 
-    private RecompensasVista vista4;
-    private InventarioVista vista2;
-
-
-    private PausaVista vista3;
+    private RecompensasVista vistaRecompensa;
+    private InventarioVista vistaInventario;
+    private PausaVista vistaPausa;
 
     //constructor
     public CombateScreen(Main game) {
@@ -39,7 +36,7 @@ public class CombateScreen extends Screens {
         if (modelo.getEnemigo() != null) {
             modelo.getEnemigo().cambiarComportamiento(new ComportamientoAgresivo());
         }
-        vista = new CombateVista(modelo);
+        
         controlador = new CombateControlador(modelo, game.teclado, game.audio);
        
         
@@ -48,16 +45,35 @@ public class CombateScreen extends Screens {
     @Override
     public void show() {
 
-        // COMBATE
+        // INVENTARIO
         game.assets.load("Imagenes/Combate/categorias.png", Texture.class);
         game.assets.load("Imagenes/Combate/inventario.png", Texture.class);
-        
+
+        // PANEL STATUS
+        game.assets.load("Imagenes/Combate/vidaHeroe.png", Texture.class);
+        game.assets.load("Imagenes/Combate/vidaEnemigo.png", Texture.class);
+
+        // PANEL VICTORIA/DERROTA
+        game.assets.load("Imagenes/Combate/victoria.png", Texture.class);
+        game.assets.load("Imagenes/Combate/derrota.png", Texture.class);
+
+        // NIVELES TORRES
+        game.assets.load("Imagenes/Combate/nivel1.png", Texture.class);
+        game.assets.load("Imagenes/Combate/nivel2.png", Texture.class);
+        game.assets.load("Imagenes/Combate/nivel3.png", Texture.class);
+        game.assets.load("Imagenes/Combate/nivel4.png", Texture.class);
+        game.assets.load("Imagenes/Combate/nivel5.png", Texture.class);
 
         // RECOMPENSA
         game.assets.load("Imagenes/black.png", Texture.class);
         game.assets.load("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
         game.assets.load("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
-        game.assets.finishLoading(); //obliga al juego a cargar todo antes de seguir
+
+        //obliga al juego a cargar todo antes de seguir
+        game.assets.finishLoading(); 
+
+        vista = new CombateVista(viewport, modelo, game);
+        Gdx.input.setInputProcessor(vista.getStage());
 
         /*vista4 = new RecompensasVista(game);
         Gdx.input.setInputProcessor(vista4.getStage());*/
@@ -70,29 +86,37 @@ public class CombateScreen extends Screens {
     }
 
     @Override
+
     public void render(float delta) {
-        super.render(delta); //limpia la pantalla
-        //vista2.render(delta); //dibuja la vista
-        //vista4.render(delta);
-        //vista3.render(delta);
-    }
-    
-    @Override
-    public void update(float delta) {
+
+        super.render(delta);
+
         controlador.update(delta);
+
+        vista.getStage().act(delta);
+        vista.getStage().draw();
+
+        spriteBatch.begin();
+
+        vista.dibujarSprite(spriteBatch);
+        vista.comentarista(spriteBatch);
+        vista.resultado(spriteBatch);
+
+        spriteBatch.end();
+
+        vista.dibujarInterfaz(spriteBatch);
+
         
     }
 
     @Override
-    public void draw(float delta) {
-        vista.draw(spriteBatch);
-        vista.dibujarInterfaz(spriteBatch);
-
-        vista.dibujarSprite(spriteBatch);
-
-        if (modelo.getOpcionActual() == Opciones.PAUSA){
-
-            //vista3.draw(spriteBatch);
-        }
+    public void dispose() {
+        super.dispose();
+        vista.cerrar();
     }
+    
+    @Override
+    public void update(float delta) {}
+    @Override
+    public void draw(float delta) {}
 }

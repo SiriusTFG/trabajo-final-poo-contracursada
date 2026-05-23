@@ -4,35 +4,37 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
+
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
 public class CombateVista {
 
-     private CombateModelo modelo;
+    private Stage stage;
+
+    private float ancho;
+    private float alto;
+
+    private float x;
+    private float y;
+    
+    private CombateModelo modelo;
     private ShapeRenderer sr;
 
-    // ESTADOS VISUALES
-    private static final int NORMAL = 1;
-    private static final int SELECTED = 0;
-
-    private Texture fondo, inventario, vidaHeroe, vidaEnemigo;
+    private Texture fondo, statusEnemigo, statusHeroe;
     private Texture victoria, derrota;
-    private final Texture[] texturas;
-    
-    private int[] columnas;
-    private int[] filas;
 
-    // [objeto][estado][nivel]
-    private TextureRegion[][][] sprites;
+    private Image imgFondoGeneral, stsHeroe, stsEnemigo;
+
 
     //Fuente
     private BitmapFont fuente;
@@ -42,7 +44,10 @@ public class CombateVista {
     private Map<String, Texture> texturasEntidades = new HashMap<>();
 
     //Constructor
-    public CombateVista(CombateModelo modelo) {
+    public CombateVista(FitViewport viewport, CombateModelo modelo, Main game) {
+
+        stage = new Stage(viewport, game.batch);
+
         this.modelo = modelo;
         sr = new ShapeRenderer();
         fuente = new BitmapFont();
@@ -50,90 +55,51 @@ public class CombateVista {
         fuente.getData().setScale(1.5f);
         fuente.setColor(Color.WHITE);
 
-        // Sprites
-        fondo = new Texture("Imagenes/Combate/nivel1.png");
-        //inventario =  new Texture("Imagenes/Combate/inventario.png");
-        vidaHeroe = new Texture("Imagenes/Combate/vidaHeroe.png");
-        vidaEnemigo = new Texture("Imagenes/Combate/vidaEnemigo.png");
-        victoria = new Texture("Imagenes/Combate/victoria.png");
-        derrota = new Texture("Imagenes/Combate/derrota.png");
-        texturas = new Texture[] {
-           // new Texture("Imagenes/Combate/luchar.png"),
-            //new Texture("Imagenes/Combate/habilidades.png"),
-            //new Texture("Imagenes/MenuInicio/op.png"),
-        };
+        // Imagenes
+        fondo = game.assets.get("Imagenes/Combate/nivel1.png", Texture.class);
+        imgFondoGeneral = new Image(fondo);
+        imgFondoGeneral.setPosition(0, 0);
+        imgFondoGeneral.setSize(WORLD_WIDTH, WORLD_HEIGHT);
+        stage.addActor(imgFondoGeneral); 
 
-        columnas = new int[] {2,2};
-        filas = new int[] {1,1};
 
-        sprites = new TextureRegion[texturas.length][][];
+        statusHeroe = game.assets.get("Imagenes/Combate/vidaHeroe.png", Texture.class);
+        stsHeroe = new Image(statusHeroe);
+        stsHeroe.setSize(400, 200);
+        stsHeroe.setPosition(30, 50);
+        stage.addActor(stsHeroe); 
 
-        for (int i = 0; i < texturas.length; i++) {
+        statusEnemigo = game.assets.get("Imagenes/Combate/vidaEnemigo.png", Texture.class);
+        stsEnemigo = new Image(statusEnemigo);
+        stsEnemigo.setSize(400, 200);
+        stsEnemigo.setPosition( 860, 50);
+        stage.addActor(stsEnemigo); 
 
-            Texture tex = texturas[i];
+        victoria = game.assets.get("Imagenes/Combate/victoria.png", Texture.class);
+        derrota = game.assets.get("Imagenes/Combate/derrota.png", Texture.class);
 
-            int cols = columnas[i];
-            int rows = filas[i];
-
-            int width = tex.getWidth() / cols;
-            int height = tex.getHeight() / rows;
-
-            sprites[i] = new TextureRegion[cols][rows];
-
-            for (int estado = 0; estado < cols; estado++) {
-
-                for (int nivel = 0; nivel < rows; nivel++) {
-
-                    sprites[i][estado][nivel] = new TextureRegion(tex, estado * width, nivel * height, width, height);
-                }
-            }
-        }
     }
 
    private Texture getTextureEntidad(String ruta) {
-    if (ruta == null || ruta.isEmpty()) return null;
-        String rutaCorregida = ruta;
-    if (ruta.startsWith("assets/")) {
-        rutaCorregida = ruta.substring(7);
+
+        if (ruta == null || ruta.isEmpty()) return null;
+            String rutaCorregida = ruta;
+        if (ruta.startsWith("assets/")) {
+            rutaCorregida = ruta.substring(7);
+        }
+        if (!Gdx.files.internal(rutaCorregida).exists()) {
+            System.err.println("ERROR: No se encontró la imagen en: " + rutaCorregida);
+            return null; 
+        }
+        if (!texturasEntidades.containsKey(rutaCorregida)) {
+            texturasEntidades.put(rutaCorregida, new Texture(rutaCorregida));
+            System.out.println("Sprite cargado exitosamente: " + rutaCorregida);
+        }
+        return texturasEntidades.get(rutaCorregida);
     }
-    if (!Gdx.files.internal(rutaCorregida).exists()) {
-        System.err.println("ERROR: No se encontró la imagen en: " + rutaCorregida);
-        return null; 
-    }
-    if (!texturasEntidades.containsKey(rutaCorregida)) {
-        texturasEntidades.put(rutaCorregida, new Texture(rutaCorregida));
-        System.out.println("Sprite cargado exitosamente: " + rutaCorregida);
-    }
-    return texturasEntidades.get(rutaCorregida);
-}
 
-    public void draw(SpriteBatch batch) {
-
-        float x = WORLD_WIDTH * 0.33f;
-        float y = WORLD_HEIGHT * 0.60f;
-        float separacion = WORLD_HEIGHT * 0.15f;
-
-        float ancho = WORLD_WIDTH * 0.35f;
-        float alto = WORLD_HEIGHT * 0.12f;
-
-        // configuracion para botones de habilidad
-        float anchoHab = 280f;
-        float altoHab = 85f;
-        float margen = 20f;
-        float xInicialHab = (WORLD_WIDTH - (anchoHab * 4 + margen * 3)) / 2;
-        float yHab = 160f;
-
-        // configuracion para bortones de opciones
-        float anchoOpt = 300f;
-        float xOpt = (WORLD_WIDTH - anchoOpt) / 2;
-        float yOpt = 50f;
-
-        //int estadoOpt = (modelo.getOpcionActual() == CombateModelo.Opciones.PAUSA) ? NORMAL : SELECTED;
-
-        batch.draw(fondo, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-        batch.draw(vidaHeroe, 30, 50, 400, 200);
-        batch.draw(vidaEnemigo, 860, 50, 400, 200);
-        
+    public void comentarista(SpriteBatch batch){
+    
         String mensaje = modelo.getMensajeCombate();
         if (mensaje != null && !mensaje.isEmpty()) {
             fuente.setColor(Color.WHITE);
@@ -143,14 +109,25 @@ public class CombateVista {
             float yMensaje = WORLD_HEIGHT * 0.90f;
             fuente.draw(batch, mensaje, xMensaje, yMensaje);
         }
+
+    }
+    
+    public void resultado(SpriteBatch batch) {
+
+        ancho = WORLD_WIDTH * 0.5f;
+        alto = WORLD_HEIGHT * 0.3f;
+
+        x = (WORLD_WIDTH - ancho) / 2f;
+        y = (WORLD_HEIGHT - alto) / 2f + WORLD_HEIGHT * 0.25f;
+
         if (modelo.getResultado() == CombateModelo.Resultado.VICTORIA) {
-            batch.draw(victoria, WORLD_WIDTH * 0.25f, WORLD_HEIGHT * 0.35f, WORLD_WIDTH * 0.5f, WORLD_HEIGHT * 0.3f);
+            batch.draw(victoria, x, y, ancho, alto);
         } else if (modelo.getResultado() == CombateModelo.Resultado.DERROTA) {
-            batch.draw(derrota, WORLD_WIDTH * 0.25f, WORLD_HEIGHT * 0.35f, WORLD_WIDTH * 0.5f, WORLD_HEIGHT * 0.3f);
+            batch.draw(derrota, x, y, ancho, alto);
+        }
     }
-    }
+
     public void dibujarInterfaz(SpriteBatch batch) {
-        batch.end(); //pausa el batch para usar el ShapeRenderer
 
         sr.setProjectionMatrix(batch.getProjectionMatrix());
         sr.begin(ShapeRenderer.ShapeType.Filled);
@@ -159,14 +136,15 @@ public class CombateVista {
             dibujarBarra(120, 132, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), Color.GREEN);
             dibujarBarra(120, 106, modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax(), Color.BLUE);
             dibujarBarra(977, 136, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
+            dibujarBarra(977, 110, modelo.getEnemigo().getManaActual(), modelo.getEnemigo().getVidaMax(), Color.BLUE);
         }
         
         sr.end();
-        batch. begin();
     }
 
     private void dibujarBarra(float x, float y, int actual, int max, Color color) {
-        float ancho = 200f;
+        
+        ancho = 200f;
         float porcentaje = (float) actual / max;
 
         sr.setColor(Color.BLACK);
@@ -176,6 +154,7 @@ public class CombateVista {
     }
 
     public void dibujarSprite(SpriteBatch batch) {
+        
         if (modelo.getHeroe() != null) {
             String rutaHeroe = modelo.getHeroe().getRutaImagenEstadoActual();
             Texture texHeroe = getTextureEntidad(rutaHeroe);
@@ -194,15 +173,12 @@ public class CombateVista {
         }
         
     }
-    
-    public void dispose() {
-        fondo.dispose();
-        vidaHeroe.dispose();
-        vidaEnemigo.dispose();
-        victoria.dispose();
-        derrota.dispose();
-        fuente.dispose();
-        
+
+    public void cerrar() {
+        stage.dispose();
     }
+
+    // GETTERS
+    public Stage getStage() {return stage;}
 }
 

@@ -158,5 +158,4 @@ public class MenuScreen extends Screens {
     @Override
     public void update(float delta) {}
     public void draw(float delta) {}
-    public void input(){}
 }

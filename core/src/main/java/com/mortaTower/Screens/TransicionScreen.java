@@ -62,9 +62,7 @@ public void render(float delta) {
 
     shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
     shapeRenderer.setColor(0, 0, 0, alpha);
-    shapeRenderer.rect(0, 0,
-            Gdx.graphics.getWidth(),
-            Gdx.graphics.getHeight());
+    shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     shapeRenderer.end();
 
     Gdx.gl.glDisable(GL20.GL_BLEND);
