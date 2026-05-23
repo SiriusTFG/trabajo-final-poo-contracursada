@@ -98,7 +98,7 @@ public class MenuVista {
         btnFxMenos = crearBoton(texMenos);
         btnFxMas = crearBoton(texMas);
 
-        btnControles = crearBoton(new Texture("Imagenes/Opciones/controles1.png"));
+        btnControles = crearBoton(new Texture("Imagenes/Opciones/controles.png"));
         btnAtras = crearBoton(new Texture("Imagenes/Opciones/atras.png"));
 
         Table tablaOpciones = new Table();
@@ -118,7 +118,7 @@ public class MenuVista {
         tablaOpciones.add(imgEfectos).size(300, 50).padBottom(10);
         tablaOpciones.add(btnFxMas).size(tamañoBtn, tamañoBtn).padLeft(20).row();
         
-        tablaOpciones.add(btnAtras).size(100,100).padTop(100);
+        tablaOpciones.add(btnAtras).size(100,100).padTop(50);
 
         capaOpciones.addActor(tablaOpciones);
         stage.addActor(capaOpciones);

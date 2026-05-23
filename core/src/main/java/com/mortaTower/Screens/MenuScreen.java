@@ -17,7 +17,7 @@ public class MenuScreen extends Screens {
 
     public MenuScreen(Main game) {
         super(game);
-        game.audio.loop(0);
+        //game.audio.loop(0);
     }
 
    @Override
