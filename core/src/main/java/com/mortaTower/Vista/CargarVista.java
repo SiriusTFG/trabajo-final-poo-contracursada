@@ -1,80 +1,93 @@
 package com.mortaTower.Vista;
 
+import java.util.ArrayList;
+import java.util.List;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mortaTower.Main;
 import com.mortaTower.Modelo.CargarModelo;
-import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
-import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
+
 
 public class CargarVista {
 
-    private CargarModelo cargarModelo;
-    private Texture fondo;
-    private BitmapFont font;
-  
-    private Texture slotNormal;
-    private Texture slotSelected;
+ private CargarModelo modelo;
+ private Stage stage;
+ private List<ImageButton> botonesPartidas = new ArrayList<>();
 
+ public CargarVista(CargarModelo modelo, FitViewport viewport, Main game) {
+    this.modelo = modelo;
+    this.stage = new Stage(viewport, game.batch);
 
-  
+    Texture fondo = new Texture("Imagenes/MenuInicio/Fondo1.png");
+    Image imgFondo = new Image(fondo);
+    imgFondo.setSize(stage.getWidth(), stage.getHeight());
+    stage.addActor(imgFondo);
 
-    public CargarVista(CargarModelo cargarModelo) {
-        this.cargarModelo = cargarModelo;
+    Table tabla = new Table();
+    tabla.setFillParent(true);
+    tabla.top().padTop(190);
+
+    Texture texNormal = new Texture("Imagenes/MenuInicio/boton.png");
+    Texture texSelected = new Texture("Imagenes/MenuInicio/boton1.png");
+
+    for (int i = 0; i < modelo.getPartidas().size(); i++) {
+        ImageButton boton = crearBoton (texNormal, texSelected);
+
+        Label.LabelStyle estilo = new Label.LabelStyle();
+        estilo.font = new com.badlogic.gdx.graphics.g2d.BitmapFont();
         
-        fondo = new Texture ("Imagenes/MenuInicio/Fondo1.png");
-        
-        slotNormal = new Texture ("Imagenes/MenuInicio/boton.png");
-        slotSelected = new Texture("Imagenes/MenuInicio/boton1.png");
-        font = new BitmapFont();
-        font.getData().setScale(2f);
-        font.setColor(Color.WHITE);
-        
-    }
-    public void draw(SpriteBatch batch) {
-        
-        batch.draw(fondo, 0, 0, WORLD_WIDTH, WORLD_HEIGHT);
+        String resumen = modelo.getPartidas().get(i);
 
+        String[] partes = resumen.split(" - ", 2);
+        String textoVisible = (partes.length > 1) ? partes[1] : resumen;
+        Label texto = new Label(textoVisible, estilo);
 
-        float optionX = WORLD_WIDTH * 0.42f;
-        float optionY = WORLD_HEIGHT * 0.7f;
-        float separacion = WORLD_HEIGHT * 0.15f;
+        Stack stack = new Stack();
 
-        var partidas = cargarModelo.getPartidas();
-        int seleccion = cargarModelo.getSeleccion();
+        texto.setAlignment(1); // centro
 
-        font.setColor(Color.WHITE);
-        for (int i = 0; i < partidas.size(); i++) {
+        Table textoCentrado = new Table();
+        textoCentrado.setFillParent(true);
+        textoCentrado.add(texto).center();
 
-          
-            Texture slot = (i == seleccion) ? slotSelected : slotNormal;
-            
-        
-            float slotWidth = WORLD_WIDTH * 0.44f;
-            float slotHeight = 90;
+        stack.add(boton);
+        stack.add(textoCentrado);
 
-            batch.draw (slot, WORLD_WIDTH * 0.28f, optionY - separacion * i - 45, slotWidth, slotHeight);
-                
+        tabla.add(stack).width(560).height(90).padBottom(5).row();
+        botonesPartidas.add(boton);
 
-            if(i == seleccion){
-               font.setColor(Color.YELLOW);
-               
-                font.draw(batch, partidas.get(i), WORLD_WIDTH * 0.37f, optionY - separacion * i);
-                font.setColor(Color.WHITE);
-            } else {
-             
-                font.draw(batch, partidas.get (i), WORLD_WIDTH * 0.37f, optionY - separacion * i);
-            }
-            }
 
     }
-    public void dispose() {
-        slotNormal.dispose();
-        slotSelected.dispose();
-        fondo.dispose();
-        font.dispose();
+    stage.addActor(tabla);
     }
 
-}
+    private ImageButton crearBoton(Texture normal, Texture seleccionado) {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+
+        style.imageUp = new TextureRegionDrawable(new TextureRegion(normal));
+        style.imageOver = new TextureRegionDrawable(new TextureRegion(seleccionado));
+        return new ImageButton(style);
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public List<ImageButton> getBotonesPartidas() {
+        return botonesPartidas;
+    }
+    public void cerrar() {
+        stage.dispose();
+    }
+    }
+    
+    

@@ -20,20 +20,6 @@ public class CargarControlador {
     public Action update () {
         teclado.update();     
 
-        if (teclado.upPressed) {
-            cargarModelo.arriba();
-            audio.play(1);
-            }
-            
-        if (teclado.downPressed) {
-            cargarModelo.abajo();
-            audio.play(1);
-    
-        }
-        if (teclado.selectPressed){
-            audio.play(2);
-            return Action.CONFIRM_LOAD;
-        }
         if (teclado.backPressed){
             audio.play(1);
             return Action.CANCEL;
