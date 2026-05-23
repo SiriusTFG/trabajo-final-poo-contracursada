@@ -77,14 +77,14 @@ public class CombateScreen extends Screens {
         vista = new CombateVista(viewport, modelo, game);
         Gdx.input.setInputProcessor(vista.getStage());
 
-        /*vista4 = new RecompensasVista(game);
-        Gdx.input.setInputProcessor(vista4.getStage());*/
-        
         vistaInventario = new InventarioVista(viewport, game);
         Gdx.input.setInputProcessor(vistaInventario.getStage());
 
-        //vista3 = new PausaVista(game);
-        //Gdx.input.setInputProcessor(vista3.getStage());
+        vistaRecompensa = new RecompensasVista(game);
+        Gdx.input.setInputProcessor(vistaRecompensa.getStage());
+
+        vistaPausa = new PausaVista(game);
+        Gdx.input.setInputProcessor(vistaPausa.getStage());
     }
 
     @Override
@@ -109,6 +109,12 @@ public class CombateScreen extends Screens {
         spriteBatch.end();
 
         vista.dibujarInterfaz(spriteBatch);
+
+        if (game.teclado.backPressed){
+
+           vistaPausa.render(delta);
+        }
+
 
         switch (modelo.getTurnoActual()) {
             case JUGADOR -> {
