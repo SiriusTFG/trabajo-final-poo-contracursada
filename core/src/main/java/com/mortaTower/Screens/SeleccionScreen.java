@@ -1,87 +1,123 @@
 package com.mortaTower.Screens;
 
-import com.mortaTower.Controlador.RecompensaControlador;
-import com.mortaTower.Controlador.SeleccionControlador;
-import com.mortaTower.Controlador.SeleccionControlador.Action;
+import java.sql.SQLException;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mortaTower.DAO.PartidaDao;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.Partida;
-import com.mortaTower.Modelo.RecompensasModelo;
-import com.mortaTower.Modelo.SeleccionModelo;
-import com.mortaTower.Vista.NombreVista;
-import com.mortaTower.Vista.RecompensasVista;
 import com.mortaTower.Vista.SeleccionVista;
 
 public class SeleccionScreen extends Screens {
 
-    private final SeleccionModelo modelo;
-    private final SeleccionControlador controlador;
-
-    private final SeleccionVista seleccionVista;
-    private final NombreVista nombreVista;
-
-    private RecompensasVista recoVista;
-    private RecompensasModelo modelo2;
-    private RecompensaControlador cont;
+    private SeleccionVista vista;
+    private PartidaDao partidaDao;
+    
+    private int idHereoSelc = -1;
 
     public SeleccionScreen(Main game) {
-
         super(game);
-
-        modelo = new SeleccionModelo();
-        controlador = new SeleccionControlador(modelo, game.teclado, game.audio);
-        seleccionVista = new SeleccionVista(modelo, stage);
-        
-        nombreVista = new NombreVista(stage);
-
-        modelo2 = new RecompensasModelo();
-        //recoVista = new RecompensasVista(modelo2);
-        cont = new RecompensaControlador(modelo2, game.teclado);
+        partidaDao = new PartidaDao();
     }
 
     @Override
-    public void update(float delta) {
+    public void show() {
+        game.assets.load("Imagenes/SeleccionPersonaje/seleccionPersonaje.png", Texture.class);
+        game.assets.load("Imagenes/SeleccionPersonaje/nombrePersonaje.png", Texture.class);
+        game.assets.load("Imagenes/SeleccionPersonaje/seleccionCaballero.png", Texture.class);
+        game.assets.load("Imagenes/SeleccionPersonaje/seleccionMago.png", Texture.class);
+        game.assets.finishLoading();
 
-        Action action = controlador.update();
-        //cont.update();
+        vista = new SeleccionVista(viewport, game);
+        Gdx.input.setInputProcessor(vista.getStage());
 
-        switch (action) {
+        vista.getBtnCaballero().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent evento, float x, float y) {
+                game.audio.play(3);
+                idHereoSelc = 1;
+                mostrarIngresoNombre();
+            }
+        });
 
-            case IR_MENU -> { game.setScreen(new TransicionScreen(game,this,new MenuScreen(game))); }
+        vista.getBtnMago().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent evento, float x, float y) {
+                game.audio.play(3);
+                idHereoSelc = 2;
+                mostrarIngresoNombre();
+            }
+        });
 
-            case INICIAR_PARTIDA -> { 
+        vista.getBtnAtrasNombre().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent evento, float x, float y) {
+                game.audio.play(4);
+                idHereoSelc = -1;
+                vista.getNombrePartida().setVisible(false);
+                vista.getCapaIngresoNombre().setVisible(false);
+                vista.getCapaPrincipal().setVisible(true);
+            }
+        });
+
+        vista.getBtnIniciarPartida().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent eveto, float x, float y) {
+                game.audio.play(2);
+                String nombrePartida = vista.getNombreDelField().trim();
+
+                if (nombrePartida.isEmpty()) {
+                    return;
+                }
+
                 try {
-                    String nombrePartida = nombreVista.getNombre();
-                    modelo.setNombreJugador(nombrePartida);
-                    Partida pNueva = modelo.confirmarYCrearPartida();
-                    
-                    game.setPartida(pNueva);
-                    game.setScreen(new TransicionScreen(game, this,new CombateScreen(game)));
-                } catch (Exception e) {
+                    Partida partida = confirmarYCrearPartida(nombrePartida, idHereoSelc);
+                    game.setPartida(partida);
+                    game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new CombateScreen(game)));
+                } catch (SQLException e) {
                     e.printStackTrace();
                 }
-            }   
+            }
+        });
 
-            case NONE -> {}
-        }
+        vista.getBtnAtras().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent evento, float x, float y) {
+                vista.cerrar();
+                game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new MenuScreen(game)));
+            }
+        });
+    }
+
+    private void mostrarIngresoNombre() {
+        vista.getCapaPrincipal().setVisible(false);
+        vista.getCapaIngresoNombre().setVisible(true);
+        vista.getNombrePartida().setVisible(true);
+    }
+
+    public Partida confirmarYCrearPartida(String nombrePartida, int idHeroe) throws SQLException {
+        int idPartida = partidaDao.nuevaPartida(nombrePartida, idHeroe);
+        return partidaDao.cargarPartida(idPartida);
     }
 
     @Override
-    public void draw(float delta) {
-
-        switch (modelo.getEstadoActual()) {
-
-            case SELECCION -> { seleccionVista.draw(spriteBatch); nombreVista.dispose(); }
-
-            case NOMBRE -> {
-
-                seleccionVista.draw(spriteBatch);
-
-                //recoVista.draw(spriteBatch);
-                nombreVista.draw(spriteBatch);
-            }
-
-
-
-        }
+    public void render(float delta) {
+        super.render(delta);
+        vista.getStage().act(delta);
+        vista.getStage().draw();
     }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        vista.cerrar();
+    }
+
+    @Override
+    public void update(float delta) {}
+    public void draw(float delta) {}
+    public void input(){}
 }
