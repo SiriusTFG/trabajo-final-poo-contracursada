@@ -76,6 +76,8 @@ public abstract class Entidad {
 
     //Getters y Setters
     public String getNombre() {return nombre;}
+    public void setNombre(String nombre) {this.nombre = nombre;}
+    
     public Habilidad[] getHabilidades() {return habilidades;}
     public int getVidaActual() {return vidaActual;}
     public int getVidaMax() {return vidaMax;}

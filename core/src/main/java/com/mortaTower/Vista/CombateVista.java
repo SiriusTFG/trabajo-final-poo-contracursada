@@ -37,7 +37,7 @@ public class CombateVista {
 
 
     //Fuente
-    private BitmapFont fuente;
+    private BitmapFont fuente, nombreHeroe;
     private GlyphLayout layout; 
 
     //Texturas de enem y heroe.
@@ -155,20 +155,26 @@ public class CombateVista {
 
     public void dibujarSprite(SpriteBatch batch) {
         
+        fuente.setColor(Color.WHITE);
+
         if (modelo.getHeroe() != null) {
             String rutaHeroe = modelo.getHeroe().getRutaImagenEstadoActual();
             Texture texHeroe = getTextureEntidad(rutaHeroe);
+            String nombreHeroe = modelo.getHeroe().getNombre();
             if (texHeroe != null) {
                 // Ajusta estas coordenadas (X, Y, Ancho, Alto) según el tamaño de pantalla
                 batch.draw(texHeroe, WORLD_WIDTH * 0.15f, WORLD_HEIGHT * 0.40f, 150, 150);
+                fuente.draw(batch, nombreHeroe, 120, 180);
             }
         }
         if (modelo.getEnemigo() != null) {
             String rutaEnemigo = modelo.getEnemigo().getRutaImagenEstadoActual();
             Texture texEnemigo = getTextureEntidad(rutaEnemigo);   
+            String nombreEnemigo = modelo.getEnemigo().getNombre();
             if (texEnemigo != null) {
                 // Ajusta las coordenadas para que quede del lado derecho
                 batch.draw(texEnemigo, WORLD_WIDTH * 0.70f, WORLD_HEIGHT * 0.40f, 150, 150);
+                fuente.draw(batch, nombreEnemigo, 977, 188);
             }
         }
         

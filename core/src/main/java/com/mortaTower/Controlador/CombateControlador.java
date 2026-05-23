@@ -7,7 +7,7 @@ import com.mortaTower.Modelo.Heroe;
 
 public class CombateControlador {
     
-    private CombateModelo modelo;
+   /* private CombateModelo modelo;
     private Teclado teclado;
     private Audio audio;
 
@@ -68,10 +68,8 @@ public class CombateControlador {
     }
 
     private void manejarEntradaJugador() {
-        //if (teclado.leftPressed) {modelo.izquierda();}
-        //if (teclado.rightPressed) {modelo.derecha();}
-        //if (teclado.downPressed) {modelo.abajo();}
-        //if (teclado.upPressed) {modelo.arriba();}
+
+        
 
         if (teclado.selectPressed) {
             Opciones opt = modelo.getOpcionActual();
@@ -118,5 +116,5 @@ public class CombateControlador {
            // modelo.getEnemigo().realizarTurno(modelo.getHeroe());
             teclado.resetPresiones();
         }
-    }
+    }*/
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.DAO.PartidaDao;
 import com.mortaTower.Main;
+import com.mortaTower.Modelo.Heroe;
 import com.mortaTower.Modelo.Partida;
 import com.mortaTower.Vista.SeleccionVista;
 
@@ -15,7 +16,6 @@ public class SeleccionScreen extends Screens {
 
     private SeleccionVista vista;
     private PartidaDao partidaDao;
-    
     private int idHereoSelc = -1;
 
     public SeleccionScreen(Main game) {
@@ -119,5 +119,4 @@ public class SeleccionScreen extends Screens {
     @Override
     public void update(float delta) {}
     public void draw(float delta) {}
-    public void input(){}
 }
