@@ -1,18 +1,19 @@
 package com.mortaTower.Vista;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mortaTower.Modelo.CombateModelo;
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
-import java.util.HashMap;
-import java.util.Map;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 
 public class CombateVista {
 
@@ -24,6 +25,7 @@ public class CombateVista {
     private static final int SELECTED = 0;
 
     private Texture fondo, inventario, vidaHeroe, vidaEnemigo;
+    private Texture victoria, derrota;
     private final Texture[] texturas;
     
     private int[] columnas;
@@ -53,7 +55,8 @@ public class CombateVista {
         //inventario =  new Texture("Imagenes/Combate/inventario.png");
         vidaHeroe = new Texture("Imagenes/Combate/vidaHeroe.png");
         vidaEnemigo = new Texture("Imagenes/Combate/vidaEnemigo.png");
-
+        victoria = new Texture("Imagenes/Combate/victoria.png");
+        derrota = new Texture("Imagenes/Combate/derrota.png");
         texturas = new Texture[] {
            // new Texture("Imagenes/Combate/luchar.png"),
             //new Texture("Imagenes/Combate/habilidades.png"),
@@ -140,6 +143,11 @@ public class CombateVista {
             float yMensaje = WORLD_HEIGHT * 0.90f;
             fuente.draw(batch, mensaje, xMensaje, yMensaje);
         }
+        if (modelo.getResultado() == CombateModelo.Resultado.VICTORIA) {
+            batch.draw(victoria, WORLD_WIDTH * 0.25f, WORLD_HEIGHT * 0.35f, WORLD_WIDTH * 0.5f, WORLD_HEIGHT * 0.3f);
+        } else if (modelo.getResultado() == CombateModelo.Resultado.DERROTA) {
+            batch.draw(derrota, WORLD_WIDTH * 0.25f, WORLD_HEIGHT * 0.35f, WORLD_WIDTH * 0.5f, WORLD_HEIGHT * 0.3f);
+    }
     }
     public void dibujarInterfaz(SpriteBatch batch) {
         batch.end(); //pausa el batch para usar el ShapeRenderer
@@ -184,6 +192,17 @@ public class CombateVista {
                 batch.draw(texEnemigo, WORLD_WIDTH * 0.70f, WORLD_HEIGHT * 0.40f, 150, 150);
             }
         }
+        
+    }
+    
+    public void dispose() {
+        fondo.dispose();
+        vidaHeroe.dispose();
+        vidaEnemigo.dispose();
+        victoria.dispose();
+        derrota.dispose();
+        fuente.dispose();
+        
     }
 }
 

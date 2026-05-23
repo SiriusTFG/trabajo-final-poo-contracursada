@@ -7,14 +7,25 @@ public class CombateModelo {
     
     public enum Opciones {HAB_1, HAB_2, HAB_3, HAB_4, PAUSA};
     public enum Turno {JUGADOR, ENEMIGO, PROCESANDO};
+    public enum Resultado {NINGUNO, VICTORIA, DERROTA};
 
     private static final Opciones[] valores = Opciones.values();
     private Opciones seleccion = Opciones.HAB_1;
     private Turno turnoActual = Turno.JUGADOR;
     private Heroe heroe;
     private Enemigo enemigo;
+private Resultado resultado = Resultado.NINGUNO;
+
     private String mensajeCombate = "";
     private float tiempoMensaje = 0;
+
+
+    public Resultado getResultado() {
+        return resultado;
+    }
+    public void setResultado(Resultado resultado) {
+        this.resultado = resultado;
+    }
 
     public CombateModelo(Heroe heroe, int numPiso) {
     //De forma temporal,optimizar despues.
