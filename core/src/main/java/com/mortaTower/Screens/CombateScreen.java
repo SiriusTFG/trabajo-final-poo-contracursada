@@ -128,9 +128,6 @@ public class CombateScreen extends Screens {
 
             final int index = i;
 
-            // elimina listeners anteriores
-            //vista.getBotonHabilidad(i).clearListeners();
-
             vista.getBotonHabilidad(i).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
