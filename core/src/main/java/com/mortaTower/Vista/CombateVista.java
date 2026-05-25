@@ -222,14 +222,11 @@ public class CombateVista {
         int ancho = textura.getWidth() / 2;
         int alto = textura.getHeight();
 
-        TextureRegion normal =
-            new TextureRegion(textura, 0, 0, ancho, alto);
+        TextureRegion normal = new TextureRegion(textura, 0, 0, ancho, alto);
 
-        TextureRegion seleccionado =
-            new TextureRegion(textura, ancho, 0, ancho, alto);
+        TextureRegion seleccionado = new TextureRegion(textura, ancho, 0, ancho, alto);
 
-        ImageButton.ImageButtonStyle style =
-            new ImageButton.ImageButtonStyle();
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
 
         style.imageUp = new TextureRegionDrawable(normal);
         style.imageOver = new TextureRegionDrawable(seleccionado);

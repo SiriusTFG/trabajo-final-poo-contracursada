@@ -120,7 +120,7 @@ public class CargarVista {
 
     stage.addActor(modalEliminar);
 }
-        private ImageButton crearBoton(Texture normal, Texture seleccionado) {
+    private ImageButton crearBoton(Texture normal, Texture seleccionado) {
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
 
         style.imageUp = new TextureRegionDrawable(new TextureRegion(normal));
