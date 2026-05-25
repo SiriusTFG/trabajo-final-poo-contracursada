@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -33,6 +34,7 @@ public class InventarioVista {
         
         inventario = game.assets.get("Imagenes/Combate/inventario.png", Texture.class);
         categorias = game.assets.get("Imagenes/Combate/categorias.png", Texture.class);
+
 
         //creacion de botones
         btnAtaque = crearBoton(categorias, 0);

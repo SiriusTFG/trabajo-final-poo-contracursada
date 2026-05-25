@@ -38,15 +38,6 @@ public class RecompensasModelo {
         generarRewards();
     }
 
-    public void arriba() {
-    int index = (seleccion.ordinal() - 1 + valores.length) % valores.length;
-    seleccion = valores[index];
-}
-
-public void abajo() {
-    int index = (seleccion.ordinal() + 1) % valores.length;
-    seleccion = valores[index];
-}
 
     // genera habilidades + tipo visual
     public void generarRewards() {

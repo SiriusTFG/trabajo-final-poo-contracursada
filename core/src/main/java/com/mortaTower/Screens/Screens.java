@@ -46,14 +46,12 @@ public abstract class Screens implements Screen {
         Gdx.gl.glClearColor(0.15f, 0.15f, 0.2f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); // borra el frame anterior
 
-        update(delta);
-
         camera.update();
 
         spriteBatch.setProjectionMatrix(camera.combined); 
 
         spriteBatch.begin();
-        draw(delta);
+        
         spriteBatch.end();
 
         stage.act(delta);
@@ -70,7 +68,4 @@ public abstract class Screens implements Screen {
     @Override public void resume() {}
     @Override public void hide() {}
     @Override public void dispose() {}
-
-    public abstract void draw(float delta);
-    public abstract void update(float delta);
 }

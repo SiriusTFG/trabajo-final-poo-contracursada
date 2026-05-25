@@ -76,7 +76,7 @@ public class SeleccionScreen extends Screens {
                 try {
                     Partida partida = confirmarYCrearPartida(nombrePartida, idHereoSelc);
                     game.setPartida(partida);
-                    game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new CombateScreen(game)));
+                    game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new CombateScreen(game, 1)));
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -115,8 +115,4 @@ public class SeleccionScreen extends Screens {
         super.dispose();
         vista.cerrar();
     }
-
-    @Override
-    public void update(float delta) {}
-    public void draw(float delta) {}
 }

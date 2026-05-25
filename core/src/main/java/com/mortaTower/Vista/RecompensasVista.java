@@ -54,6 +54,7 @@ public class RecompensasVista {
 
         // Posicion de tabla
         tabla.center();
+        
 
         tabla.add(cat1).size(210, 180).pad(30);
         tabla.add(btnHab1).size(800, 200).row();

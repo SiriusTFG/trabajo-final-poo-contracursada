@@ -110,6 +110,7 @@ public class CargarScreen extends Screens {
             PartidaDao partidaDao = new PartidaDao();
             Partida partida = partidaDao.cargarPartida(idPartida);
 
+<<<<<<< Updated upstream
             if (partida != null) {
                 game.setPartida(partida);
                 game.setScreen(new TransicionScreen(game, this, new CombateScreen(game)));
@@ -118,9 +119,15 @@ public class CargarScreen extends Screens {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error al cargar la partida: " + e.getMessage());
+=======
+        if (partida != null) {
+            game.setPartida(partida);
+            game.setScreen(new TransicionScreen(game, this, new CombateScreen(game, 1)));
+>>>>>>> Stashed changes
         }
     }
 
+<<<<<<< Updated upstream
     private void eliminarPartidaSeleccionada() {
         String resumen = modelo.getPartidas().get(indicePartidaAEliminar);
         int idPartida = Integer.parseInt(resumen.split(" - ")[0]);
@@ -144,6 +151,24 @@ public class CargarScreen extends Screens {
             game.setScreen(new TransicionScreen(game, this, anteriorScreen));
         }
     }
+=======
+    public void show(){
+
+     Action action = controlador.update();
+
+        switch (action) {
+
+                case CONFIRM_LOAD -> {cargarPartidaSeleccionada();}
+                
+                case CANCEL -> { game.setScreen(new TransicionScreen(game, this, anteriorScreen));
+            }
+                case NONE -> {}
+        }
+
+    }
+    
+    public void update(float delta) {}
+>>>>>>> Stashed changes
 
     @Override
     public void render(float delta) {

@@ -1,101 +1,171 @@
 package com.mortaTower.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
-import com.mortaTower.Controlador.CombateControlador;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Heroe;
 
-import com.mortaTower.Modelo.CombateModelo.Opciones;
+import com.mortaTower.Modelo.CombateModelo.Resultado;
 import com.mortaTower.Modelo.Entidad;
+import com.mortaTower.Modelo.Habilidad;
+import com.mortaTower.Modelo.HabilidadAtaque;
+import com.mortaTower.Modelo.HabilidadCuracion;
+import com.mortaTower.Modelo.HabilidadDefensa;
+import com.mortaTower.Modelo.HabilidadMana;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
-import com.mortaTower.Vista.InventarioVista;
+
 import com.mortaTower.Vista.PausaVista;
 import com.mortaTower.Vista.RecompensasVista;
 
 public class CombateScreen extends Screens {
 
     private CombateModelo modelo;
-    private CombateVista vista;
-    private CombateControlador controlador;
-
+    
+    private CombateVista vista;     
     private RecompensasVista vistaRecompensa;
-    private InventarioVista vistaInventario;
     private PausaVista vistaPausa;
+
+    private boolean victoriaProcesada = false;
+    private int nivel;
+
+    private Habilidad[] habilidadesMostradas;
 
     private float contador = 0;
     private final float tiempoPausa = 1.2f;
     private boolean proximoTurnoJugador;
 
+    private boolean pausa = false;
+
     //constructor
-    public CombateScreen(Main game) {
+    public CombateScreen(Main game, int nivel) {
 
         super(game);
-        Gdx.input.setInputProcessor(null);
-        game.teclado.resetPresiones();
+
+        this.nivel = nivel;
+
         Heroe heroe = game.getPartidaActual().getHeroe();
         
-        modelo = new CombateModelo(heroe, 1);
+        modelo = new CombateModelo(heroe, nivel);
         if (modelo.getEnemigo() != null) {
             modelo.getEnemigo().cambiarComportamiento(new ComportamientoAgresivo());
         }
+        
         
     }
 
     @Override
     public void show() {
 
-        // INVENTARIO
-        game.assets.load("Imagenes/Combate/categorias.png", Texture.class);
-        game.assets.load("Imagenes/Combate/inventario.png", Texture.class);
+        cargarAssets();
 
-        // PANEL STATUS
-        game.assets.load("Imagenes/Combate/vidaHeroe.png", Texture.class);
-        game.assets.load("Imagenes/Combate/vidaEnemigo.png", Texture.class);
-
-        // PANEL VICTORIA/DERROTA
-        game.assets.load("Imagenes/Combate/victoria.png", Texture.class);
-        game.assets.load("Imagenes/Combate/derrota.png", Texture.class);
-
-        // NIVELES TORRES
-        game.assets.load("Imagenes/Combate/nivel1.png", Texture.class);
-        game.assets.load("Imagenes/Combate/nivel2.png", Texture.class);
-        game.assets.load("Imagenes/Combate/nivel3.png", Texture.class);
-        game.assets.load("Imagenes/Combate/nivel4.png", Texture.class);
-        game.assets.load("Imagenes/Combate/nivel5.png", Texture.class);
-
-        // RECOMPENSA
-        game.assets.load("Imagenes/black.png", Texture.class);
-        game.assets.load("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
-        game.assets.load("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
-
-        //obliga al juego a cargar todo antes de seguir
-        game.assets.finishLoading(); 
-
-        vista = new CombateVista(viewport, modelo, game);
-        Gdx.input.setInputProcessor(vista.getStage());
-
-        vistaInventario = new InventarioVista(viewport, game);
-        Gdx.input.setInputProcessor(vistaInventario.getStage());
-
+        vista = new CombateVista(viewport, modelo, game, nivel);
         vistaRecompensa = new RecompensasVista(game);
-        Gdx.input.setInputProcessor(vistaRecompensa.getStage());
-
         vistaPausa = new PausaVista(game);
-        Gdx.input.setInputProcessor(vistaPausa.getStage());
+
+        // un input a la vez
+        setInput(vista.getStage());
+
+        // Iputs Categoria
+        agregarListenerCategoria(vista.getBtnAtaque(),HabilidadAtaque.class);
+        agregarListenerCategoria(vista.getBtnDefensa(),HabilidadDefensa.class);
+        agregarListenerCategoria(vista.getBtnCuracion(),HabilidadCuracion.class);
+        agregarListenerCategoria(vista.getBtnMana(),HabilidadMana.class);        
+
+        vistaPausa.getBtnRenudar().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                pausa = false;
+            }
+        });
+
+        vistaPausa.getBtnSalir().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new TransicionScreen(game, CombateScreen.this, new MenuScreen(game)));
+            }
+        });
+
+        vistaRecompensa.getBtnHab1().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new TransicionScreen(game, CombateScreen.this, new CombateScreen(game, nivel + 1)));
+            }
+        });
+    }
+
+    private void setInput(Stage stageActivo) {
+        Gdx.input.setInputProcessor(stageActivo);
+    }
+
+    private void agregarListenerCategoria(ImageButton boton, Class<? extends Habilidad> tipo)   {
+
+        boton.addListener(new ClickListener() {
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                habilidadesMostradas = modelo.getHabilidadesPorTipo(tipo);
+                vista.listaHabilidades(habilidadesMostradas);
+                
+                // Iputs Habilidades
+                listenersHabilidades();
+            }
+        });
+    }
+
+    private void listenersHabilidades() {
+
+        int cantidad = vista.getCantidadHabilidades();
+
+        for (int i = 0; i < cantidad; i++) {
+
+            final int index = i;
+
+            // elimina listeners anteriores
+            vista.getBotonHabilidad(i).clearListeners();
+
+            vista.getBotonHabilidad(i).addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+
+                    manejarEntradaJugador(index);
+                }
+            });
+        }
     }
 
     @Override
-
     public void render(float delta) {
 
         super.render(delta);
-        
-        game.teclado.update();
-        modelo.actualizarMensaje(delta);
-        //controlador.update(delta);
+
+        // Toggle pausa
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+
+            pausa = !pausa;
+
+            if (pausa) {
+                setInput(vistaPausa.getStage());
+            } else {
+                setInput(vista.getStage());
+            }
+        }
+
+        // PAUSA
+        if (pausa) {
+
+            vistaPausa.getStage().act(delta);
+            vistaPausa.getStage().draw();
+
+            return;
+        }
 
         vista.getStage().act(delta);
         vista.getStage().draw();
@@ -110,84 +180,96 @@ public class CombateScreen extends Screens {
 
         vista.dibujarInterfaz(spriteBatch);
 
-        if (game.teclado.backPressed){
+        // LÓGICA SOLO SI NO PAUSADO
+        if (!pausa) {
 
-           vistaPausa.render(delta);
-        }
+            switch (modelo.getTurnoActual()) {
 
-
-        switch (modelo.getTurnoActual()) {
-            case JUGADOR -> {
-
-                vistaInventario.render(delta);
-                manejarEntradaJugador();
-            }
-
-            case ENEMIGO -> {
-                contador += delta;
-                if (contador >= tiempoPausa) {
-                    ejecutarTurnoEnemigo();
-                    modelo.setTurnoActual(CombateModelo.Turno.PROCESANDO);
-                    proximoTurnoJugador = true;
-                    contador = 0;
+                case JUGADOR -> {
+                    vista.mostrarInventario();
+    
                 }
-            }
 
-            case PROCESANDO -> {
-                contador += delta;
-                if (contador >= tiempoPausa) {
-                    modelo.getHeroe().setEstadoActual(Entidad.Estado.PARADO);
-                    modelo.getEnemigo().setEstadoActual(Entidad.Estado.PARADO);
-                    if (modelo.getEnemigo().getVidaActual() <= 0) {
-                        System.out.println("Victoria");
-                        modelo.setResultado(CombateModelo.Resultado.VICTORIA);
-                        modelo.getEnemigo().setEstadoActual(Entidad.Estado.MUERTE);
-                    } else if (modelo.getHeroe().getVidaActual() <= 0) {
-                        System.out.println("Game Over");
-                        modelo.setResultado(CombateModelo.Resultado.DERROTA);
-                        modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
-                    } else {
-                        modelo.setTurnoActual(proximoTurnoJugador ? CombateModelo.Turno.JUGADOR : CombateModelo.Turno.ENEMIGO);  
+                case ENEMIGO -> {
+                    contador += delta;
+                    if (contador >= tiempoPausa) {
+                        ejecutarTurnoEnemigo();
+                        modelo.setTurnoActual(CombateModelo.Turno.PROCESANDO);
+                        proximoTurnoJugador = true;
+                        contador = 0;
                     }
-                    contador = 0;
+                }
+
+                case PROCESANDO -> {
+                    contador += delta;
+                    if (contador >= tiempoPausa) {
+
+                        modelo.getHeroe().setEstadoActual(Entidad.Estado.PARADO);
+                        modelo.getEnemigo().setEstadoActual(Entidad.Estado.PARADO);
+
+                        if (modelo.getEnemigo().getVidaActual() <= 0) {
+                            modelo.setResultado(CombateModelo.Resultado.VICTORIA);
+                            modelo.getEnemigo().setEstadoActual(Entidad.Estado.MUERTE);
+
+
+                        } else if (modelo.getHeroe().getVidaActual() <= 0) {
+                            modelo.setResultado(CombateModelo.Resultado.DERROTA);
+                            modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
+
+                        } else {
+                            modelo.setTurnoActual(
+                                proximoTurnoJugador
+                                    ? CombateModelo.Turno.JUGADOR
+                                    : CombateModelo.Turno.ENEMIGO
+                            );
+                        }
+
+                        contador = 0;
+                    }
                 }
             }
-        }
 
-        
-    }
+            if (modelo.getResultado() == Resultado.VICTORIA) {
+                
+                setInput(vistaRecompensa.getStage());
+                vistaRecompensa.getStage().act(delta);
+                vistaRecompensa.getStage().draw();
 
-    private void manejarEntradaJugador() {
-
-        
-
-        if (game.teclado.selectPressed) {
-            Opciones opt = modelo.getOpcionActual();
-
-            if (opt == Opciones.PAUSA) {
-                System.out.println("Menu opciones");
-            } else {
-                int indiceHabilidad = opt.ordinal();
-                Heroe heroe = modelo.getHeroe();
-
-                if (heroe.getHabilidades()[indiceHabilidad] != null && heroe.getHabilidades()[indiceHabilidad].puedeUsarse(heroe)) {
-                    System.out.println("Turno del " + modelo.getHeroe().getNombre());
-                    //probar sprites y estados.
-                    heroe.setEstadoActual(Entidad.Estado.ATAQUE);
-                    modelo.getEnemigo().setEstadoActual(Entidad.Estado.DANIO);
-                    //
-                    heroe.seleccionarHabilidad(indiceHabilidad);
-                    String nombreHabilidad = heroe.getHabilidades()[indiceHabilidad].getNombre();
-                    modelo.mostrarMensaje( heroe.getNombre() + " uso " + nombreHabilidad + "!");
-                    heroe.realizarTurno(modelo.getEnemigo());
-                    proximoTurnoJugador = false;
-                    modelo.setTurnoActual(CombateModelo.Turno.PROCESANDO);
-                    contador = 0;
-                }
+                return;
+                
+                //victoriaProcesada = true;
             }
-            game.teclado.resetPresiones();
         }
     }
+
+    private void manejarEntradaJugador(int indiceHabilidad) {
+
+        Habilidad habilidad = habilidadesMostradas[indiceHabilidad];
+        Heroe heroe = modelo.getHeroe();
+
+        if (habilidad == null || !habilidad.puedeUsarse(heroe)) {
+            return;
+        }
+
+        System.out.println("Turno del " + heroe.getNombre());
+
+        heroe.setEstadoActual(Entidad.Estado.ATAQUE);
+        modelo.getEnemigo().setEstadoActual(Entidad.Estado.DANIO);
+
+        heroe.seleccionarHabilidad(habilidad);
+
+        modelo.mostrarMensaje(
+            heroe.getNombre() + " usó " + habilidad.getNombre() + "!"
+        );
+
+        heroe.realizarTurno(modelo.getEnemigo());
+
+        proximoTurnoJugador = false;
+        vista.ocultarInventario();
+        modelo.setTurnoActual(CombateModelo.Turno.PROCESANDO);
+        contador = 0;
+    }
+    
 
     private void ejecutarTurnoEnemigo() {
         if (modelo.getEnemigo().getVidaActual() > 0) {
@@ -208,14 +290,38 @@ public class CombateScreen extends Screens {
         }
     }
 
+    private void cargarAssets() {
+
+        game.assets.load("Imagenes/Combate/categorias.png", Texture.class);
+        game.assets.load("Imagenes/Combate/inventario.png", Texture.class);
+        game.assets.load("Imagenes/Combate/cuadroHabilidad.png", Texture.class);
+
+        game.assets.load("Imagenes/Combate/vidaHeroe.png", Texture.class);
+        game.assets.load("Imagenes/Combate/vidaEnemigo.png", Texture.class);
+
+        game.assets.load("Imagenes/Combate/victoria.png", Texture.class);
+        game.assets.load("Imagenes/Combate/derrota.png", Texture.class);
+
+        game.assets.load("Imagenes/Combate/nivel1.png", Texture.class);
+        game.assets.load("Imagenes/Combate/nivel2.png", Texture.class);
+        game.assets.load("Imagenes/Combate/nivel3.png", Texture.class);
+        game.assets.load("Imagenes/Combate/nivel4.png", Texture.class);
+        game.assets.load("Imagenes/Combate/nivel5.png", Texture.class);
+
+        // RECOMPENSA
+        game.assets.load("Imagenes/black.png", Texture.class);
+        game.assets.load("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
+        game.assets.load("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
+
+        // PAUSA
+        game.assets.load("Imagenes/MenuInicio/renudar.png", Texture.class);
+
+        game.assets.finishLoading();
+    }
+
     @Override
     public void dispose() {
         super.dispose();
         vista.cerrar();
     }
-    
-    @Override
-    public void update(float delta) {}
-    @Override
-    public void draw(float delta) {}
 }

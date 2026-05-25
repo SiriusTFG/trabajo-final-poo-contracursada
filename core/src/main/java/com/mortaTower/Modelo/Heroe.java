@@ -52,12 +52,14 @@ public class Heroe extends Entidad {
     
     }
 
-    public void seleccionarHabilidad(int indice) {
-        if (indice < 0 || indice >= habilidades.length) {
+    public void seleccionarHabilidad(Habilidad habilidad) {
+
+        if (habilidad == null) {
             habilidadSeleccionada = null;
             return;
         }
-        habilidadSeleccionada = habilidades[indice];
+
+        habilidadSeleccionada = habilidad;
     }
 
     @Override
@@ -68,6 +70,7 @@ public class Heroe extends Entidad {
         habilidadSeleccionada = null;
     }
 
+    
     public int getNivel() {
         return nivel;
     }

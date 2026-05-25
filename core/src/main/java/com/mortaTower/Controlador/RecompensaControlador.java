@@ -16,17 +16,5 @@ public class RecompensaControlador {
 
     public void update(){
 
-
-        if (teclado.upPressed){
-
-            modelo.arriba();
-            teclado.upPressed = false;
-        }
-
-        if (teclado.downPressed){
-
-            modelo.abajo();
-            teclado.downPressed = false;
-        }
     }
 }

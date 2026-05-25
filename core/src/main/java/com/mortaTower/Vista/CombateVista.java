@@ -1,53 +1,73 @@
 package com.mortaTower.Vista;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
+
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
+import com.mortaTower.Modelo.Habilidad;
 
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
 public class CombateVista {
 
-    private Stage stage;
-
-    private float ancho;
-    private float alto;
-
-    private float x;
-    private float y;
-    
     private CombateModelo modelo;
-    private ShapeRenderer sr;
+    private Stage stage;
+    private Stack stack;
 
+    private float ancho, x;
+    private float alto, y;
+    
+    // TEXTURAS
+    private ShapeRenderer sr;
+    private Image imgFondoGeneral, stsHeroe, stsEnemigo;
+    private Image imgInventario;
     private Texture fondo, statusEnemigo, statusHeroe;
     private Texture victoria, derrota;
+    private Texture inventario, categorias, habilidad;
 
-    private Image imgFondoGeneral, stsHeroe, stsEnemigo;
-
+    // BOTONES
+    private ImageButton btnAtaque, btnDefensa, btnCuracion, btnMana, btn;
 
     //Fuente
-    private BitmapFont fuente, nombreHeroe;
+    private BitmapFont fuente, font;
     private GlyphLayout layout; 
+    private Label lbl;
+
+    // TABLAS
+    private Table tabla, tablaHab;
 
     //Texturas de enem y heroe.
     private Map<String, Texture> texturasEntidades = new HashMap<>();
 
-    //Constructor
-    public CombateVista(FitViewport viewport, CombateModelo modelo, Main game) {
+    private List<ImageButton> botonesHabilidades = new ArrayList<>();
+    private List<Label> labelsHabilidades = new ArrayList<>();
+
+    // CONSTRUCTOR
+    public CombateVista(FitViewport viewport, CombateModelo modelo, Main game, int nivel) {
 
         stage = new Stage(viewport, game.batch);
 
+        inventario = game.assets.get("Imagenes/Combate/inventario.png", Texture.class);
+        categorias = game.assets.get("Imagenes/Combate/categorias.png", Texture.class);
+        habilidad = game.assets.get("Imagenes/Combate/cuadroHabilidad.png", Texture.class);
+        
         this.modelo = modelo;
         sr = new ShapeRenderer();
         fuente = new BitmapFont();
@@ -56,7 +76,7 @@ public class CombateVista {
         fuente.setColor(Color.WHITE);
 
         // Imagenes
-        fondo = game.assets.get("Imagenes/Combate/nivel1.png", Texture.class);
+        fondo = game.assets.get("Imagenes/Combate/nivel" + nivel + ".png", Texture.class);
         imgFondoGeneral = new Image(fondo);
         imgFondoGeneral.setPosition(0, 0);
         imgFondoGeneral.setSize(WORLD_WIDTH, WORLD_HEIGHT);
@@ -74,13 +94,151 @@ public class CombateVista {
         stsEnemigo.setSize(400, 200);
         stsEnemigo.setPosition( 860, 50);
         stage.addActor(stsEnemigo); 
+        
+        inventario();
 
         victoria = game.assets.get("Imagenes/Combate/victoria.png", Texture.class);
         derrota = game.assets.get("Imagenes/Combate/derrota.png", Texture.class);
 
     }
 
-   private Texture getTextureEntidad(String ruta) {
+    // INVENTARIO
+    public void inventario(){
+       
+        imgInventario = new Image(inventario);
+        float ancho = WORLD_WIDTH - 860;
+        float alto = WORLD_HEIGHT - 380;
+
+        imgInventario.setSize(ancho, alto);
+        imgInventario.setPosition((WORLD_WIDTH - ancho) / 2f, 100);
+        
+        //creacion de botones
+        btnAtaque = crearBoton(categorias, 0);
+        btnDefensa = crearBoton(categorias, 1);
+        btnCuracion = crearBoton(categorias, 2);
+        btnMana = crearBoton(categorias, 3);
+        
+        // Layout
+        tabla = new Table();
+        //tabla.setDebug(true);
+
+        // Posicion de tabla
+        tabla.bottom().padBottom(200);
+        tabla.left().padLeft(475);
+        
+        
+
+        tabla.add(btnAtaque).width(50).height(50).pad(0).row();
+        tabla.add(btnDefensa).width(50).height(50).pad(0).row();
+        tabla.add(btnCuracion).width(50).height(50).pad(0).row();
+        tabla.add(btnMana).width(50).height(50).pad(0).row();
+
+        stage.addActor(imgInventario);
+        stage.addActor(tabla);
+
+        ocultarInventario();
+    }
+
+    // BOTONES QUE INCLUYEN NOMBRES DE HABILIDADES(segun el tipo)
+    public void listaHabilidades(Habilidad[] tipo) {
+
+        font = new BitmapFont();
+
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.font = font;
+        style.fontColor = Color.WHITE;
+
+        if (tablaHab != null) {
+            tablaHab.remove();
+            tablaHab.clear();
+        }
+
+        tablaHab = new Table();
+        tablaHab.left().padLeft(550);
+        tablaHab.defaults().space(0);
+        tablaHab.bottom().padBottom(360);
+
+        botonesHabilidades.clear();
+        labelsHabilidades.clear();
+
+        for (int i = 0; i < tipo.length; i++) {
+
+            final int index = i;
+
+            String nombre = tipo[i].getNombre();
+            btn = crearBotonHab(habilidad);
+
+            lbl = new Label(nombre, style);
+            lbl.setAlignment(Align.center);
+            lbl.setTouchable(Touchable.disabled);
+
+            stack = new Stack();
+            stack.add(btn);
+            stack.add(lbl);
+
+            botonesHabilidades.add(btn);
+            labelsHabilidades.add(lbl);
+
+            tablaHab.add(stack).width(290).height(50).row();
+        }
+
+        stage.addActor(tablaHab);
+    }
+
+
+    public void mostrarInventario() {
+        imgInventario.setVisible(true);
+        tabla.setVisible(true);
+    }
+
+    public void ocultarInventario() {
+        imgInventario.setVisible(false);
+        tabla.setVisible(false);
+    }
+
+    // PARA CATEGORIAS
+    private ImageButton crearBoton(Texture textura, int fila) {
+
+        int ancho = textura.getWidth() / 2;
+        int alto = textura.getHeight() / 4;
+
+        int y = fila * alto;
+
+        TextureRegion normal = new TextureRegion(textura, 0, y, ancho, alto);
+
+        TextureRegion seleccionado =new TextureRegion(textura, ancho, y, ancho, alto);
+
+        ImageButton.ImageButtonStyle style =new ImageButton.ImageButtonStyle();
+
+        style.imageUp = new TextureRegionDrawable(normal);
+        style.imageOver = new TextureRegionDrawable(seleccionado);
+
+        return new ImageButton(style);
+    }
+
+    // PARA HABILIDADES
+    private ImageButton crearBotonHab(Texture textura) {
+
+        int ancho = textura.getWidth() / 2;
+        int alto = textura.getHeight();
+
+        TextureRegion normal =
+            new TextureRegion(textura, 0, 0, ancho, alto);
+
+        TextureRegion seleccionado =
+            new TextureRegion(textura, ancho, 0, ancho, alto);
+
+        ImageButton.ImageButtonStyle style =
+            new ImageButton.ImageButtonStyle();
+
+        style.imageUp = new TextureRegionDrawable(normal);
+        style.imageOver = new TextureRegionDrawable(seleccionado);
+
+        return new ImageButton(style);
+    }
+
+    // PARA LAS ENTIDADES
+    private Texture getTextureEntidad(String ruta) {
 
         if (ruta == null || ruta.isEmpty()) return null;
             String rutaCorregida = ruta;
@@ -98,6 +256,7 @@ public class CombateVista {
         return texturasEntidades.get(rutaCorregida);
     }
 
+    // COMENTA LA HABILIDAD EJECUTADA (de una entidad)
     public void comentarista(SpriteBatch batch){
     
         String mensaje = modelo.getMensajeCombate();
@@ -112,6 +271,7 @@ public class CombateVista {
 
     }
     
+    // IMAGEN VICTORIA/DERROTA AL FINALIZAR LA PARTIDA
     public void resultado(SpriteBatch batch) {
 
         ancho = WORLD_WIDTH * 0.5f;
@@ -127,6 +287,7 @@ public class CombateVista {
         }
     }
 
+    // BARRA DE VIDA/MANA
     public void dibujarInterfaz(SpriteBatch batch) {
 
         sr.setProjectionMatrix(batch.getProjectionMatrix());
@@ -186,5 +347,12 @@ public class CombateVista {
 
     // GETTERS
     public Stage getStage() {return stage;}
-}
+    
+    public ImageButton getBtnAtaque() { return btnAtaque; }
+    public ImageButton getBtnDefensa() { return btnDefensa; }
+    public ImageButton getBtnCuracion() { return btnCuracion; }
+    public ImageButton getBtnMana() { return btnMana; }
 
+    public ImageButton getBotonHabilidad(int index) {return botonesHabilidades.get(index);}   
+    public int getCantidadHabilidades() {return botonesHabilidades.size();}
+}
