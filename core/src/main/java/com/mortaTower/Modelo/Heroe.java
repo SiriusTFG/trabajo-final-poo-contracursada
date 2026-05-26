@@ -82,9 +82,4 @@ public class Heroe extends Entidad {
     public int getExperienciaNecesaria() {
         return experienciaNecesaria;
     }
-
-    @Override
-    protected void inicializarSprites() {
-    // Por ahora vacío.
-    }
 }

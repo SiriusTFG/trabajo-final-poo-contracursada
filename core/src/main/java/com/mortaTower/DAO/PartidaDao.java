@@ -80,8 +80,6 @@ public class PartidaDao {
                         rs.getInt("ataque_actual"),
                         rs.getDouble("defensa_actual"));
                     
-                    heroe.setRutaImagen(rs.getString("ruta_imagen"));
-
                     List<Habilidad> habilidades = habilidadDao.obtenerPorPartida(idPartida);
                     for (int i = 0; i < habilidades.size(); i++) {
                         heroe.setHabilidad(i, habilidades.get(i));

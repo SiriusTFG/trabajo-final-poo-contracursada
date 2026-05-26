@@ -33,12 +33,13 @@ public class CombateScreen extends Screens {
     private PausaVista vistaPausa;
 
     private boolean victoriaProcesada = false;
+    private boolean danioAplicado;
     private int nivel;
 
     private Habilidad[] habilidadesMostradas;
 
     private float contador = 0;
-    private final float tiempoPausa = 1.2f;
+    private float tiempoPausa;
     private boolean proximoTurnoJugador;
 
     private boolean pausa = false;
@@ -180,6 +181,11 @@ public class CombateScreen extends Screens {
         // LÓGICA SOLO SI NO PAUSADO
         if (!pausa) {
 
+            modelo.getHeroe().actualizarAnimacion(delta);
+            if (modelo.getEnemigo() != null) {
+                modelo.getEnemigo().actualizarAnimacion(delta);
+            }
+
             switch (modelo.getTurnoActual()) {
 
                 case JUGADOR -> {
@@ -199,8 +205,15 @@ public class CombateScreen extends Screens {
 
                 case PROCESANDO -> {
                     contador += delta;
+                    if (contador >= tiempoPausa / 2.0f && !danioAplicado) {
+                     if (proximoTurnoJugador == false) {
+                        modelo.getHeroe().realizarTurno(modelo.getEnemigo());
+                    } else {
+                        modelo.getEnemigo().realizarTurno(modelo.getHeroe());
+                    }                                     
+                        danioAplicado = true;
+                    }
                     if (contador >= tiempoPausa) {
-
                         modelo.getHeroe().setEstadoActual(Entidad.Estado.PARADO);
                         modelo.getEnemigo().setEstadoActual(Entidad.Estado.PARADO);
 
@@ -250,8 +263,11 @@ public class CombateScreen extends Screens {
 
         System.out.println("Turno del " + heroe.getNombre());
 
+        this.danioAplicado = false; //para reinicar Flag
+
         heroe.setEstadoActual(Entidad.Estado.ATAQUE);
         modelo.getEnemigo().setEstadoActual(Entidad.Estado.DANIO);
+        this.tiempoPausa = vista.getTiempoAnimacionHeroe(Entidad.Estado.ATAQUE);
 
         heroe.seleccionarHabilidad(habilidad);
 
@@ -259,7 +275,7 @@ public class CombateScreen extends Screens {
             heroe.getNombre() + " usó " + habilidad.getNombre() + "!"
         );
 
-        heroe.realizarTurno(modelo.getEnemigo());
+        // heroe.realizarTurno(modelo.getEnemigo());
 
         proximoTurnoJugador = false;
         vista.ocultarInventario();
@@ -271,11 +287,11 @@ public class CombateScreen extends Screens {
     private void ejecutarTurnoEnemigo() {
         if (modelo.getEnemigo().getVidaActual() > 0) {
             System.out.println("Turno del " + modelo.getEnemigo().getNombre());
-
+            this.danioAplicado = false;
             modelo.getEnemigo().setEstadoActual(Entidad.Estado.ATAQUE);
             modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
-
-            modelo.getEnemigo().realizarTurno(modelo.getHeroe());
+            this.tiempoPausa = vista.getTiempoAnimacionEnemigo(Entidad.Estado.ATAQUE);
+           // modelo.getEnemigo().realizarTurno(modelo.getHeroe());
 
             modelo.mostrarMensaje( modelo.getEnemigo().getNombre() + " usó " + modelo.getEnemigo().getUltimaHabilidadUsada() + "!");
             //probar sprites y estados.

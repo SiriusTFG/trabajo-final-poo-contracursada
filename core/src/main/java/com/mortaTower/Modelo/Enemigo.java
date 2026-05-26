@@ -30,9 +30,4 @@ public class Enemigo extends Entidad {
     public void cambiarComportamiento(ComportamientoEnemigo nuevoComportamiento) {
         this.comportamiento = nuevoComportamiento;
     }
-
-    @Override
-    protected void inicializarSprites() {
-    // Por ahora vacío
-    }
 }
