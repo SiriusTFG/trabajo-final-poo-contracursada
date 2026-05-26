@@ -16,11 +16,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
+import com.mortaTower.Modelo.Enemigo;
+import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Habilidad;
+import com.mortaTower.Modelo.Heroe;
 
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
@@ -58,6 +62,11 @@ public class CombateVista {
 
     private List<ImageButton> botonesHabilidades = new ArrayList<>();
     private List<Label> labelsHabilidades = new ArrayList<>();
+
+    //ANIMACIONES
+    private Map<Entidad.Estado, Animation<TextureRegion>> animacionesHeroe = new HashMap<>();
+    private Map<Entidad.Estado, Animation<TextureRegion>> animacionesEnemigo = new HashMap<>();
+    private TextureAtlas atlas;
 
     // CONSTRUCTOR
     public CombateVista(FitViewport viewport, CombateModelo modelo, Main game, int nivel) {
@@ -99,7 +108,7 @@ public class CombateVista {
 
         victoria = game.assets.get("Imagenes/Combate/victoria.png", Texture.class);
         derrota = game.assets.get("Imagenes/Combate/derrota.png", Texture.class);
-
+        cargarAnimaciones();
     }
 
     // INVENTARIO
@@ -294,7 +303,7 @@ public class CombateVista {
             dibujarBarra(120, 132, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), Color.GREEN);
             dibujarBarra(120, 106, modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax(), Color.BLUE);
             dibujarBarra(977, 136, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
-            dibujarBarra(977, 110, modelo.getEnemigo().getManaActual(), modelo.getEnemigo().getVidaMax(), Color.BLUE);
+            dibujarBarra(977, 110, modelo.getEnemigo().getManaActual(), modelo.getEnemigo().getManaMax(), Color.BLUE);
         }
         
         sr.end();
@@ -312,31 +321,88 @@ public class CombateVista {
     }
 
     public void dibujarSprite(SpriteBatch batch) {
-        
+        Heroe heroe = modelo.getHeroe();
+        Enemigo enemigo = modelo.getEnemigo();
         fuente.setColor(Color.WHITE);
 
-        if (modelo.getHeroe() != null) {
-            String rutaHeroe = modelo.getHeroe().getRutaImagenEstadoActual();
-            Texture texHeroe = getTextureEntidad(rutaHeroe);
-            String nombreHeroe = modelo.getHeroe().getNombre();
-            if (texHeroe != null) {
-                // Ajusta estas coordenadas (X, Y, Ancho, Alto) según el tamaño de pantalla
-                batch.draw(texHeroe, WORLD_WIDTH * 0.15f, WORLD_HEIGHT * 0.40f, 150, 150);
-                fuente.draw(batch, nombreHeroe, 120, 180);
+        if (heroe != null) {
+           Entidad.Estado estadoHeroe = heroe.getEstadoActual();
+
+           Animation <TextureRegion> animacion = animacionesHeroe.get(estadoHeroe);
+            
+            if (animacion != null) {
+                TextureRegion frame = animacion.getKeyFrame(heroe.getStatetime(), true);
+                batch.draw(frame, WORLD_WIDTH * 0.15f, WORLD_HEIGHT * 0.40f, 150, 150);
+                String nombreHeroe = heroe.getNombre();
+                fuente.draw(batch, nombreHeroe, 157, 188);
             }
         }
-        if (modelo.getEnemigo() != null) {
-            String rutaEnemigo = modelo.getEnemigo().getRutaImagenEstadoActual();
-            Texture texEnemigo = getTextureEntidad(rutaEnemigo);   
-            String nombreEnemigo = modelo.getEnemigo().getNombre();
-            if (texEnemigo != null) {
-                // Ajusta las coordenadas para que quede del lado derecho
-                batch.draw(texEnemigo, WORLD_WIDTH * 0.70f, WORLD_HEIGHT * 0.40f, 150, 150);
-                fuente.draw(batch, nombreEnemigo, 977, 188);
+        if (enemigo != null) {
+            Animation <TextureRegion> animacion = animacionesEnemigo.get(enemigo.getEstadoActual());
+            
+            if (animacion != null) {
+                TextureRegion frame = animacion.getKeyFrame(enemigo.getStatetime(), true);
+                batch.draw(frame, WORLD_WIDTH * 0.65f, WORLD_HEIGHT * 0.40f, 150, 150);
+                String nombreEnemigo = enemigo.getNombre();
+                fuente.draw(batch, nombreEnemigo, 957, 188);
             }
-        }
-        
+           }
     }
+
+private void cargarAnimaciones() {
+    // 1. Héroe Parado
+    Array<TextureRegion> framesParadoH = new Array<>();
+    for (int i = 1; i <= 2; i++) { 
+        String ruta = "Imagenes/Personajes/Heroes/Caballero/CaballeroParado" + i + ".png";
+        Texture textura = new Texture(Gdx.files.internal(ruta));
+        framesParadoH.add(new TextureRegion(textura));
+    }
+    animacionesHeroe.put(Entidad.Estado.PARADO, new Animation<>(0.35f, framesParadoH, Animation.PlayMode.LOOP));
+    
+    // 2. Héroe Ataque
+    Array<TextureRegion> framesAtaqueH = new Array<>();
+    for (int i = 1; i <= 3; i++) { 
+        String ruta = "Imagenes/Personajes/Heroes/Caballero/CaballeroAtaque" + i + ".png";
+        Texture textura = new Texture(Gdx.files.internal(ruta));
+        framesAtaqueH.add(new TextureRegion(textura));
+    }
+    animacionesHeroe.put(Entidad.Estado.ATAQUE, new Animation<>(0.25f, framesAtaqueH, Animation.PlayMode.NORMAL));
+
+    // 3. Héroe Daño (¡Corregido con su propio Array!)
+    Array<TextureRegion> framesDanioH = new Array<>();
+    for (int i = 1; i <= 3; i++) {
+        String ruta = "Imagenes/Personajes/Heroes/Caballero/CaballeroDano" + i + ".png";
+        Texture textura = new Texture(Gdx.files.internal(ruta));
+        framesDanioH.add(new TextureRegion(textura));
+    }
+    animacionesHeroe.put(Entidad.Estado.DANIO, new Animation<>(0.30f, framesDanioH, Animation.PlayMode.NORMAL));
+    // 1. Enemigo Parado (Limpio y separado)
+    Array<TextureRegion> framesParadoE = new Array<>();
+    for (int i = 1; i <= 1; i++) {
+        String ruta = "Imagenes/Personajes/Enemigo/Zombie/ZombieParado" + i + ".png";
+        Texture textura = new Texture(Gdx.files.internal(ruta));
+        framesParadoE.add(new TextureRegion(textura));
+    }
+    animacionesEnemigo.put(Entidad.Estado.PARADO, new Animation<>(0.55f, framesParadoE, Animation.PlayMode.LOOP));
+
+    // 2. Enemigo Ataque
+    Array<TextureRegion> framesAtaqueE = new Array<>();
+    for (int i = 1; i <= 2; i++) {
+        String ruta = "Imagenes/Personajes/Enemigo/Zombie/ZombieAtaque" + i + ".png";
+        Texture textura = new Texture(Gdx.files.internal(ruta));
+        framesAtaqueE.add(new TextureRegion(textura));
+    }
+    animacionesEnemigo.put(Entidad.Estado.ATAQUE, new Animation<>(0.60f, framesAtaqueE, Animation.PlayMode.NORMAL));
+
+    // 3. Enemigo Daño (¡Corregido con su propio Array!)
+    Array<TextureRegion> framesDanioE = new Array<>();
+    for (int i = 1; i <= 2; i++) {
+        String ruta = "Imagenes/Personajes/Enemigo/Zombie/ZombieDano" + i + ".png";
+        Texture textura = new Texture(Gdx.files.internal(ruta));
+        framesDanioE.add(new TextureRegion(textura));
+    }
+    animacionesEnemigo.put(Entidad.Estado.DANIO, new Animation<>(0.60f, framesDanioE, Animation.PlayMode.NORMAL));
+}
 
     public void cerrar() {
         stage.dispose();
@@ -344,6 +410,20 @@ public class CombateVista {
 
     // GETTERS
     public Stage getStage() {return stage;}
+    public float getTiempoAnimacionHeroe(Entidad.Estado estado){
+        Animation<TextureRegion> animacion = animacionesHeroe.get(estado);
+        if (animacion != null) {
+            return animacion.getAnimationDuration(); // Devuelve la duración de la animación
+        }
+        return 1.0f;
+    }
+    public float getTiempoAnimacionEnemigo(Entidad.Estado estado){
+        Animation<TextureRegion> animacion = animacionesEnemigo.get(estado);
+        if (animacion != null) {
+            return animacion.getAnimationDuration(); // Devuelve la duración de la animación
+        }
+        return 1.0f;
+    }
     
     public ImageButton getBtnAtaque() { return btnAtaque; }
     public ImageButton getBtnDefensa() { return btnDefensa; }
