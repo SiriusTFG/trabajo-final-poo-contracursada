@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.DAO.PartidaDao;
 import com.mortaTower.Main;
-import com.mortaTower.Modelo.Heroe;
 import com.mortaTower.Modelo.Partida;
 import com.mortaTower.Vista.SeleccionVista;
 
@@ -29,6 +28,10 @@ public class SeleccionScreen extends Screens {
         game.assets.load("Imagenes/SeleccionPersonaje/nombrePersonaje.png", Texture.class);
         game.assets.load("Imagenes/SeleccionPersonaje/seleccionCaballero.png", Texture.class);
         game.assets.load("Imagenes/SeleccionPersonaje/seleccionMago.png", Texture.class);
+        game.assets.load("Imagenes/CargarPartida/menuSinespacio.png", Texture.class);
+        game.assets.load("Imagenes/CargarPartida/IrPartidasGuardadas.png", Texture.class);
+        game.assets.load("Imagenes/CargarPartida/IrPartidasGuardadas1.png", Texture.class);
+       
         game.assets.finishLoading();
 
         vista = new SeleccionVista(viewport, game);
@@ -42,6 +45,13 @@ public class SeleccionScreen extends Screens {
                 mostrarIngresoNombre();
             }
         });
+        vista.getBtnIrPartidasGuardadas().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent evento, float x, float y) {
+                game.audio.play(2);
+                game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new CargarScreen(game,SeleccionScreen.this)));
+                }
+                       });
 
         vista.getBtnMago().addListener(new ClickListener() {
             @Override
@@ -79,6 +89,7 @@ public class SeleccionScreen extends Screens {
                     game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new CombateScreen(game, 1)));
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    vista.mostrarSinEspacio();
                 }
             }
         });

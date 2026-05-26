@@ -20,12 +20,20 @@ public class PartidaDao {
     private HabilidadDao habilidadDao = new HabilidadDao();
 
     public int nuevaPartida(String nombrePartida, int idHeroe) throws SQLException {
-        String sqlpartida = "INSERT INTO partidas (nombre_partida, id_heroe, nivel_actual, " +
-                     "experiencia_actual, vida_actual, mana_actual, ataque_actual, defensa_actual, piso_torre) " +
-                     "SELECT ?, id, 1, 0, vida_max, mana_max, ataque, defensa_base, 1 FROM heroes WHERE id = ?";
+        String sqlCount = "SELECT COUNT(*) FROM partidas";
+        try (Statement stmt = conexion.createStatement();
+            ResultSet rs = stmt.executeQuery(sqlCount)){
+            if (rs.next() && rs.getInt(1) >= 5) {
+                throw new SQLException("No se pueden crear más de 5 partidas. Por favor, borra alguna partida existente para crear una nueva.");
+            }
+            
+            }        
+            String sqlpartida = "INSERT INTO partidas (nombre_partida, id_heroe, nivel_actual, " +
+            "experiencia_actual, vida_actual, mana_actual, ataque_actual, defensa_actual, piso_torre) " +
+            "SELECT ?, id, 1, 0, vida_max, mana_max, ataque, defensa_base, 1 FROM heroes WHERE id = ?";
 
         String sqlCopiaHabilidades = "INSERT INTO partida_habilidades (id_partida, id_habilidad, slot) " +
-                                     "SELECT ?, id_habilidad, slot FROM heroe_habilidades WHERE id_heroe = ?";
+            "SELECT ?, id_habilidad, slot FROM heroe_habilidades WHERE id_heroe = ?";
         
         int idGenerado = -1;
         try {

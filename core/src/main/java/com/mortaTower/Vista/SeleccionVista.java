@@ -23,6 +23,8 @@ public class SeleccionVista {
 
     private Table capaPrincipal;
     private Group capaIngresoNombre;
+    private Group capaSinEspacio;
+    private ImageButton btnIrPartidasGuardadas;
 
     //botones y texto
     private ImageButton btnCaballero, btnMago, btnAtras, btnAtrasNombre, btnIniciarPartida;
@@ -102,6 +104,30 @@ public class SeleccionVista {
 
         capaIngresoNombre.addActor(tablaNombrePartida);
         stage.addActor(capaIngresoNombre);
+
+        capaSinEspacio = new Group();
+        capaSinEspacio.setSize(stage.getWidth(), stage.getHeight());
+        capaSinEspacio.setVisible(false);
+
+        Image imgSinEspacio = new Image(game.assets.get("Imagenes/CargarPartida/menuSinespacio.png", Texture.class));
+        imgSinEspacio.setSize(520, 280);
+        imgSinEspacio.setPosition((stage.getWidth() - 520) / 2f, (stage.getHeight() - 280) / 2f);
+        capaSinEspacio.addActor(imgSinEspacio);
+
+        btnIrPartidasGuardadas = crearBotonSeparado(
+        game.assets.get("Imagenes/CargarPartida/IrPartidasGuardadas.png", Texture.class),
+        game.assets.get("Imagenes/CargarPartida/IrPartidasGuardadas1.png", Texture.class)
+    );
+        
+        
+        
+        
+        
+        btnIrPartidasGuardadas.setSize(430, 90);
+        btnIrPartidasGuardadas.setPosition(stage.getWidth() / 2f - 215, stage.getHeight() / 2f - 100);
+        capaSinEspacio.addActor(btnIrPartidasGuardadas);
+
+        stage.addActor(capaSinEspacio);
     }
 
     private ImageButton crearBoton(Texture textura) {
@@ -116,7 +142,14 @@ public class SeleccionVista {
         style.imageOver = new TextureRegionDrawable(seleccionado);
         return new ImageButton(style);
     }
+    private ImageButton crearBotonSeparado(Texture normal, Texture hover) {
+    ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
 
+    style.imageUp = new TextureRegionDrawable(new TextureRegion(normal));
+    style.imageOver = new TextureRegionDrawable(new TextureRegion(hover));
+
+    return new ImageButton(style);
+}
     private Drawable crearCursor(Color color, int width, int height) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.setColor(color);
@@ -140,4 +173,14 @@ public class SeleccionVista {
     public ImageButton getBtnIniciarPartida() {return btnIniciarPartida;}
     public TextField getNombrePartida() {return nombrePartida;}
     public String getNombreDelField() {return nombrePartida.getText();}
+
+    public void mostrarSinEspacio() {
+    capaIngresoNombre.setVisible(false);
+    nombrePartida.setVisible(false);
+    capaSinEspacio.setVisible(true);
+    }
+
+    public ImageButton getBtnIrPartidasGuardadas() {
+    return btnIrPartidasGuardadas;
+}
 }
