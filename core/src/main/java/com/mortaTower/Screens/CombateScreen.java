@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Heroe;
-
+import com.mortaTower.Modelo.RecompensasModelo;
 import com.mortaTower.Modelo.CombateModelo.Resultado;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Habilidad;
@@ -27,6 +27,7 @@ import com.mortaTower.Vista.RecompensasVista;
 public class CombateScreen extends Screens {
 
     private CombateModelo modelo;
+    private RecompensasModelo modeloRec;
     
     private CombateVista vista;     
     private RecompensasVista vistaRecompensa;
@@ -93,12 +94,8 @@ public class CombateScreen extends Screens {
             }
         });
 
-        vistaRecompensa.getBtnHab1().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new TransicionScreen(game, CombateScreen.this, new CombateScreen(game, nivel + 1)));
-            }
-        });
+        // listeners para los botones de recompensas
+        listenersRecompensas();
     }
 
     private void setInput(Stage stageActivo) {
@@ -134,6 +131,22 @@ public class CombateScreen extends Screens {
                 public void clicked(InputEvent event, float x, float y) {
 
                     manejarEntradaJugador(index);
+                }
+            });
+        }
+    }
+
+    private void listenersRecompensas(){
+
+        int cantidad = vistaRecompensa.getCantidadHabilidades();
+
+        for (int i = 0; i < cantidad; i++) {
+
+            vistaRecompensa.getBoton(i).addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+
+                    game.setScreen(new TransicionScreen(game, CombateScreen.this, new CombateScreen(game, nivel + 1)));
                 }
             });
         }

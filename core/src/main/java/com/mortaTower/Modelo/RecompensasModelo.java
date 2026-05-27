@@ -11,8 +11,10 @@ public class RecompensasModelo {
 
     private HabilidadDao habilidadDao;
     private List<Habilidad> habilidades;
+    private int cantRecompensas = 3;
 
     public enum Recompensa {ATAQUE, DEFENSA, CURACION, MANA}
+    private int[] tipo = new int[3];
     
     public enum Opcion {HAB1, HAB2, HAB3}
     private static final Opcion[] valores = Opcion.values();
@@ -44,21 +46,17 @@ public class RecompensasModelo {
 
         if (habilidades.isEmpty()) return;
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < cantRecompensas; i++) {
             rewards[i] = habilidades.get(random.nextInt(habilidades.size()));
             tipos[i] = Recompensa.valueOf(rewards[i].getTipo().toUpperCase());
+            tipo[i] = tipos[i].ordinal();
         }
     }  
 
     public Opcion getOpcionActual(){return seleccion;}
 
-    public Habilidad getHabilidad(int i) {
-        return rewards[i];
-    }
-
-    public Recompensa getTipo(int i) {
-        return tipos[i];
-    }
+    public Habilidad[] getHabilidad() {return rewards;}
+    public int[] getipo(){return tipo;}
 
     
 }

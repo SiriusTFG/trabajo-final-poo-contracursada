@@ -1,29 +1,57 @@
 package com.mortaTower.Vista;
 
-import com.badlogic.gdx.graphics.Texture;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.mortaTower.Main;
+import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.RecompensasModelo;
 
 
 public class RecompensasVista {
 
-     private Stage stage;
-
+    private RecompensasModelo modelo;
 
     // BOTONES
-    private ImageButton btnHab1, btnHab2, btnHab3;
-    private Image cat1 , cat2, cat3;
+    private ImageButton btn;
 
+    private Stage stage;
+    private Stack stack;
+
+    private int ancho, x;
+    private int alto, y;
+    
+    // TEXTURAS;
     private Texture fondo, categorias, cuadro;
 
+    //Fuente
+    private BitmapFont font;
+    private Label lbl;
+    private Image img;
+
+    // TABLAS
+    private Table tablaHab;
+
+    private List<ImageButton> botonesHabilidades = new ArrayList<>();
+    //private List<Label> labelsHabilidades = new ArrayList<>();
+    //private List<Image> imagenCategoria = new ArrayList<>();
+
     public RecompensasVista(Main game) {
+
+        modelo = new RecompensasModelo();
 
         stage = new Stage();
 
@@ -35,49 +63,69 @@ public class RecompensasVista {
         
         cuadro = game.assets.get("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
         categorias = game.assets.get("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
-        
-        
-
-        //creacion de botones
-        btnHab1 = crearBoton(cuadro, 0);
-        btnHab2 = crearBoton(cuadro, 0);
-        btnHab3 = crearBoton(cuadro, 0);
-
-        cat1 = crearCategoria(categorias, 0);
-        cat2 = crearCategoria(categorias, 1);
-        cat3 = crearCategoria(categorias, 2);
-
-        // Layout
-        Table tabla = new Table();
-        tabla.setFillParent(true); //ocupa la pantalla
-        //tabla.setDebug(true);
-
-        // Posicion de tabla
-        tabla.center();
-        
-
-        tabla.add(cat1).size(210, 180).pad(30);
-        tabla.add(btnHab1).size(800, 200).row();
-
-        tabla.add(cat2).size(210, 180).pad(30);
-        tabla.add(btnHab2).size(800, 200).row();
-
-        tabla.add(cat3).size(210, 180).pad(30);
-        tabla.add(btnHab3).size(800, 200).row();
 
         stage.addActor(fondoImg);
-        stage.addActor(tabla);
+        listaHabilidades();
     }
 
-    private ImageButton crearBoton(Texture textura, int fila) {
+    public void listaHabilidades() {
 
-        int ancho = textura.getWidth() / 2;
-        int alto = textura.getHeight();
+        font = new BitmapFont();
 
-        int y = fila * alto;
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.font = font;
+        style.fontColor = Color.WHITE;
 
-        TextureRegion normal = new TextureRegion(textura, 0, y, ancho, alto);
-        TextureRegion seleccionado =new TextureRegion(textura, ancho, y, ancho, alto);
+        if (tablaHab != null) {
+            tablaHab.remove();
+            tablaHab.clear();
+        }
+
+        tablaHab = new Table();
+        tablaHab.setFillParent(true);
+        tablaHab.defaults().space(0);
+        tablaHab.center();
+
+        //imagenCategoria.clear();
+        botonesHabilidades.clear();
+        //labelsHabilidades.clear();
+
+        for (int i = 0; i < 3; i++) {
+
+            Habilidad[] hab = modelo.getHabilidad();
+            int[] tipo = modelo.getipo();
+
+            String nombre = hab[i].getNombre();
+
+            btn = crearBoton(cuadro);
+            img = crearCategoria(categorias, tipo[i]);
+
+            lbl = new Label(nombre, style);
+            lbl.setAlignment(Align.center);
+            lbl.setTouchable(Touchable.disabled);
+
+            stack = new Stack();
+            stack.add(btn);
+            stack.add(lbl);
+
+            //imagenCategoria.add(img);
+            botonesHabilidades.add(btn);
+            //labelsHabilidades.add(lbl);
+
+            tablaHab.add(img).size(210, 180);
+            tablaHab.add(stack).width(800).height(200).row();;
+        }
+
+        stage.addActor(tablaHab);
+    }
+
+    private ImageButton crearBoton(Texture textura) {
+
+        ancho = textura.getWidth() / 2;
+        alto = textura.getHeight();
+
+        TextureRegion normal = new TextureRegion(textura, 0, 0, ancho, alto);
+        TextureRegion seleccionado =new TextureRegion(textura, ancho, 0, ancho, alto);
 
         ImageButton.ImageButtonStyle style =new ImageButton.ImageButtonStyle();
 
@@ -89,10 +137,10 @@ public class RecompensasVista {
 
     private Image crearCategoria(Texture textura, int columna){
 
-        int ancho = textura.getWidth()/4;
-        int alto = textura.getHeight();
+        ancho = textura.getWidth()/4;
+        alto = textura.getHeight();
 
-        int x = columna * ancho;
+        x = columna * ancho;
 
         TextureRegion region = new TextureRegion(textura, x, 0, ancho, alto);
 
@@ -106,7 +154,6 @@ public class RecompensasVista {
 
     // GETTERS
     public Stage getStage() { return stage; }
-    public ImageButton getBtnHab1() { return btnHab1; }
-    public ImageButton getBtnHab2() { return btnHab2; }
-    public ImageButton getBtnHab3() { return btnHab3; }
+    public ImageButton getBoton(int index) {return botonesHabilidades.get(index);}   
+    public int getCantidadHabilidades() {return botonesHabilidades.size();}
 }
