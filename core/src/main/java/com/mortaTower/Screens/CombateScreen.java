@@ -330,7 +330,7 @@ public class CombateScreen extends Screens {
             //modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
            // modelo.mostrarMensaje (modelo.getEnemigo().getNombre() + " ataca");
            // modelo.getEnemigo().realizarTurno(modelo.getHeroe());
-            game.teclado.resetPresiones();
+           // game.teclado.resetPresiones();
         }
     }
 
