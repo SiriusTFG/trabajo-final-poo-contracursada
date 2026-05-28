@@ -46,8 +46,6 @@ public class RecompensasVista {
     private Table tablaHab;
 
     private List<ImageButton> botonesHabilidades = new ArrayList<>();
-    //private List<Label> labelsHabilidades = new ArrayList<>();
-    //private List<Image> imagenCategoria = new ArrayList<>();
 
     public RecompensasVista(Main game) {
 
@@ -86,9 +84,7 @@ public class RecompensasVista {
         tablaHab.defaults().space(0);
         tablaHab.center();
 
-        //imagenCategoria.clear();
         botonesHabilidades.clear();
-        //labelsHabilidades.clear();
 
         for (int i = 0; i < 3; i++) {
 
@@ -108,9 +104,7 @@ public class RecompensasVista {
             stack.add(btn);
             stack.add(lbl);
 
-            //imagenCategoria.add(img);
             botonesHabilidades.add(btn);
-            //labelsHabilidades.add(lbl);
 
             tablaHab.add(img).size(210, 180);
             tablaHab.add(stack).width(800).height(200).row();;
@@ -150,6 +144,10 @@ public class RecompensasVista {
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
+    }
+
+    public void cerrar() {
+        stage.dispose();
     }
 
     // GETTERS

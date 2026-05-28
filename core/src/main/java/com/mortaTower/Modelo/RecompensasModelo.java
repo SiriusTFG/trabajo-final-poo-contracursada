@@ -53,6 +53,14 @@ public class RecompensasModelo {
         }
     }  
 
+    public void reemplazarHab(int idNuevaHabilidad, int slot) {
+    try {
+        habilidadDao.reemplazarHabilidadEnPartida(1, idNuevaHabilidad, slot);
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    }
+
     public Opcion getOpcionActual(){return seleccion;}
 
     public Habilidad[] getHabilidad() {return rewards;}

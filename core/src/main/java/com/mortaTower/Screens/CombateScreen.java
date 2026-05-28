@@ -44,6 +44,9 @@ public class CombateScreen extends Screens {
     private boolean proximoTurnoJugador;
 
     private boolean pausa = false;
+    private boolean seleccionandoReemplazo = false;
+    private boolean inventarioVisible = false;
+    private Habilidad recompensaSeleccionada;
 
     //constructor
     public CombateScreen(Main game, int nivel) {
@@ -55,6 +58,8 @@ public class CombateScreen extends Screens {
         Heroe heroe = game.getPartidaActual().getHeroe();
         
         modelo = new CombateModelo(heroe, nivel);
+        modeloRec = new RecompensasModelo();
+
         if (modelo.getEnemigo() != null) {
             modelo.getEnemigo().cambiarComportamiento(new ComportamientoAgresivo());
         }
@@ -130,7 +135,15 @@ public class CombateScreen extends Screens {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
 
-                    manejarEntradaJugador(index);
+                    if (seleccionandoReemplazo){
+                        
+                        // aca tendria que ir metodo o intruccion para remplazar la recompenza seleccionada por una actual
+                        game.setScreen(new TransicionScreen(game, CombateScreen.this, new CombateScreen(game, nivel + 1)));
+                        
+                    }else{
+
+                       manejarEntradaJugador(index); 
+                    }
                 }
             });
         }
@@ -146,7 +159,13 @@ public class CombateScreen extends Screens {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
 
-                    game.setScreen(new TransicionScreen(game, CombateScreen.this, new CombateScreen(game, nivel + 1)));
+                    seleccionandoReemplazo = true;
+
+                      
+                    vistaRecompensa.cerrar();
+                    vista.mostrarInventario();
+                    setInput(vista.getStage());
+                    
                 }
             });
         }
@@ -252,15 +271,14 @@ public class CombateScreen extends Screens {
                 }
             }
 
-            if (modelo.getResultado() == Resultado.VICTORIA) {
+            if (modelo.getResultado() == Resultado.VICTORIA && !seleccionandoReemplazo) {
                 
                 setInput(vistaRecompensa.getStage());
                 vistaRecompensa.getStage().act(delta);
                 vistaRecompensa.getStage().draw();
-
+                
                 return;
                 
-                //victoriaProcesada = true;
             }
         }
     }

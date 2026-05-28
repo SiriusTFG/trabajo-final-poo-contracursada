@@ -1,6 +1,7 @@
 package com.mortaTower.Modelo;
 
 public abstract class Habilidad {
+    
     private String nombre;
     private String descripcion;
     private String tipo;         //Ataque, Defensa, Curacion, Maná
