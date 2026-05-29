@@ -6,26 +6,32 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
-
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-
-import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Enemigo;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
-
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
@@ -67,6 +73,9 @@ public class CombateVista {
     private Map<Entidad.Estado, Animation<TextureRegion>> animacionesHeroe = new HashMap<>();
     private Map<Entidad.Estado, Animation<TextureRegion>> animacionesEnemigo = new HashMap<>();
     private TextureAtlas atlas;
+
+    //ANIMACION GOBLIN
+    private Animation<TextureRegion> animacionGoblin;
 
     // CONSTRUCTOR
     public CombateVista(FitViewport viewport, CombateModelo modelo, Main game, int nivel) {
@@ -349,60 +358,77 @@ public class CombateVista {
            }
     }
 
-private void cargarAnimaciones() {
-    // 1. Héroe Parado
-    Array<TextureRegion> framesParadoH = new Array<>();
-    for (int i = 1; i <= 2; i++) { 
-        String ruta = "Imagenes/Personajes/Heroes/Caballero/CaballeroParado" + i + ".png";
-        Texture textura = new Texture(Gdx.files.internal(ruta));
-        framesParadoH.add(new TextureRegion(textura));
-    }
-    animacionesHeroe.put(Entidad.Estado.PARADO, new Animation<>(0.35f, framesParadoH, Animation.PlayMode.LOOP));
+    private void cargarAnimaciones() {
+        // 1. Héroe Parado
+        Array<TextureRegion> framesParadoH = new Array<>();
+        for (int i = 1; i <= 2; i++) { 
+            String ruta = "Imagenes/Personajes/Heroes/Caballero/CaballeroParado" + i + ".png";
+            Texture textura = new Texture(Gdx.files.internal(ruta));
+            framesParadoH.add(new TextureRegion(textura));
+        }
+        animacionesHeroe.put(Entidad.Estado.PARADO, new Animation<>(0.35f, framesParadoH, Animation.PlayMode.LOOP));
     
     // 2. Héroe Ataque
-    Array<TextureRegion> framesAtaqueH = new Array<>();
-    for (int i = 1; i <= 3; i++) { 
-        String ruta = "Imagenes/Personajes/Heroes/Caballero/CaballeroAtaque" + i + ".png";
-        Texture textura = new Texture(Gdx.files.internal(ruta));
-        framesAtaqueH.add(new TextureRegion(textura));
-    }
-    animacionesHeroe.put(Entidad.Estado.ATAQUE, new Animation<>(0.25f, framesAtaqueH, Animation.PlayMode.NORMAL));
+        Array<TextureRegion> framesAtaqueH = new Array<>();
+        for (int i = 1; i <= 3; i++) { 
+            String ruta = "Imagenes/Personajes/Heroes/Caballero/CaballeroAtaque" + i + ".png";
+            Texture textura = new Texture(Gdx.files.internal(ruta));
+            framesAtaqueH.add(new TextureRegion(textura));
+        }
+        animacionesHeroe.put(Entidad.Estado.ATAQUE, new Animation<>(0.25f, framesAtaqueH, Animation.PlayMode.NORMAL));
 
-    // 3. Héroe Daño (¡Corregido con su propio Array!)
-    Array<TextureRegion> framesDanioH = new Array<>();
-    for (int i = 1; i <= 3; i++) {
-        String ruta = "Imagenes/Personajes/Heroes/Caballero/CaballeroDano" + i + ".png";
-        Texture textura = new Texture(Gdx.files.internal(ruta));
-        framesDanioH.add(new TextureRegion(textura));
-    }
-    animacionesHeroe.put(Entidad.Estado.DANIO, new Animation<>(0.30f, framesDanioH, Animation.PlayMode.NORMAL));
-    // 1. Enemigo Parado (Limpio y separado)
-    Array<TextureRegion> framesParadoE = new Array<>();
-    for (int i = 1; i <= 1; i++) {
-        String ruta = "Imagenes/Personajes/Enemigo/Zombie/ZombieParado" + i + ".png";
-        Texture textura = new Texture(Gdx.files.internal(ruta));
-        framesParadoE.add(new TextureRegion(textura));
-    }
-    animacionesEnemigo.put(Entidad.Estado.PARADO, new Animation<>(0.55f, framesParadoE, Animation.PlayMode.LOOP));
+        // 3. Héroe Daño (¡Corregido con su propio Array!)
+        Array<TextureRegion> framesDanioH = new Array<>();
+        for (int i = 1; i <= 3; i++) {
+            String ruta = "Imagenes/Personajes/Heroes/Caballero/CaballeroDano" + i + ".png";
+            Texture textura = new Texture(Gdx.files.internal(ruta));
+            framesDanioH.add(new TextureRegion(textura));
+        }
+        animacionesHeroe.put(Entidad.Estado.DANIO, new Animation<>(0.30f, framesDanioH, Animation.PlayMode.NORMAL));
 
-    // 2. Enemigo Ataque
-    Array<TextureRegion> framesAtaqueE = new Array<>();
-    for (int i = 1; i <= 2; i++) {
-        String ruta = "Imagenes/Personajes/Enemigo/Zombie/ZombieAtaque" + i + ".png";
-        Texture textura = new Texture(Gdx.files.internal(ruta));
-        framesAtaqueE.add(new TextureRegion(textura));
-    }
-    animacionesEnemigo.put(Entidad.Estado.ATAQUE, new Animation<>(0.60f, framesAtaqueE, Animation.PlayMode.NORMAL));
+        // 1. Enemigo Parado (Limpio y separado)
+        Array<TextureRegion> framesParadoE = new Array<>();
+        for (int i = 1; i <= 1; i++) {
+            String ruta = "Imagenes/Personajes/Enemigo/Zombie/ZombieParado" + i + ".png";
+            Texture textura = new Texture(Gdx.files.internal(ruta));
+            framesParadoE.add(new TextureRegion(textura));
+        }
+        animacionesEnemigo.put(Entidad.Estado.PARADO, new Animation<>(0.55f, framesParadoE, Animation.PlayMode.LOOP));
 
-    // 3. Enemigo Daño (¡Corregido con su propio Array!)
-    Array<TextureRegion> framesDanioE = new Array<>();
-    for (int i = 1; i <= 2; i++) {
-        String ruta = "Imagenes/Personajes/Enemigo/Zombie/ZombieDano" + i + ".png";
-        Texture textura = new Texture(Gdx.files.internal(ruta));
-        framesDanioE.add(new TextureRegion(textura));
+        // 2. Enemigo Ataque
+        Array<TextureRegion> framesAtaqueE = new Array<>();
+        for (int i = 1; i <= 2; i++) {
+            String ruta = "Imagenes/Personajes/Enemigo/Zombie/ZombieAtaque" + i + ".png";
+            Texture textura = new Texture(Gdx.files.internal(ruta));
+            framesAtaqueE.add(new TextureRegion(textura));
+        }
+        animacionesEnemigo.put(Entidad.Estado.ATAQUE, new Animation<>(0.60f, framesAtaqueE, Animation.PlayMode.NORMAL));
+
+        // 3. Enemigo Daño (¡Corregido con su propio Array!)
+        Array<TextureRegion> framesDanioE = new Array<>();
+        for (int i = 1; i <= 2; i++) {
+            String ruta = "Imagenes/Personajes/Enemigo/Zombie/ZombieDano" + i + ".png";
+            Texture textura = new Texture(Gdx.files.internal(ruta));
+            framesDanioE.add(new TextureRegion(textura));
+        }
+        animacionesEnemigo.put(Entidad.Estado.DANIO, new Animation<>(0.60f, framesDanioE, Animation.PlayMode.NORMAL));
+
+        //animacion de goblin
+        Array<TextureRegion> framesGoblin = new Array<>();
+        for (int i = 1; i <= 4; i++) {
+            String ruta = "Imagenes/Personajes/Enemigo/duende/duendeCorriendo" + i + ".png";
+            Texture textura = new Texture(Gdx.files.internal(ruta));
+            framesGoblin.add(new TextureRegion(textura));
+        }
+        animacionGoblin = new Animation<>(0.15f, framesGoblin, Animation.PlayMode.LOOP);
     }
-    animacionesEnemigo.put(Entidad.Estado.DANIO, new Animation<>(0.60f, framesDanioE, Animation.PlayMode.NORMAL));
-}
+
+    public void dibujarGoblin(SpriteBatch batch, float x, float y, float stateTime) {
+        if (animacionGoblin != null) {
+            TextureRegion frame = animacionGoblin.getKeyFrame(stateTime, true);
+            batch.draw(frame, x, y, 100, 100);
+        }
+    }
 
     public void cerrar() {
         stage.dispose();

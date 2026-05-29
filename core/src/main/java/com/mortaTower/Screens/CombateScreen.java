@@ -7,20 +7,21 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mortaTower.Hilo.GoblinAtacante;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
-import com.mortaTower.Modelo.Heroe;
-import com.mortaTower.Modelo.RecompensasModelo;
 import com.mortaTower.Modelo.CombateModelo.Resultado;
 import com.mortaTower.Modelo.Entidad;
+import com.mortaTower.Modelo.Goblin;
 import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.HabilidadAtaque;
 import com.mortaTower.Modelo.HabilidadCuracion;
 import com.mortaTower.Modelo.HabilidadDefensa;
 import com.mortaTower.Modelo.HabilidadMana;
+import com.mortaTower.Modelo.Heroe;
+import com.mortaTower.Modelo.RecompensasModelo;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
-
 import com.mortaTower.Vista.PausaVista;
 import com.mortaTower.Vista.RecompensasVista;
 
@@ -47,6 +48,10 @@ public class CombateScreen extends Screens {
     private boolean seleccionandoReemplazo = false;
     private boolean inventarioVisible = false;
     private Habilidad recompensaSeleccionada;
+
+    //Goblin
+    private Goblin goblin;
+    private GoblinAtacante hiloGoblin;
 
     //constructor
     public CombateScreen(Main game, int nivel) {
@@ -101,6 +106,23 @@ public class CombateScreen extends Screens {
 
         // listeners para los botones de recompensas
         listenersRecompensas();
+
+        //manejo del hilo en el combate
+        goblin = new Goblin();
+        hiloGoblin = new GoblinAtacante();
+
+        //se inicia el hilo secundario
+        hiloGoblin.iniciar(10, 15, () -> {
+            //metodo de libgdx para dejar que el hilo secundario modifique el hilo principal
+            Gdx.app.postRunnable(() -> {
+                if (!pausa && modelo.getResultado() == CombateModelo.Resultado.NINGUNO) {
+                    float posicionX = Gdx.graphics.getWidth(); //arranca por la derecha
+                    float posicionY = WORLD_HEIGHT * 0.40f;
+                    goblin.prepararCorrida(posicionX, posicionY);
+                    System.out.println("el goblin entra al combate");
+                }
+            });
+        });
     }
 
     private void setInput(Stage stageActivo) {
@@ -205,6 +227,24 @@ public class CombateScreen extends Screens {
         vista.dibujarSprite(spriteBatch);
         vista.comentarista(spriteBatch);
         vista.resultado(spriteBatch);
+
+        //LOGICA Y DIBUJADO DEL GOBLIN
+        if (goblin != null && goblin.getActivo() && !pausa) {
+            goblin.sumarStateTime(delta);
+            float velocidadGoblin = 200f;
+            goblin.setX(goblin.getX() - (velocidadGoblin * delta));
+
+            vista.dibujarGoblin(spriteBatch, goblin.getX(), goblin.getY(), goblin.getStateTime());
+
+            float posicionImpacto = WORLD_WIDTH * 0.15f;
+            if (goblin.getX() <= posicionImpacto) {
+                goblin.setActivo(false);
+
+                modelo.getHeroe().recibirDanio(goblin.getDanio());
+                modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
+                modelo.mostrarMensaje("¡Un duende te robó " + goblin.getDanio() + " de vida!");
+            }
+        }
 
         spriteBatch.end();
 
@@ -367,5 +407,8 @@ public class CombateScreen extends Screens {
     public void dispose() {
         super.dispose();
         vista.cerrar();
+        if (hiloGoblin != null) {
+            hiloGoblin.pararHilo();
+        }
     }
 }

@@ -31,7 +31,6 @@ public class SeleccionScreen extends Screens {
         game.assets.load("Imagenes/CargarPartida/menuSinespacio.png", Texture.class);
         game.assets.load("Imagenes/CargarPartida/IrPartidasGuardadas.png", Texture.class);
         game.assets.load("Imagenes/CargarPartida/IrPartidasGuardadas1.png", Texture.class);
-       
         game.assets.finishLoading();
 
         vista = new SeleccionVista(viewport, game);

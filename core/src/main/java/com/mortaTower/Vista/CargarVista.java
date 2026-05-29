@@ -70,6 +70,7 @@ public class CargarVista {
         Table textoCentrado = new Table();
         textoCentrado.setFillParent(true);
         textoCentrado.add(texto).center();
+        textoCentrado.debug();
 
         stack.add(boton);
         stack.add(textoCentrado);
@@ -77,6 +78,7 @@ public class CargarVista {
         Table fila = new Table();
         fila.add(stack).width(560).height(90).padRight(-50);
         fila.add(botonBorrar).width(56).height(56);
+        fila.debug();
 
         tabla.add(fila).padBottom(-2).row();
 

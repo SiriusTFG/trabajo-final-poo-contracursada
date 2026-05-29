@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mortaTower.DAO.EnemigoDao;
-import com.mortaTower.DAO.HeroeDao;
 
 public class CombateModelo {
     
@@ -23,8 +22,9 @@ public class CombateModelo {
     public CombateModelo(Heroe heroe, int numPiso) {
         //De forma temporal,optimizar despues.
         try {
-        HeroeDao hDao = new HeroeDao();
-        this.heroe = hDao.obtenerPorId(heroe.getId());
+        //HeroeDao hDao = new HeroeDao();
+        //this.heroe = hDao.obtenerPorId(heroe.getId());
+        this.heroe = heroe;
         } catch (Exception e) {
         e.printStackTrace();
         this.heroe = heroe;}

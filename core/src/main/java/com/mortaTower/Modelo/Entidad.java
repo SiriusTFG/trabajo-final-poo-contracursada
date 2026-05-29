@@ -1,8 +1,5 @@
 package com.mortaTower.Modelo;
 
-import java.util.Map;
-import java.util.HashMap;
-
 public abstract class Entidad {
     protected int id;
     protected String nombre;

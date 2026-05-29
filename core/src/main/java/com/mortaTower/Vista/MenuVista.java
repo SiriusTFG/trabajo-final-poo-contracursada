@@ -154,14 +154,6 @@ public class MenuVista {
         ((TextureRegionDrawable) imgEfectos.getDrawable()).setRegion(sprites[1][indiceSprite]);
     }
 
-    /* public void render(float delta) {
-        stage.act(delta);
-        stage.getBatch().begin();
-        stage.getBatch().draw(fondo, 0, 0, stage.getWidth(), stage.getHeight());
-        stage.getBatch().end();
-        stage.draw();
-    } */
-
     public void cerrar() {
         stage.dispose();
     }
