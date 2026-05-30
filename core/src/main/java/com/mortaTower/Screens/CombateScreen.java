@@ -11,10 +11,6 @@ import com.mortaTower.Hilo.GoblinAtacante;
 import com.mortaTower.Main;
 import com.mortaTower.Controlador.RecompensaControlador;
 import com.mortaTower.Modelo.CombateModelo;
-<<<<<<< Updated upstream
-=======
-import com.mortaTower.Modelo.Heroe;
->>>>>>> Stashed changes
 import com.mortaTower.Modelo.CombateModelo.Resultado;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Goblin;
@@ -108,10 +104,6 @@ public class CombateScreen extends Screens {
                 game.setScreen(new TransicionScreen(game, CombateScreen.this, new MenuScreen(game)));
             }
         });
-<<<<<<< Updated upstream
-
-        // listeners para los botones de recompensas
-        listenersRecompensas();
 
         //manejo del hilo en el combate
         goblin = new Goblin();
@@ -129,8 +121,6 @@ public class CombateScreen extends Screens {
                 }
             });
         });
-=======
->>>>>>> Stashed changes
     }
 
     private void setInput(Stage stageActivo) {

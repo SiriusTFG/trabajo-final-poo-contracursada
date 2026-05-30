@@ -185,13 +185,6 @@ public class MenuVista {
         imgEfectos.setDrawable(new TextureRegionDrawable(fxFrames[invertido]));
     }
 
-<<<<<<< Updated upstream
-=======
-    // =========================
-    // CLEANUP
-    // =========================
-
->>>>>>> Stashed changes
     public void cerrar() {
         stage.dispose();
     }
