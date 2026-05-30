@@ -33,6 +33,7 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     habilidades.add(mapearHabilidad(rs));
+                    
                 }
             }
         }
@@ -74,7 +75,8 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
             rs.getInt("valor_base"), 
             rs.getInt("cooldown_max"));
         } else {
-            return null;
+            
+            throw new IllegalArgumentException("Tipo de habilidad desconocido: " + tipo);
         }
     }
 
@@ -89,9 +91,32 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     habilidades.add(mapearHabilidad(rs));
+                    
                 }
             }
         }
+        return habilidades;
+    }
+
+    public List<Habilidad> obtenerTodas() throws SQLException {
+
+        List<Habilidad> habilidades = new ArrayList<>();
+
+        String sql = "SELECT * FROM habilidades ORDER BY id ASC";
+
+        try (PreparedStatement pstmt = conexion.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+
+                Habilidad h = mapearHabilidad(rs);
+
+                if (h != null) {
+                    habilidades.add(h);
+                }
+            }
+        }
+
         return habilidades;
     }
 

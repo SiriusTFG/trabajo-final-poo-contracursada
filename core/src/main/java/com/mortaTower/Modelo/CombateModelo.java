@@ -1,9 +1,11 @@
 package com.mortaTower.Modelo;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.mortaTower.DAO.EnemigoDao;
+import com.mortaTower.DAO.HabilidadDao;
 
 public class CombateModelo {
     
@@ -47,23 +49,28 @@ public class CombateModelo {
         return "---";
     }
 
-    public Habilidad[] getHabilidadesPorTipo(Class<? extends Habilidad> tipo) {
-        Habilidad[] habilidades = heroe.getHabilidades();
+    public Habilidad[] getHabilidades(Habilidad[] habilidades) {
+        
+        habilidades = heroe.getHabilidades();
 
         if (habilidades == null) {
             return new Habilidad[0];
         }
 
-        List<Habilidad> filtradas = new ArrayList<>();
+        return habilidades;
+    } 
 
-        for (Habilidad h : habilidades) {
-            if (h != null && tipo.isInstance(h)) {
-                filtradas.add(h);
-            }
+    public List<Habilidad> getHabilidadesPorEntidad() {
+        try {
+            HabilidadDao dao = new HabilidadDao();
+
+            return dao.obtenerPorEntidad(heroe.getId(), "Heroe");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         }
-
-        return filtradas.toArray(new Habilidad[0]);
-    }   
+    }
 
     private Enemigo cargarEnemigo(int numPiso) {
         try {

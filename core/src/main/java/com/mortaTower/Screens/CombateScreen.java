@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import java.util.List;
+import java.util.ArrayList;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Controlador.RecompensaControlador;
 import com.mortaTower.Hilo.GoblinAtacante;
@@ -20,6 +22,10 @@ import com.mortaTower.Modelo.HabilidadCuracion;
 import com.mortaTower.Modelo.HabilidadDefensa;
 import com.mortaTower.Modelo.HabilidadMana;
 import com.mortaTower.Modelo.Heroe;
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
 import com.mortaTower.Vista.PausaVista;
@@ -27,6 +33,10 @@ import com.mortaTower.Vista.PausaVista;
 public class CombateScreen extends Screens {
 
     private CombateModelo modelo;
+<<<<<<< Updated upstream
+=======
+    
+>>>>>>> Stashed changes
     private RecompensaControlador recompensaControlador;
     
     private CombateVista vista;     
@@ -37,6 +47,7 @@ public class CombateScreen extends Screens {
     private int nivel;
 
     private Habilidad[] habilidadesMostradas;
+    private List<Habilidad> hab;
 
     private float contador = 0;
     private float tiempoPausa;
@@ -44,6 +55,11 @@ public class CombateScreen extends Screens {
 
     private boolean pausa = false;
     private boolean seleccionandoReemplazo = false;
+<<<<<<< Updated upstream
+=======
+    
+    private String resultado;
+>>>>>>> Stashed changes
     private Habilidad recompensaSeleccionada;
 
     //Goblin
@@ -75,18 +91,15 @@ public class CombateScreen extends Screens {
     public void show() {
 
         cargarAssets();
+        
+        hab = modelo.getHabilidadesPorEntidad();
 
-        vista = new CombateVista(viewport, modelo, game, nivel);
+        vista = new CombateVista(viewport,modelo,game,nivel,hab);
+
         vistaPausa = new PausaVista(game);
 
         // un input a la vez
-        setInput(vista.getStage());
-
-        // Iputs Categoria
-        agregarListenerCategoria(vista.getBtnAtaque(),HabilidadAtaque.class);
-        agregarListenerCategoria(vista.getBtnDefensa(),HabilidadDefensa.class);
-        agregarListenerCategoria(vista.getBtnCuracion(),HabilidadCuracion.class);
-        agregarListenerCategoria(vista.getBtnMana(),HabilidadMana.class);        
+        setInput(vista.getStage());       
 
         vistaPausa.getBtnRenudar().addListener(new ClickListener() {
             @Override
@@ -118,26 +131,12 @@ public class CombateScreen extends Screens {
                 }
             });
         });
+
+        listenersHabilidades();
     }
 
     private void setInput(Stage stageActivo) {
         Gdx.input.setInputProcessor(stageActivo);
-    }
-
-    private void agregarListenerCategoria(ImageButton boton, Class<? extends Habilidad> tipo)   {
-
-        boton.addListener(new ClickListener() {
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-
-                habilidadesMostradas = modelo.getHabilidadesPorTipo(tipo);
-                vista.listaHabilidades(habilidadesMostradas);
-                
-                // Iputs Habilidades
-                listenersHabilidades();
-            }
-        });
     }
 
     private void listenersHabilidades() {
@@ -152,15 +151,7 @@ public class CombateScreen extends Screens {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
 
-                    if (seleccionandoReemplazo){
-                        
-                        // aca tendria que ir metodo o intruccion para remplazar la recompenza seleccionada por una actual
-                        game.setScreen(new TransicionScreen(game, CombateScreen.this, new CombateScreen(game, nivel + 1)));
-                        
-                    }else{
-
-                       manejarEntradaJugador(index); 
-                    }
+                    manejarEntradaJugador(index); 
                 }
             });
         }
@@ -187,10 +178,13 @@ public class CombateScreen extends Screens {
         vista.getStage().draw();
 
         spriteBatch.begin();
+        
+        String mensaje = modelo.getMensajeCombate();
 
         vista.dibujarSprite(spriteBatch);
-        vista.comentarista(spriteBatch);
-        vista.resultado(spriteBatch);
+        vista.comentarista(spriteBatch, mensaje);
+
+        vista.resultado(spriteBatch, resultado);
 
         if (heroeAturdido) {
             tempRecuperacionHeroe -= delta;
@@ -317,11 +311,13 @@ public class CombateScreen extends Screens {
 
                         if (modelo.getEnemigo().getVidaActual() <= 0) {
                             modelo.setResultado(CombateModelo.Resultado.VICTORIA);
+                            resultado = "victoria";
                             modelo.getEnemigo().setEstadoActual(Entidad.Estado.MUERTE);
 
 
                         } else if (modelo.getHeroe().getVidaActual() <= 0) {
                             modelo.setResultado(CombateModelo.Resultado.DERROTA);
+                            resultado = "derrota";
                             modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
 
                         } else {
@@ -348,7 +344,7 @@ public class CombateScreen extends Screens {
 
     private void manejarEntradaJugador(int indiceHabilidad) {
 
-        Habilidad habilidad = habilidadesMostradas[indiceHabilidad];
+        Habilidad habilidad = vista.getHabilidad(indiceHabilidad);
         Heroe heroe = modelo.getHeroe();
 
         if (habilidad == null || !habilidad.puedeUsarse(heroe)) {
@@ -400,7 +396,7 @@ public class CombateScreen extends Screens {
     private void cargarAssets() {
 
         game.assets.load("Imagenes/Combate/categorias.png", Texture.class);
-        game.assets.load("Imagenes/Combate/inventario.png", Texture.class);
+        game.assets.load("Imagenes/Combate/inventario2.png", Texture.class);
         game.assets.load("Imagenes/Combate/cuadroHabilidad.png", Texture.class);
 
         game.assets.load("Imagenes/Combate/vidaHeroe.png", Texture.class);

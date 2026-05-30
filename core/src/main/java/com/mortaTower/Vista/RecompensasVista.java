@@ -90,7 +90,7 @@ public class RecompensasVista {
 
         botonesHabilidades.clear();
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < habilidad.length; i++) {
 
             String nombre = habilidad[i].getNombre();
 
@@ -114,16 +114,16 @@ public class RecompensasVista {
         stage.addActor(tablaHab);
     }
 
-    public void cuadroRemplazo(){
+    public void cuadroRemplazo(Habilidad[] habilidad){
         
         Image fondoRemplazo = new Image(new TextureRegionDrawable(cuadroRemplazo));
         fondoRemplazo.setPosition(600, 100);
 
         font = new BitmapFont();
 
-        Label.LabelStyle style = new Label.LabelStyle();
-        style.font = font;
-        style.fontColor = Color.WHITE;
+        Label.LabelStyle styles = new Label.LabelStyle();
+        styles.font = font;
+        styles.fontColor = Color.WHITE;
 
         if (tr != null) {
             tr.remove();
@@ -139,18 +139,20 @@ public class RecompensasVista {
 
         botonesRemplazo.clear();
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < habilidad.length; i++) {
 
             btnRemplazo = crearBoton(barraRemplazo);
             btnRemplazo.setSize(600, 445);
 
-            /*lbl = new Label(nombre, style);
+            //String nombre2 = habilidad[i].getNombre();
+
+            /*lbl = new Label(nombre2, styles);
             lbl.setAlignment(Align.center);
             lbl.setTouchable(Touchable.disabled);*/
 
             stack = new Stack();
             stack.add(btnRemplazo);
-           // stack.add(lbl);
+            //stack.add(lbl);
 
             botonesRemplazo.add(btnRemplazo);
 

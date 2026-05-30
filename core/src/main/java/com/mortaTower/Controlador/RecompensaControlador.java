@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Main;
+import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Habilidad;
+import com.mortaTower.Modelo.Heroe;
 import com.mortaTower.Modelo.RecompensasModelo;
 import com.mortaTower.Screens.CombateScreen;
 import com.mortaTower.Screens.Screens;
@@ -16,10 +18,12 @@ public class RecompensaControlador  extends Screens{
 
     //private Main game;
     private RecompensasModelo modeloRecompensa;
-    
+    private CombateModelo combateModelo;
+
     private RecompensasVista vistaRecompensa;
     private int nivel;
-    private Habilidad[] habilidad;
+    private Habilidad[] habilidad, habilidadActual;
+    private int habSelecionada;
     private int[] tipo;
 
     private enum EstadoRecompensa {LISTA_HABILIDADES, REEMPLAZO}
@@ -29,10 +33,12 @@ public class RecompensaControlador  extends Screens{
 
         super(game);
         this.nivel = nivel;
-
+        Heroe heroe = game.getPartidaActual().getHeroe();
         modeloRecompensa= new RecompensasModelo();
+        combateModelo = new CombateModelo(heroe, nivel);
 
         habilidad = modeloRecompensa.getHabilidad();
+        habilidadActual = modeloRecompensa.getHabilidadActual();
         tipo = modeloRecompensa.getipo();
 
         cargarAssets();
@@ -61,11 +67,14 @@ public class RecompensaControlador  extends Screens{
 
         for (int i = 0; i < cantidad; i++) {
 
+            int id = i;
+            
             vistaRecompensa.getBoton(i).addListener(new ClickListener() {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
 
+                    habSelecionada = id;
                     cambiarEstado(EstadoRecompensa.REEMPLAZO);
                 }
             });
@@ -84,10 +93,14 @@ public class RecompensaControlador  extends Screens{
 
         for (int i = 0; i < cant; i++) {
 
+            int slot = i;
+
             vistaRecompensa.getBtnRemplazo(i).addListener(new ClickListener() {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+
+                    modeloRecompensa.reemplazarHab(habSelecionada ,slot);
 
                     game.setScreen(new TransicionScreen(game, RecompensaControlador.this, new CombateScreen(game, nivel + 1)));
                 }
@@ -111,7 +124,7 @@ public class RecompensaControlador  extends Screens{
 
             case REEMPLAZO:
                 vistaRecompensa.limpiar();
-                vistaRecompensa.cuadroRemplazo();
+                vistaRecompensa.cuadroRemplazo(habilidadActual);
                 listenersRecompensas();
                 break;
         }
