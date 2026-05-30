@@ -30,6 +30,7 @@ import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Enemigo;
 import com.mortaTower.Modelo.Entidad;
+import com.mortaTower.Modelo.Goblin;
 import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
@@ -75,7 +76,7 @@ public class CombateVista {
     private TextureAtlas atlas;
 
     //ANIMACION GOBLIN
-    private Animation<TextureRegion> animacionGoblin;
+    private Map<Goblin.EstadoGoblin, Animation<TextureRegion>> animacionesGoblin = new HashMap<>();
 
     // CONSTRUCTOR
     public CombateVista(FitViewport viewport, CombateModelo modelo, Main game, int nivel) {
@@ -413,20 +414,38 @@ public class CombateVista {
         }
         animacionesEnemigo.put(Entidad.Estado.DANIO, new Animation<>(0.60f, framesDanioE, Animation.PlayMode.NORMAL));
 
-        //animacion de goblin
-        Array<TextureRegion> framesGoblin = new Array<>();
+        //goblin corriendo
+        Array<TextureRegion> framesGoblinC = new Array<>();
         for (int i = 1; i <= 4; i++) {
             String ruta = "Imagenes/Personajes/Enemigo/duende/duendeCorriendo" + i + ".png";
             Texture textura = new Texture(Gdx.files.internal(ruta));
-            framesGoblin.add(new TextureRegion(textura));
+            framesGoblinC.add(new TextureRegion(textura));
         }
-        animacionGoblin = new Animation<>(0.15f, framesGoblin, Animation.PlayMode.LOOP);
+        animacionesGoblin.put(Goblin.EstadoGoblin.CORRIENDO, new Animation<>(0.15f, framesGoblinC, Animation.PlayMode.LOOP));
+
+        //goblin atacando
+        Array<TextureRegion> framesGoblinA = new Array<>();
+        for (int i = 1; i <= 2; i++) {
+            String ruta = "Imagenes/Personajes/Enemigo/duende/duendeAtaque" + i + ".png";
+            Texture textura = new Texture(Gdx.files.internal(ruta));
+            framesGoblinA.add(new TextureRegion(textura));
+        }
+        animacionesGoblin.put(Goblin.EstadoGoblin.ATACANDO, new Animation<>(0.15f, framesGoblinA, Animation.PlayMode.LOOP));
+
+        Array<TextureRegion> framesGoblinS = new Array<>();
+        for (int i = 1; i <= 2; i++) {
+            String ruta = "Imagenes/Personajes/Enemigo/duende/duendeSaltando" + i + ".png";
+            Texture textura = new Texture(Gdx.files.internal(ruta));
+            framesGoblinS.add(new TextureRegion(textura));
+        }
+        animacionesGoblin.put(Goblin.EstadoGoblin.ESCAPANDO, new Animation<>(0.8f, framesGoblinS, Animation.PlayMode.NORMAL));
     }
 
-    public void dibujarGoblin(SpriteBatch batch, float x, float y, float stateTime) {
-        if (animacionGoblin != null) {
-            TextureRegion frame = animacionGoblin.getKeyFrame(stateTime, true);
-            batch.draw(frame, x, y, 100, 100);
+    public void dibujarGoblin(SpriteBatch batch, float x, float y, float stateTime, Goblin.EstadoGoblin estado) {
+        Animation<TextureRegion> animacionActual = animacionesGoblin.get(estado);
+        if (animacionActual != null) {
+            TextureRegion frame = animacionActual.getKeyFrame(stateTime, true);
+            batch.draw(frame, x, y, 150, 150);
         }
     }
 
@@ -443,10 +462,19 @@ public class CombateVista {
         }
         return 1.0f;
     }
+    
     public float getTiempoAnimacionEnemigo(Entidad.Estado estado){
         Animation<TextureRegion> animacion = animacionesEnemigo.get(estado);
         if (animacion != null) {
             return animacion.getAnimationDuration(); // Devuelve la duración de la animación
+        }
+        return 1.0f;
+    }
+
+    public float getTiempoAnimacionGoblin(Goblin.EstadoGoblin estado) {
+        Animation<TextureRegion> animacion = animacionesGoblin.get(estado);
+        if (animacion != null) {
+            return animacion.getAnimationDuration(); 
         }
         return 1.0f;
     }

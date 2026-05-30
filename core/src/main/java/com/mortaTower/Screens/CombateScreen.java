@@ -7,9 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mortaTower.Controlador.RecompensaControlador;
 import com.mortaTower.Hilo.GoblinAtacante;
 import com.mortaTower.Main;
-import com.mortaTower.Controlador.RecompensaControlador;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.CombateModelo.Resultado;
 import com.mortaTower.Modelo.Entidad;
@@ -20,7 +20,6 @@ import com.mortaTower.Modelo.HabilidadCuracion;
 import com.mortaTower.Modelo.HabilidadDefensa;
 import com.mortaTower.Modelo.HabilidadMana;
 import com.mortaTower.Modelo.Heroe;
-import com.mortaTower.Modelo.RecompensasModelo;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
 import com.mortaTower.Vista.PausaVista;
@@ -28,11 +27,9 @@ import com.mortaTower.Vista.PausaVista;
 public class CombateScreen extends Screens {
 
     private CombateModelo modelo;
-
     private RecompensaControlador recompensaControlador;
     
     private CombateVista vista;     
-   
     private PausaVista vistaPausa;
 
     private boolean victoriaProcesada = false;
@@ -47,13 +44,13 @@ public class CombateScreen extends Screens {
 
     private boolean pausa = false;
     private boolean seleccionandoReemplazo = false;
-    
-    
     private Habilidad recompensaSeleccionada;
 
     //Goblin
     private Goblin goblin;
     private GoblinAtacante hiloGoblin;
+    private float tempRecuperacionHeroe = 0f;
+    private boolean heroeAturdido = false;
 
     //constructor
     public CombateScreen(Main game, int nivel) {
@@ -195,22 +192,68 @@ public class CombateScreen extends Screens {
         vista.comentarista(spriteBatch);
         vista.resultado(spriteBatch);
 
+        if (heroeAturdido) {
+            tempRecuperacionHeroe -= delta;
+            if(tempRecuperacionHeroe <= 0) {
+                modelo.getHeroe().setEstadoActual(Entidad.Estado.PARADO);
+                heroeAturdido = false;
+            }
+        }
+
         //LOGICA Y DIBUJADO DEL GOBLIN
         if (goblin != null && goblin.getActivo() && !pausa) {
             goblin.sumarStateTime(delta);
-            float velocidadGoblin = 200f;
-            goblin.setX(goblin.getX() - (velocidadGoblin * delta));
+            
+            switch (goblin.getEstadoActual()) {
+                case CORRIENDO -> {
+                    float velocidad = 200f;
+                    goblin.setX(goblin.getX() - (velocidad * delta));
+                    
+                    float posicionImpacto = WORLD_WIDTH * 0.20f;
+                    if (goblin.getX() <= posicionImpacto) {
+                        goblin.cambiarEstado(Goblin.EstadoGoblin.ATACANDO);
+                        modelo.getHeroe().recibirDanio(goblin.getDanio());
+                        modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
+                        heroeAturdido = true;
+                        tempRecuperacionHeroe = vista.getTiempoAnimacionHeroe(Entidad.Estado.DANIO);
+                        modelo.mostrarMensaje("¡Un duende te robó " + goblin.getDanio() + " de vida!");
+                    }
+                }
 
-            vista.dibujarGoblin(spriteBatch, goblin.getX(), goblin.getY(), goblin.getStateTime());
+                case ATACANDO -> {
+                    float duracionAtaque = vista.getTiempoAnimacionGoblin(Goblin.EstadoGoblin.ATACANDO);
+                    if (goblin.getStateTime() >= duracionAtaque) {
+                        goblin.cambiarEstado(Goblin.EstadoGoblin.ESCAPANDO);
+                    }
+                }
 
-            float posicionImpacto = WORLD_WIDTH * 0.15f;
-            if (goblin.getX() <= posicionImpacto) {
-                goblin.setActivo(false);
+                case ESCAPANDO -> {
+                    //tiempo que lleva en este estado
+                    float t = goblin.getStateTime();
+                    
+                    //movimiento horizontal
+                    float velocidadX = 650f; 
+                    goblin.setX(goblin.getX() + (velocidadX * delta));
 
-                modelo.getHeroe().recibirDanio(goblin.getDanio());
-                modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
-                modelo.mostrarMensaje("¡Un duende te robó " + goblin.getDanio() + " de vida!");
+                    //movimiento vertical (parabola)
+                    float pisoY = WORLD_HEIGHT * 0.40f; // la altura desde la que salto
+                    float fuerzaSalto = 800f; // impulso inicial hacia arriba
+                    float gravedad = 1000f;   // que tan fuerte lo tira al piso
+                    
+                    // Y = inicio + (fuerza * t) - (1/2 * gravedad * t^2)
+                    float nuevaY = pisoY + (fuerzaSalto * t) - (0.5f * gravedad * (t * t));
+                    goblin.setY(nuevaY);
+
+                    //si cruza el borde derecho de la pantalla, desaparece
+                    if (goblin.getX() > WORLD_WIDTH + 100) {
+                        goblin.setActivo(false);
+                    }
+                }
             }
+            vista.dibujarGoblin(spriteBatch, goblin.getX(), goblin.getY(), goblin.getStateTime(), goblin.getEstadoActual());
+
+            
+            
         }
 
         spriteBatch.end();
