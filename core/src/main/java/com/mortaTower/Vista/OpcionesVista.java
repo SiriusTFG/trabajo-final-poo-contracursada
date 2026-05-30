@@ -3,7 +3,6 @@ package com.mortaTower.Vista;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -11,25 +10,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mortaTower.Main;
-import com.mortaTower.Modelo.OpcionesModelo;
 
 public class OpcionesVista {
 
     private Stage stage;
 
-    private Texture transparencia, fondo, controles;
+    private Texture transparencia, fondo, atras;
     private Texture musicaTex, efectosTex;
 
     private TextureRegion[] musicaFrames;
     private TextureRegion[] efectosFrames;
 
     // actores
-    private Image imgMusica, imgEfectos, imgPantallaControles;
+    private Image imgMusica, imgEfectos;
 
     // botones
     private ImageButton btnMusicaMenos, btnMusicaMas;
     private ImageButton btnEfectosMenos, btnEfectosMas;
-    private ImageButton btnControles;
+    private ImageButton btnAtras;
 
     public OpcionesVista(FitViewport viewport, Main game) {
 
@@ -38,28 +36,42 @@ public class OpcionesVista {
         // TEXTURAS
         transparencia = new Texture("Imagenes/black.png");
         fondo = new Texture("Imagenes/Opciones/menuOpciones.png");
-        controles = new Texture("Imagenes/Opciones/menuControles.png");
+        atras = new Texture("Imagenes/Opciones/atras.png");
 
         musicaTex = new Texture("Imagenes/Opciones/volMusica.png");
         efectosTex = new Texture("Imagenes/Opciones/volEfectos.png");
 
-        Texture texMenos = new Texture("Imagenes/Opciones/btn_menos.png");
-        Texture texMas = new Texture("Imagenes/Opciones/btn_mas.png");
+        Texture texMenos = new Texture("Imagenes/Opciones/btnMenos.png");
+        Texture texMas = new Texture("Imagenes/Opciones/btnMas.png");
 
         // =========================
         // SPLIT CORRECTO (10 niveles)
         // =========================
-        musicaFrames = TextureRegion.split(
-                musicaTex,
-                musicaTex.getWidth() / 10,
-                musicaTex.getHeight()
-        )[0];
+        int frames = 10;
+        musicaFrames = new TextureRegion[frames];
+        efectosFrames = new TextureRegion[frames];
 
-        efectosFrames = TextureRegion.split(
-                efectosTex,
-                efectosTex.getWidth() / 10,
-                efectosTex.getHeight()
-        )[0];
+        int anchoM = musicaTex.getWidth();
+        int altoM = musicaTex.getHeight() / frames;
+
+        int anchoF = efectosTex.getWidth();
+        int altoF = efectosTex.getHeight() / frames;
+
+        for (int i = 0; i < frames; i++) {
+            musicaFrames[i] = new TextureRegion(musicaTex, 0 , i * altoM, anchoM, altoM);
+            efectosFrames[i] = new TextureRegion(efectosTex, 0, i * altoF, anchoF, altoF);
+        }
+
+        // fondo
+        Image imgOscura = new Image(transparencia);
+        imgOscura.setSize(stage.getWidth(), stage.getHeight());
+        imgOscura.setColor(0, 0, 0, 0.8f);
+        stage.addActor(imgOscura);
+
+        Image imgOpcionesPanel = new Image(fondo);
+        imgOpcionesPanel.setSize(stage.getWidth() - 600, stage.getHeight() - 200);
+        imgOpcionesPanel.setPosition(350, 100);
+        stage.addActor(imgOpcionesPanel);
 
         // =========================
         // ACTORES
@@ -67,33 +79,37 @@ public class OpcionesVista {
         imgMusica = new Image(new TextureRegionDrawable(musicaFrames[0]));
         imgEfectos = new Image(new TextureRegionDrawable(efectosFrames[0]));
 
-        btnMusicaMenos = crearBotonSimple(texMenos);
-        btnMusicaMas = crearBotonSimple(texMas);
-        btnEfectosMenos = crearBotonSimple(texMenos);
-        btnEfectosMas = crearBotonSimple(texMas);
+        btnMusicaMenos = crearBotonDoble(texMenos);
+        btnMusicaMas = crearBotonDoble(texMas);
+        btnEfectosMenos = crearBotonDoble(texMenos);
+        btnEfectosMas = crearBotonDoble(texMas);
 
-        btnControles = crearBotonDoble(new Texture("Imagenes/Opciones/controles.png"));
-
-        imgPantallaControles = new Image(controles);
-        imgPantallaControles.setVisible(false);
+        btnAtras = crearBotonDoble(atras);
+        btnAtras.setSize(200, 200);
+        btnAtras.setPosition(220, 480);
+        stage.addActor(btnAtras);
 
         // =========================
         // UI
         // =========================
         Table tabla = new Table();
-        tabla.setFillParent(true);
-        tabla.center();
+       /*  tabla.setFillParent(true);
+        tabla.center(); */
+        tabla.pack();
+        tabla.setPosition(690, 380);
+        tabla.debug();
         
         float tamañoBtn = 50f;
 
         tabla.add(btnMusicaMenos).size(tamañoBtn, tamañoBtn).padRight(15);
-        tabla.add(imgMusica).padBottom(20);
+        tabla.add(imgMusica).size(380, 80);
         tabla.add(btnMusicaMas).size(tamañoBtn, tamañoBtn).padLeft(15).row();
 
-        tabla.add(btnControles).colspan(3).padTop(20).row();
+        tabla.add(btnEfectosMenos).size(tamañoBtn, tamañoBtn).padRight(15).padTop(10);
+        tabla.add(imgEfectos).size(380, 80).padTop(10);
+        tabla.add(btnEfectosMas).size(tamañoBtn, tamañoBtn).padLeft(15).padTop(10).row();
 
         stage.addActor(tabla);
-        stage.addActor(imgPantallaControles);
     }
 
     // =========================
@@ -126,22 +142,21 @@ public class OpcionesVista {
 
     public void actualizarBarraMusica(int nivel) {
         nivel = MathUtils.clamp(nivel, 0, musicaFrames.length - 1);
-        imgMusica.setDrawable(new TextureRegionDrawable(musicaFrames[nivel]));
+        int invertido = (musicaFrames.length - 1) - nivel;
+        imgMusica.setDrawable(new TextureRegionDrawable(musicaFrames[invertido]));
     }
 
     public void actualizarBarraEfectos(int nivel) {
         nivel = MathUtils.clamp(nivel, 0, efectosFrames.length - 1);
-        imgEfectos.setDrawable(new TextureRegionDrawable(efectosFrames[nivel]));
+        int invertido = (efectosFrames.length - 1) - nivel;
+        imgEfectos.setDrawable(new TextureRegionDrawable(efectosFrames[invertido]));
     }
 
     // =========================
     // RENDER
     // =========================
 
-    public void render(float delta, boolean mostrarControles) {
-
-        imgPantallaControles.setVisible(mostrarControles);
-
+    public void render(float delta) {
         stage.act(delta);
         stage.draw();
     }
@@ -155,7 +170,6 @@ public class OpcionesVista {
 
         transparencia.dispose();
         fondo.dispose();
-        controles.dispose();
         musicaTex.dispose();
         efectosTex.dispose();
     }
@@ -167,5 +181,5 @@ public class OpcionesVista {
     public ImageButton getBtnMusicaMas() { return btnMusicaMas; }
     public ImageButton getBtnFxMenos() { return btnEfectosMenos; }
     public ImageButton getBtnFxMas() { return btnEfectosMas; }
-    public ImageButton getBtnControles() { return btnControles; }
+    public ImageButton getBtnAtras() {return btnAtras;}
 }
