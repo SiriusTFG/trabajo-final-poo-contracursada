@@ -43,18 +43,8 @@ public class CombateVista {
 
     private List<ImageButton> botonesHabilidades = new ArrayList<>();
 
-<<<<<<< Updated upstream
-    //ANIMACIONES
-    private Map<Entidad.Estado, Animation<TextureRegion>> animacionesHeroe = new HashMap<>();
-    private Map<Entidad.Estado, Animation<TextureRegion>> animacionesEnemigo = new HashMap<>();
-    private TextureAtlas atlas;
-
     //ANIMACION GOBLIN
     private Map<Goblin.EstadoGoblin, Animation<TextureRegion>> animacionesGoblin = new HashMap<>();
-=======
-    // Animacion Goblin
-    private Animation<TextureRegion> animacionGoblin;
->>>>>>> Stashed changes
 
     // UI
     private Table tabla;
@@ -423,7 +413,6 @@ public class CombateVista {
         }
         return 1.0f;
     }
-<<<<<<< Updated upstream
 
     public float getTiempoAnimacionGoblin(Goblin.EstadoGoblin estado) {
         Animation<TextureRegion> animacion = animacionesGoblin.get(estado);
@@ -432,14 +421,4 @@ public class CombateVista {
         }
         return 1.0f;
     }
-    
-    public ImageButton getBtnAtaque() { return btnAtaque; }
-    public ImageButton getBtnDefensa() { return btnDefensa; }
-    public ImageButton getBtnCuracion() { return btnCuracion; }
-    public ImageButton getBtnMana() { return btnMana; }
-
-    public ImageButton getBotonHabilidad(int index) {return botonesHabilidades.get(index);}   
-    public int getCantidadHabilidades() {return botonesHabilidades.size();}
-=======
->>>>>>> Stashed changes
 }

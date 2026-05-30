@@ -22,10 +22,6 @@ import com.mortaTower.Modelo.HabilidadCuracion;
 import com.mortaTower.Modelo.HabilidadDefensa;
 import com.mortaTower.Modelo.HabilidadMana;
 import com.mortaTower.Modelo.Heroe;
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
 import com.mortaTower.Vista.PausaVista;
@@ -33,10 +29,6 @@ import com.mortaTower.Vista.PausaVista;
 public class CombateScreen extends Screens {
 
     private CombateModelo modelo;
-<<<<<<< Updated upstream
-=======
-    
->>>>>>> Stashed changes
     private RecompensaControlador recompensaControlador;
     
     private CombateVista vista;     
@@ -55,12 +47,9 @@ public class CombateScreen extends Screens {
 
     private boolean pausa = false;
     private boolean seleccionandoReemplazo = false;
-<<<<<<< Updated upstream
-=======
-    
-    private String resultado;
->>>>>>> Stashed changes
     private Habilidad recompensaSeleccionada;
+
+    private String resultado;
 
     //Goblin
     private Goblin goblin;
@@ -184,7 +173,7 @@ public class CombateScreen extends Screens {
         vista.dibujarSprite(spriteBatch);
         vista.comentarista(spriteBatch, mensaje);
 
-        vista.resultado(spriteBatch, resultado);
+        vista.resultado(spriteBatch, resultado); 
 
         if (heroeAturdido) {
             tempRecuperacionHeroe -= delta;
