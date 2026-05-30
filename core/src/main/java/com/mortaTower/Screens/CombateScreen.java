@@ -9,7 +9,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Hilo.GoblinAtacante;
 import com.mortaTower.Main;
+import com.mortaTower.Controlador.RecompensaControlador;
 import com.mortaTower.Modelo.CombateModelo;
+<<<<<<< Updated upstream
+=======
+import com.mortaTower.Modelo.Heroe;
+>>>>>>> Stashed changes
 import com.mortaTower.Modelo.CombateModelo.Resultado;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Goblin;
@@ -23,15 +28,15 @@ import com.mortaTower.Modelo.RecompensasModelo;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
 import com.mortaTower.Vista.PausaVista;
-import com.mortaTower.Vista.RecompensasVista;
 
 public class CombateScreen extends Screens {
 
     private CombateModelo modelo;
-    private RecompensasModelo modeloRec;
+
+    private RecompensaControlador recompensaControlador;
     
     private CombateVista vista;     
-    private RecompensasVista vistaRecompensa;
+   
     private PausaVista vistaPausa;
 
     private boolean victoriaProcesada = false;
@@ -46,7 +51,8 @@ public class CombateScreen extends Screens {
 
     private boolean pausa = false;
     private boolean seleccionandoReemplazo = false;
-    private boolean inventarioVisible = false;
+    
+    
     private Habilidad recompensaSeleccionada;
 
     //Goblin
@@ -63,7 +69,7 @@ public class CombateScreen extends Screens {
         Heroe heroe = game.getPartidaActual().getHeroe();
         
         modelo = new CombateModelo(heroe, nivel);
-        modeloRec = new RecompensasModelo();
+        recompensaControlador = new RecompensaControlador(game, this.nivel);
 
         if (modelo.getEnemigo() != null) {
             modelo.getEnemigo().cambiarComportamiento(new ComportamientoAgresivo());
@@ -78,7 +84,6 @@ public class CombateScreen extends Screens {
         cargarAssets();
 
         vista = new CombateVista(viewport, modelo, game, nivel);
-        vistaRecompensa = new RecompensasVista(game);
         vistaPausa = new PausaVista(game);
 
         // un input a la vez
@@ -103,6 +108,7 @@ public class CombateScreen extends Screens {
                 game.setScreen(new TransicionScreen(game, CombateScreen.this, new MenuScreen(game)));
             }
         });
+<<<<<<< Updated upstream
 
         // listeners para los botones de recompensas
         listenersRecompensas();
@@ -123,6 +129,8 @@ public class CombateScreen extends Screens {
                 }
             });
         });
+=======
+>>>>>>> Stashed changes
     }
 
     private void setInput(Stage stageActivo) {
@@ -171,28 +179,6 @@ public class CombateScreen extends Screens {
         }
     }
 
-    private void listenersRecompensas(){
-
-        int cantidad = vistaRecompensa.getCantidadHabilidades();
-
-        for (int i = 0; i < cantidad; i++) {
-
-            vistaRecompensa.getBoton(i).addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-
-                    seleccionandoReemplazo = true;
-
-                      
-                    vistaRecompensa.cerrar();
-                    vista.mostrarInventario();
-                    setInput(vista.getStage());
-                    
-                }
-            });
-        }
-    }
-
     @Override
     public void render(float delta) {
 
@@ -208,15 +194,6 @@ public class CombateScreen extends Screens {
             } else {
                 setInput(vista.getStage());
             }
-        }
-
-        // PAUSA
-        if (pausa) {
-
-            vistaPausa.getStage().act(delta);
-            vistaPausa.getStage().draw();
-
-            return;
         }
 
         vista.getStage().act(delta);
@@ -249,6 +226,22 @@ public class CombateScreen extends Screens {
         spriteBatch.end();
 
         vista.dibujarInterfaz(spriteBatch);
+
+        if (victoriaProcesada) {
+
+            recompensaControlador.render(delta);
+
+            return;
+        }
+
+        // PAUSA
+        if (pausa) {
+
+            vistaPausa.getStage().act(delta);
+            vistaPausa.getStage().draw();
+
+            return;
+        }
 
         // LÓGICA SOLO SI NO PAUSADO
         if (!pausa) {
@@ -313,12 +306,9 @@ public class CombateScreen extends Screens {
 
             if (modelo.getResultado() == Resultado.VICTORIA && !seleccionandoReemplazo) {
                 
-                setInput(vistaRecompensa.getStage());
-                vistaRecompensa.getStage().act(delta);
-                vistaRecompensa.getStage().draw();
-                
-                return;
-                
+                victoriaProcesada = true;
+                recompensaControlador.mostrar();
+                setInput(recompensaControlador.getVista().getStage());
             }
         }
     }
@@ -392,12 +382,8 @@ public class CombateScreen extends Screens {
         game.assets.load("Imagenes/Combate/nivel4.png", Texture.class);
         game.assets.load("Imagenes/Combate/nivel5.png", Texture.class);
 
-        // RECOMPENSA
-        game.assets.load("Imagenes/black.png", Texture.class);
-        game.assets.load("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
-        game.assets.load("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
-
         // PAUSA
+        game.assets.load("Imagenes/black.png", Texture.class);
         game.assets.load("Imagenes/MenuInicio/renudar.png", Texture.class);
 
         game.assets.finishLoading();

@@ -18,16 +18,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.Habilidad;
-import com.mortaTower.Modelo.RecompensasModelo;
 
 
 public class RecompensasVista {
 
-    private RecompensasModelo modelo;
-
     // BOTONES
-    private ImageButton btn;
-
+    private ImageButton btn, btnRemplazo, btnAtras;
     private Stage stage;
     private Stack stack;
 
@@ -35,7 +31,7 @@ public class RecompensasVista {
     private int alto, y;
     
     // TEXTURAS;
-    private Texture fondo, categorias, cuadro;
+    private Texture fondo, categorias, cuadro, cuadroRemplazo, barraRemplazo;
 
     //Fuente
     private BitmapFont font;
@@ -43,13 +39,13 @@ public class RecompensasVista {
     private Image img;
 
     // TABLAS
-    private Table tablaHab;
+    private Table tablaHab , tr;
 
     private List<ImageButton> botonesHabilidades = new ArrayList<>();
+    private List<ImageButton> botonesRemplazo = new ArrayList<>();
 
     public RecompensasVista(Main game) {
 
-        modelo = new RecompensasModelo();
 
         stage = new Stage();
 
@@ -62,11 +58,19 @@ public class RecompensasVista {
         cuadro = game.assets.get("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
         categorias = game.assets.get("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
 
+        cuadroRemplazo = game.assets.get("Imagenes/SeccionRecompensa/cuadroRemplazo.png", Texture.class);
+        
+        barraRemplazo = game.assets.get("Imagenes/SeccionRecompensa/barraRemplazo.png", Texture.class);
+
         stage.addActor(fondoImg);
-        listaHabilidades();
+
+        btnAtras = crearBoton(new Texture("Imagenes/Opciones/atras.png"));
+        btnAtras.setSize(250, 250);
+        btnAtras.setPosition(260, 760);
+    
     }
 
-    public void listaHabilidades() {
+    public void listaHabilidades(Habilidad[] habilidad, int[] tipo) {
 
         font = new BitmapFont();
 
@@ -88,10 +92,7 @@ public class RecompensasVista {
 
         for (int i = 0; i < 3; i++) {
 
-            Habilidad[] hab = modelo.getHabilidad();
-            int[] tipo = modelo.getipo();
-
-            String nombre = hab[i].getNombre();
+            String nombre = habilidad[i].getNombre();
 
             btn = crearBoton(cuadro);
             img = crearCategoria(categorias, tipo[i]);
@@ -111,6 +112,54 @@ public class RecompensasVista {
         }
 
         stage.addActor(tablaHab);
+    }
+
+    public void cuadroRemplazo(){
+        
+        Image fondoRemplazo = new Image(new TextureRegionDrawable(cuadroRemplazo));
+        fondoRemplazo.setPosition(600, 100);
+
+        font = new BitmapFont();
+
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.font = font;
+        style.fontColor = Color.WHITE;
+
+        if (tr != null) {
+            tr.remove();
+            tr.clear();
+        }
+
+        tr = new Table();
+        tr.setFillParent(true);
+        //tr.defaults().space(5);
+        tr.bottom().padBottom(220);
+        tr.left().padLeft(730);
+        //tr.setDebug(true);
+
+        botonesRemplazo.clear();
+
+        for (int i = 0; i < 4; i++) {
+
+            btnRemplazo = crearBoton(barraRemplazo);
+            btnRemplazo.setSize(600, 445);
+
+            /*lbl = new Label(nombre, style);
+            lbl.setAlignment(Align.center);
+            lbl.setTouchable(Touchable.disabled);*/
+
+            stack = new Stack();
+            stack.add(btnRemplazo);
+           // stack.add(lbl);
+
+            botonesRemplazo.add(btnRemplazo);
+
+            tr.add(stack).width(575).height(145).row();;
+        }
+
+        stage.addActor(btnAtras);
+        stage.addActor(fondoRemplazo);
+        stage.addActor(tr);
     }
 
     private ImageButton crearBoton(Texture textura) {
@@ -150,8 +199,24 @@ public class RecompensasVista {
         stage.dispose();
     }
 
+    public void limpiar() {
+        stage.clear();
+
+        Image fondoImg = new Image(new TextureRegionDrawable(fondo));
+        fondoImg.setFillParent(true);
+        fondoImg.setColor(0, 0, 0, 0.6f);
+
+        stage.addActor(fondoImg);
+
+        botonesHabilidades.clear();
+        tablaHab = null;
+    }
+
     // GETTERS
     public Stage getStage() { return stage; }
-    public ImageButton getBoton(int index) {return botonesHabilidades.get(index);}   
+    public ImageButton getBoton(int index) {return botonesHabilidades.get(index);} 
+    public ImageButton getBtnRemplazo(int index) {return botonesRemplazo.get(index);}  
     public int getCantidadHabilidades() {return botonesHabilidades.size();}
+    public int getCantidadRemplazo() {return botonesRemplazo.size();}
+    public ImageButton getBtnAtras() {return btnAtras;}
 }

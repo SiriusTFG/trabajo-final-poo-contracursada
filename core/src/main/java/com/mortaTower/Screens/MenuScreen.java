@@ -12,8 +12,8 @@ public class MenuScreen extends Screens {
 
     private MenuVista vista;
 
-    private int volMusica = 11;
-    private int volFx = 11;
+    private int volMusica = 10;
+    private int volFx = 10;
 
     public MenuScreen(Main game) {
         super(game);
@@ -28,6 +28,8 @@ public class MenuScreen extends Screens {
         game.assets.load("Imagenes/MenuInicio/cargar.png", Texture.class);
         game.assets.load("Imagenes/MenuInicio/opciones.png", Texture.class);
         game.assets.load("Imagenes/MenuInicio/salir.png", Texture.class);
+
+        game.assets.load("Imagenes/Opciones/menuOpciones.png", Texture.class);
         game.assets.finishLoading(); //obliga al juego a cargar todo antes de seguir
 
         vista = new MenuVista(viewport, game); // el viewport es del screen
@@ -64,7 +66,7 @@ public class MenuScreen extends Screens {
             
             @Override
             public void clicked(InputEvent evento, float x, float y) {
-                if (volMusica < 11) {
+                if (volMusica < 9) {
                     volMusica++;
                     game.audio.setVolumenMusica(volMusica / 11f);
                     vista.actualizarBarraMusica(volMusica);
@@ -87,7 +89,7 @@ public class MenuScreen extends Screens {
         vista.getBtnFxMas().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
-                if (volFx < 11) {
+                if (volFx < 10) {
                     volFx++;
                     game.audio.setVolumenFx(volFx / 11f);
                     game.audio.play(0);
@@ -133,12 +135,12 @@ public class MenuScreen extends Screens {
             }
         });
 
-        vista.getBtnControles().addListener(new ClickListener() {
+        /*vista.getBtnControles().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
                 vista.getCapaControles().setVisible(true);
             }
-        });
+        });*/
 
     }
 
