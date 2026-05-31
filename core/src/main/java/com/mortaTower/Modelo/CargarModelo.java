@@ -28,6 +28,4 @@ public class CargarModelo {
     public List<String> getPartidas() {return partidas;}
     public int getSeleccion() {return seleccion;}
     public void setSeleccion(int seleccion) {this.seleccion = seleccion;}
-
-    
 }

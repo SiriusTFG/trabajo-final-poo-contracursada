@@ -41,36 +41,13 @@ public class CombateModelo {
         this.resultado = resultado;
     }
 
-    // Obtiene el Nombre de la Habilidad usada
+/*     // Obtiene el Nombre de la Habilidad usada
     public String getNombreHabilidad(int indice) {
         if (heroe.getHabilidades()[indice] != null) {
             return heroe.getHabilidades()[indice].getNombre();
         }
         return "---";
-    }
-
-    public Habilidad[] getHabilidades(Habilidad[] habilidades) {
-        
-        habilidades = heroe.getHabilidades();
-
-        if (habilidades == null) {
-            return new Habilidad[0];
-        }
-
-        return habilidades;
-    } 
-
-    public List<Habilidad> getHabilidadesPorEntidad() {
-        try {
-            HabilidadDao dao = new HabilidadDao();
-
-            return dao.obtenerPorEntidad(heroe.getId(), "Heroe");
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
+    } */
 
     private Enemigo cargarEnemigo(int numPiso) {
         try {
@@ -81,6 +58,42 @@ public class CombateModelo {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public String[] getNombreHabilidadesActuales() {
+        String[] nombres = new String[4];
+        for (int i = 0; i < 4; i++) {
+            if (heroe.getHabilidades()[i] != null) {
+                nombres[i] = heroe.getHabilidades()[i].getNombre();
+            } else {
+                nombres[i] = "vacio";
+            }
+        }
+        return nombres;
+    }
+
+    public String[] getTipoHabilidadesActuales() {
+        String[] tipos = new String[4];
+        for (int i = 0; i < 4; i++) {
+            if (heroe.getHabilidades()[i] != null) {
+                tipos[i] = heroe.getHabilidades()[i].getTipo();
+            } else {
+                tipos[i] = "";
+            }
+        }
+        return tipos;
+    }
+
+    public String[] getDescripcionesHabilidadesActuales() {
+        String[] descripciones = new String[4];
+        for (int i = 0; i < 4; i++) {
+            if (heroe.getHabilidades()[i] != null) {
+                descripciones[i] = heroe.getHabilidades()[i].getDescripcion();
+            } else {
+                descripciones[i] = "";
+            }
+        }
+        return descripciones;
     }
  
     

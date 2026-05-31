@@ -1,4 +1,4 @@
-package com.mortaTower.Controlador;
+package com.mortaTower.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,9 +9,6 @@ import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
 import com.mortaTower.Modelo.RecompensasModelo;
-import com.mortaTower.Screens.CombateScreen;
-import com.mortaTower.Screens.Screens;
-import com.mortaTower.Screens.TransicionScreen;
 import com.mortaTower.Vista.RecompensasVista;
 
 public class RecompensaControlador  extends Screens{
