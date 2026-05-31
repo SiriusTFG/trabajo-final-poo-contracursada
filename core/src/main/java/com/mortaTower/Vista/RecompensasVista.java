@@ -17,18 +17,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.mortaTower.Main;
-import com.mortaTower.Modelo.Habilidad;
 
 
 public class RecompensasVista {
 
     // BOTONES
-    private ImageButton btn, btnRemplazo, btnAtras;
+    private ImageButton btn, btnRemplazo, btnAtras, btnContinuar;
     private Stage stage;
     private Stack stack;
 
     private int ancho, x;
-    private int alto, y;
+    private int alto;
     
     // TEXTURAS;
     private Texture fondo, categorias, cuadro, cuadroRemplazo, barraRemplazo;
@@ -44,11 +43,8 @@ public class RecompensasVista {
     private List<ImageButton> botonesHabilidades = new ArrayList<>();
     private List<ImageButton> botonesRemplazo = new ArrayList<>();
 
-    private List<Habilidad> habilidades;
 
     public RecompensasVista(Main game) {
-
-
         stage = new Stage();
 
         fondo = game.assets.get("Imagenes/black.png", Texture.class);
@@ -72,10 +68,8 @@ public class RecompensasVista {
     
     }
 
-    public void listaHabilidades(Habilidad[] habilidad, int[] tipo) {
-
+    public void listaHabilidades(String[] nombreHabilidades, String[] tipo) {
         font = new BitmapFont();
-
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = font;
         style.fontColor = Color.WHITE;
@@ -92,12 +86,11 @@ public class RecompensasVista {
 
         botonesHabilidades.clear();
 
-        for (int i = 0; i < habilidad.length; i++) {
-
-            String nombre = habilidad[i].getNombre();
+        for (int i = 0; i < nombreHabilidades.length; i++) {
+            String nombre = nombreHabilidades[i];
 
             btn = crearBoton(cuadro);
-            img = crearCategoria(categorias, tipo[i]);
+            img = crearIconoTipo(tipo[i]);
 
             lbl = new Label(nombre, style);
             lbl.setAlignment(Align.center);
@@ -109,14 +102,34 @@ public class RecompensasVista {
 
             botonesHabilidades.add(btn);
 
-            tablaHab.add(img).size(210, 180);
+            if (img != null) {
+                tablaHab.add(img).size(210, 180);
+            } else {
+                tablaHab.add().size(210, 180);
+            }
+
             tablaHab.add(stack).width(800).height(200).row();;
         }
-
         stage.addActor(tablaHab);
     }
 
-    public void cuadroRemplazo(List<Habilidad> hab){
+    private Image crearIconoTipo(String tipo) {
+        if (tipo == null || tipo.equalsIgnoreCase("vacio")) return null;
+
+        int columna = 0;
+        if (tipo.equalsIgnoreCase("Ataque")) columna = 0;
+        else if (tipo.equalsIgnoreCase("Defensa")) columna = 1;
+        else if (tipo.equalsIgnoreCase("Curacion")) columna = 2;
+        else if (tipo.equalsIgnoreCase("Mana")) columna = 3;
+
+        int ancho = categorias.getWidth() / 4;
+        int alto = categorias.getHeight();
+
+        TextureRegion region = new TextureRegion(categorias, columna * ancho, 0, ancho, alto);
+        return new Image(new TextureRegionDrawable(region));
+    }
+
+    public void cuadroRemplazo(String[] nombreHabilidadesActuales){
         
         Image fondoRemplazo = new Image(new TextureRegionDrawable(cuadroRemplazo));
         fondoRemplazo.setPosition(600, 100);
@@ -143,13 +156,12 @@ public class RecompensasVista {
 
         
         for (int i = 0; i < 4; i++) {
-
             btnRemplazo = crearBoton(barraRemplazo);
             btnRemplazo.setSize(600, 445);
 
-            String nombre2 = hab.get(i).getNombre();
+            String nombreViejaHabilidad = nombreHabilidadesActuales[i];
 
-            lbl = new Label(nombre2, styles);
+            lbl = new Label(nombreViejaHabilidad, styles);
             lbl.setAlignment(Align.center);
             lbl.setTouchable(Touchable.disabled);
 
@@ -165,6 +177,42 @@ public class RecompensasVista {
         stage.addActor(btnAtras);
         stage.addActor(fondoRemplazo);
         stage.addActor(tr);
+    }
+
+    public void pantallaExperiencia(int nivel, int expGanada, int expTotal, int expNecesaria) {
+        font = new BitmapFont();
+        font.getData().setScale(1.5f);
+        Label.LabelStyle styleBlanco = new Label.LabelStyle(font, Color.WHITE);
+        Label.LabelStyle styleOro = new Label.LabelStyle(font, Color.GOLD);
+
+        Table tablaExp = new Table();
+        tablaExp.setFillParent(true);
+        tablaExp.center();
+
+        Label lblTitulo = new Label("¡PISO COMPLETADO!", styleOro);
+        lblTitulo.setFontScale(2f);
+        
+        Label lblNivel = new Label("Nivel del Héroe: " + nivel, styleBlanco);
+        Label lblExpGanada = new Label("Experiencia Obtenida: +" + expGanada + " EXP", styleOro);
+        Label lblExpTotal = new Label("Progreso de Experiencia: " + expTotal + " / " + expNecesaria, styleBlanco);
+
+        //botón continuar
+        btnContinuar = crearBoton(barraRemplazo); 
+        Label lblContinuar = new Label("Siguiente Piso", styleBlanco);
+        lblContinuar.setAlignment(Align.center);
+        lblContinuar.setTouchable(Touchable.disabled);
+        
+        Stack stackBtn = new Stack();
+        stackBtn.add(btnContinuar);
+        stackBtn.add(lblContinuar);
+
+        tablaExp.add(lblTitulo).padBottom(50).row();
+        tablaExp.add(lblNivel).padBottom(20).row();
+        tablaExp.add(lblExpGanada).padBottom(20).row();
+        tablaExp.add(lblExpTotal).padBottom(60).row();
+        tablaExp.add(stackBtn).size(400, 80);
+
+        stage.addActor(tablaExp);
     }
 
     private ImageButton crearBoton(Texture textura) {
@@ -224,4 +272,5 @@ public class RecompensasVista {
     public int getCantidadHabilidades() {return botonesHabilidades.size();}
     public int getCantidadRemplazo() {return botonesRemplazo.size();}
     public ImageButton getBtnAtras() {return btnAtras;}
+    public ImageButton getBtnContinuar() {return btnContinuar;}
 }

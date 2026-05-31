@@ -41,14 +41,6 @@ public class CombateModelo {
         this.resultado = resultado;
     }
 
-/*     // Obtiene el Nombre de la Habilidad usada
-    public String getNombreHabilidad(int indice) {
-        if (heroe.getHabilidades()[indice] != null) {
-            return heroe.getHabilidades()[indice].getNombre();
-        }
-        return "---";
-    } */
-
     public List<Habilidad> getHabilidadesPor() {
         try {
             HabilidadDao dao = new HabilidadDao();

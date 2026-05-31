@@ -7,10 +7,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mortaTower.DAO.PartidaDao;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
+import com.mortaTower.Modelo.Partida;
 import com.mortaTower.Modelo.RecompensasModelo;
 import com.mortaTower.Vista.RecompensasVista;
 
@@ -28,7 +30,8 @@ public class RecompensaControlador  extends Screens{
     private int habSelecionada;
     private int[] tipo;
 
-    private enum EstadoRecompensa {LISTA_HABILIDADES, REEMPLAZO}
+    private enum EstadoRecompensa {LISTA_HABILIDADES, REEMPLAZO, RESUMEN_EXP}
+    private int expPorGanar = 50;
     private EstadoRecompensa estado = EstadoRecompensa.LISTA_HABILIDADES;
 
     public RecompensaControlador(Main game, int nivel) {
@@ -36,12 +39,12 @@ public class RecompensaControlador  extends Screens{
         super(game);
         this.nivel = nivel;
         Heroe heroe = game.getPartidaActual().getHeroe();
-        modeloRecompensa= new RecompensasModelo();
+        modeloRecompensa= new RecompensasModelo(heroe);
         combateModelo = new CombateModelo(heroe, nivel);
 
         habilidad = modeloRecompensa.getHabilidad();
-        habilidadActual = combateModelo.getHabilidadesPorEntidad();
-        tipo = modeloRecompensa.getipo();
+       // habilidadActual = combateModelo.getHabilidadesPorEntidad();
+        //tipo = modeloRecompensa.getipo();
 
         cargarAssets();
 
@@ -49,11 +52,11 @@ public class RecompensaControlador  extends Screens{
     }
 
     public void mostrar() {
+        String[] nombresRecompensas = modeloRecompensa.getNombresRecompensas();
+        String[] tipoRecompensas = modeloRecompensa.getTipoRecompensas();
 
-        vistaRecompensa.listaHabilidades(habilidad, tipo);
-
+        vistaRecompensa.listaHabilidades(nombresRecompensas, tipoRecompensas);
         Gdx.input.setInputProcessor(vistaRecompensa.getStage());
-
         listenersRecompensas();   
     }
 
@@ -64,18 +67,13 @@ public class RecompensaControlador  extends Screens{
     }
 
     private void listenersRecompensas() {
-
         int cantidad = vistaRecompensa.getCantidadHabilidades();
 
         for (int i = 0; i < cantidad; i++) {
-
             int id = i;
-            
             vistaRecompensa.getBoton(i).addListener(new ClickListener() {
-
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-
                     //recompensaSeleccionada = modeloRecompensa.getHabilidad()[id];
                     habSelecionada = id;
                     cambiarEstado(EstadoRecompensa.REEMPLAZO);
@@ -84,33 +82,29 @@ public class RecompensaControlador  extends Screens{
         }
 
        vistaRecompensa.getBtnAtras().addListener(new ClickListener() {
-
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-
                     cambiarEstado(EstadoRecompensa.LISTA_HABILIDADES);
                 }
         });
 
         int cant = vistaRecompensa.getCantidadRemplazo();
-
         for (int i = 0; i < cant; i++) {
-
             int slot = i;
-
             vistaRecompensa.getBtnRemplazo(i).addListener(new ClickListener() {
-
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-
                     try {
-                        modeloRecompensa.reemplazarHab(habSelecionada, slot);
+                        int idPartidaActual = game.getPartidaActual().getId();
+                        modeloRecompensa.reemplazarHab(idPartidaActual, habSelecionada, slot);
+                        Habilidad nuevaHabilidad = modeloRecompensa.getHabilidad()[habSelecionada];
+                        game.getPartidaActual().getHeroe().setHabilidad(slot, nuevaHabilidad);
                     } catch (SQLException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-
-                    game.setScreen(new TransicionScreen(game, RecompensaControlador.this, new CombateScreen(game, nivel + 1)));
+                    //game.setScreen(new TransicionScreen(game, RecompensaControlador.this, new CombateScreen(game, nivel + 1)));
+                    cambiarEstado(EstadoRecompensa.RESUMEN_EXP);
                 }
                 
             });
@@ -126,14 +120,43 @@ public class RecompensaControlador  extends Screens{
 
             case LISTA_HABILIDADES:
                 vistaRecompensa.limpiar();
-                vistaRecompensa.listaHabilidades(habilidad, tipo);
+                String[] nombreRecompensas = modeloRecompensa.getNombresRecompensas();
+                String[] tipoRecompensa = modeloRecompensa.getTipoRecompensas();
+                vistaRecompensa.listaHabilidades(nombreRecompensas, tipoRecompensa);
                 listenersRecompensas();
                 break;
 
             case REEMPLAZO:
                 vistaRecompensa.limpiar();
-                vistaRecompensa.cuadroRemplazo(habilidadActual);
+                String[] nombresActuales = modeloRecompensa.getNombresHabilidadesActuales();
+                vistaRecompensa.cuadroRemplazo(nombresActuales);
                 listenersRecompensas();
+                break;
+
+            case RESUMEN_EXP : 
+                vistaRecompensa.limpiar();
+                Heroe heroe = game.getPartidaActual().getHeroe();
+                heroe.ganarExperiencia(expPorGanar);
+                heroe.curarAlMaximo();
+                vistaRecompensa.pantallaExperiencia(heroe.getNivel(), expPorGanar, heroe.getExperiencia(), heroe.getExperienciaNecesaria());
+
+                vistaRecompensa.getBtnContinuar().addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        try {
+                            Partida partidaActual = game.getPartidaActual();
+                            partidaActual.setPisoActual(nivel + 1);
+                            PartidaDao partidaDao = new PartidaDao();
+                            partidaDao.guardarProgreso(partidaActual);
+                            
+                            System.out.println("Partida guardada exitosamente. Avanzando al piso " + (nivel + 1));
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                            System.err.println("Error al intentar guardar la partida.");
+                        }
+                        game.setScreen(new TransicionScreen(game, RecompensaControlador.this, new CombateScreen(game, nivel + 1)));
+                    }
+                });
                 break;
         }
     }

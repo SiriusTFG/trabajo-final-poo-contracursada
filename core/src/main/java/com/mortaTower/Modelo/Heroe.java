@@ -9,7 +9,6 @@ public class Heroe extends Entidad {
     
     public Heroe(String nombre, int vida, int mana) {
         super(nombre, vida, mana);
-
         this.experiencia = 0;
         this.nivel = 1;
         this.experienciaNecesaria = 100; // Ejemplo de experiencia necesaria para subir de nivel
@@ -22,6 +21,7 @@ public class Heroe extends Entidad {
         this.experiencia = experiencia;
         this.ataque = ataque;
         this.defensa = defensa;
+        this.experienciaNecesaria = 100 + ((this.nivel - 1) * 50);
     }
 
     public void avanzarCooldowns() {
@@ -60,6 +60,12 @@ public class Heroe extends Entidad {
         }
 
         habilidadSeleccionada = habilidad;
+    }
+
+    public void curarAlMaximo() {
+        this.vidaActual = this.vidaMax;
+        this.manaActual = this.manaMax;
+        System.out.println(this.getNombre() + " se ha curado por completo para el próximo piso.");
     }
 
     @Override

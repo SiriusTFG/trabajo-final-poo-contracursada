@@ -1,7 +1,5 @@
 package com.mortaTower.Screens;
 
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -78,16 +76,14 @@ public class CombateScreen extends Screens {
     public void show() {
         cargarAssets();
         
-        if (nivel == 1){
+        /* if (nivel == 1){
         hab = modelo.getHabilidadesPorEntidad();
         }else{
 
             hab = modelo.getHabilidadesPor();
-        }
+        } */
 
-        vista = new CombateVista(viewport,modelo,game,nivel,hab);
-
-        vista = new CombateVista(viewport, modelo, game, nivel);
+        vista = new CombateVista(viewport, game, nivel);
         vistaPausa = new PausaVista(game);
         opcionesVista = new OpcionesVista(viewport, game);
 
@@ -205,11 +201,11 @@ public class CombateScreen extends Screens {
         });
     }
 
-    private void listenersHabilidades() {
+    private void listenersHabilidades(String[] descripciones) {
 
-        int cantidad = vista.getCantidadHabilidades();
+        //int cantidad = vista.getCantidadHabilidades();
 
-        for (int i = 0; i < cantidad; i++) {
+        for (int i = 0; i < 4; i++) {
 
             final int index = i;
             final String desc = descripciones[i];
@@ -262,7 +258,13 @@ public class CombateScreen extends Screens {
         
         String mensaje = modelo.getMensajeCombate();
 
-        vista.dibujarSprite(spriteBatch);
+        vista.dibujarSprite(spriteBatch, 
+            modelo.getHeroe().getEstadoActual(), 
+            modelo.getHeroe().getStatetime(), 
+            modelo.getHeroe().getNombre(),
+            modelo.getEnemigo().getEstadoActual(), 
+            modelo.getEnemigo().getStatetime(), 
+            modelo.getEnemigo().getNombre());
         vista.comentarista(spriteBatch, mensaje);
 
         vista.resultado(spriteBatch, resultado); 
@@ -333,7 +335,8 @@ public class CombateScreen extends Screens {
 
         spriteBatch.end();
 
-        vista.dibujarInterfaz(spriteBatch);
+        vista.dibujarInterfazHeroe(spriteBatch, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax());
+        vista.dibujarInterfazEnemigo(spriteBatch, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), modelo.getEnemigo().getManaActual(), modelo.getEnemigo().getManaMax());
 
         if (victoriaProcesada) {
 

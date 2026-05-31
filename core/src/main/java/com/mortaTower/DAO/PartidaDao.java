@@ -119,8 +119,8 @@ public class PartidaDao {
             pstmt.setInt(4, heroe.getManaMax());
             pstmt.setInt(5, heroe.getAtaque());
             pstmt.setDouble(6, heroe.getDefensa());
-            pstmt.setInt(6, partida.getPisoActual());
-            pstmt.setInt(7, partida.getId());
+            pstmt.setInt(7, partida.getPisoActual());
+            pstmt.setInt(8, partida.getId());
             pstmt.executeUpdate();
         }
     }

@@ -26,17 +26,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mortaTower.Main;
-import com.mortaTower.Modelo.CombateModelo;
-import com.mortaTower.Modelo.Enemigo;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Goblin;
-import com.mortaTower.Modelo.Heroe;
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
 public class CombateVista {
 
-    private final CombateModelo modelo;
     private final Stage stage;
 
     private float ancho, x;
@@ -76,9 +72,9 @@ public class CombateVista {
     private Texture derrota;
 
     // CONSTRUCTOR
-    public CombateVista(FitViewport viewport, CombateModelo modelo, Main game, int nivel) {
+    public CombateVista(FitViewport viewport, Main game, int nivel) {
 
-        this.modelo = modelo;
+        //this.modelo = modelo;
         this.stage = new Stage(viewport, game.batch);
 
         // fondo nivel
@@ -252,17 +248,22 @@ public class CombateVista {
     }
 
     // BARRA DE VIDA/MANA
-    public void dibujarInterfaz(SpriteBatch batch) {
-
+    public void dibujarInterfazHeroe(SpriteBatch batch, int vidaActual, int vidaMax, int manaActual, int manaMax) {
         sr.setProjectionMatrix(batch.getProjectionMatrix());
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        if (modelo.getHeroe() != null && modelo.getEnemigo() != null) {
-            dibujarBarra(120, 132, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), Color.GREEN);
-            dibujarBarra(120, 106, modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax(), Color.BLUE);
-            dibujarBarra(977, 136, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), Color.RED);
-            dibujarBarra(977, 110, modelo.getEnemigo().getManaActual(), modelo.getEnemigo().getManaMax(), Color.BLUE);
-        }
+        dibujarBarra(120, 132, vidaActual, vidaMax, Color.GREEN);
+        dibujarBarra(120, 106, manaActual, manaMax, Color.BLUE);
+        
+        sr.end();
+    }
+
+    public void dibujarInterfazEnemigo(SpriteBatch batch, int vidaActual, int vidaMax, int manaActual, int manaMax) {
+        sr.setProjectionMatrix(batch.getProjectionMatrix());
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+
+        dibujarBarra(977, 136, vidaActual, vidaMax, Color.RED);
+        dibujarBarra(977, 110, manaActual, manaMax, Color.BLUE);
         
         sr.end();
     }
@@ -278,33 +279,23 @@ public class CombateVista {
         sr.rect(x, y, ancho * porcentaje, 20);
     }
 
-    public void dibujarSprite(SpriteBatch batch) {
-        Heroe heroe = modelo.getHeroe();
-        Enemigo enemigo = modelo.getEnemigo();
-        font.setColor(Color.WHITE);
+    public void dibujarSprite(SpriteBatch batch, Entidad.Estado estadoHeroe, float timeHeroe, String nombreHeroe, 
+                                Entidad.Estado estadoEnemigo, float timeEnemigo, String nombreEnemigo) {
+        font.setColor(Color.WHITE);;
 
-        if (heroe != null) {
-           Entidad.Estado estadoHeroe = heroe.getEstadoActual();
-
-           Animation <TextureRegion> animacion = animHeroe.get(estadoHeroe);
-            
-            if (animacion != null) {
-                TextureRegion frame = animacion.getKeyFrame(heroe.getStatetime(), true);
-                batch.draw(frame, WORLD_WIDTH * 0.15f, WORLD_HEIGHT * 0.40f, 150, 150);
-                String nombreHeroe = heroe.getNombre();
-                font.draw(batch, nombreHeroe, 157, 188);
-            }
+        Animation <TextureRegion> animacionH = animHeroe.get(estadoHeroe);
+        if (animacionH != null) {
+            TextureRegion frame = animacionH.getKeyFrame(timeHeroe, true);
+            batch.draw(frame, WORLD_WIDTH * 0.15f, WORLD_HEIGHT * 0.40f, 150, 150);
+            font.draw(batch, nombreHeroe, 157, 188);
         }
-        if (enemigo != null) {
-            Animation <TextureRegion> animacion = animEnemigo.get(enemigo.getEstadoActual());
-            
-            if (animacion != null) {
-                TextureRegion frame = animacion.getKeyFrame(enemigo.getStatetime(), true);
-                batch.draw(frame, WORLD_WIDTH * 0.65f, WORLD_HEIGHT * 0.40f, 150, 150);
-                String nombreEnemigo = enemigo.getNombre();
-                font.draw(batch, nombreEnemigo, 957, 188);
-            }
-           }
+
+        Animation <TextureRegion> animacionE = animEnemigo.get(estadoEnemigo);   
+        if (animacionE != null) {
+            TextureRegion frame = animacionE.getKeyFrame(timeEnemigo, true);
+            batch.draw(frame, WORLD_WIDTH * 0.65f, WORLD_HEIGHT * 0.40f, 150, 150);;
+            font.draw(batch, nombreEnemigo, 957, 188);
+        }
     }
 
     private void cargarAnimaciones() {
