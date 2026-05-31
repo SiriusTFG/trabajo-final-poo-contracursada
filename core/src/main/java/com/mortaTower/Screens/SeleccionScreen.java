@@ -24,14 +24,6 @@ public class SeleccionScreen extends Screens {
 
     @Override
     public void show() {
-        game.assets.load("Imagenes/SeleccionPersonaje/seleccionPersonaje.png", Texture.class);
-        game.assets.load("Imagenes/SeleccionPersonaje/nombrePersonaje.png", Texture.class);
-        game.assets.load("Imagenes/SeleccionPersonaje/seleccionCaballero.png", Texture.class);
-        game.assets.load("Imagenes/SeleccionPersonaje/seleccionMago.png", Texture.class);
-        game.assets.load("Imagenes/CargarPartida/menuSinespacio.png", Texture.class);
-        game.assets.load("Imagenes/CargarPartida/IrPartidasGuardadas.png", Texture.class);
-        game.assets.load("Imagenes/CargarPartida/IrPartidasGuardadas1.png", Texture.class);
-        game.assets.finishLoading();
 
         vista = new SeleccionVista(viewport, game);
         Gdx.input.setInputProcessor(vista.getStage());
@@ -66,8 +58,10 @@ public class SeleccionScreen extends Screens {
             public void clicked(InputEvent evento, float x, float y) {
                 game.audio.play(4);
                 idHereoSelc = -1;
-                vista.getNombrePartida().setVisible(false);
-                vista.getCapaIngresoNombre().setVisible(false);
+
+                vista.ingresoNombre(false);
+               // vista.getNombrePartida().setVisible(false);
+                //vista.getCapaIngresoNombre().setVisible(false);
                 vista.getCapaPrincipal().setVisible(true);
             }
         });
@@ -103,9 +97,9 @@ public class SeleccionScreen extends Screens {
     }
 
     private void mostrarIngresoNombre() {
+        
         vista.getCapaPrincipal().setVisible(false);
-        vista.getCapaIngresoNombre().setVisible(true);
-        vista.getNombrePartida().setVisible(true);
+        vista.ingresoNombre(true);
     }
 
     public Partida confirmarYCrearPartida(String nombrePartida, int idHeroe) throws SQLException {

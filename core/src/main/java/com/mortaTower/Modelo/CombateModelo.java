@@ -41,6 +41,29 @@ public class CombateModelo {
         this.resultado = resultado;
     }
 
+<<<<<<< Updated upstream
+=======
+/*     // Obtiene el Nombre de la Habilidad usada
+    public String getNombreHabilidad(int indice) {
+        if (heroe.getHabilidades()[indice] != null) {
+            return heroe.getHabilidades()[indice].getNombre();
+        }
+        return "---";
+    } */
+
+    public List<Habilidad> getHabilidadesPorEntidad() {
+        try {
+            HabilidadDao dao = new HabilidadDao();
+
+            return dao.obtenerPorEntidad(heroe.getId(), "Heroe");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+>>>>>>> Stashed changes
     public List<Habilidad> getHabilidadesPor() {
         try {
             HabilidadDao dao = new HabilidadDao();

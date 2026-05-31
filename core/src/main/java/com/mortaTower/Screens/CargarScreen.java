@@ -43,6 +43,7 @@ public class CargarScreen extends Screens {
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    
                     game.audio.play(2);
                     modelo.setSeleccion(index);
                     cargarPartidaSeleccionada();

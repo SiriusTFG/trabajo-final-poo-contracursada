@@ -32,7 +32,7 @@ public class PausaVista {
         btnOpciones = crearBoton(game.assets.get("Imagenes/MenuInicio/opciones.png", Texture.class));
         btnSalir = crearBoton(game.assets.get("Imagenes/MenuInicio/salir.png", Texture.class));
 
-         // Layout
+        // Layout
         Table tabla = new Table();
         tabla.setFillParent(true); //ocupa la pantalla
 

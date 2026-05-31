@@ -34,15 +34,15 @@ public class OpcionesVista {
         stage = new Stage(viewport, game.batch);
 
         // TEXTURAS
-        transparencia = new Texture("Imagenes/black.png");
-        fondo = new Texture("Imagenes/Opciones/menuOpciones.png");
-        atras = new Texture("Imagenes/Opciones/atras.png");
+        transparencia = game.assets.get("Imagenes/black.png", Texture.class);
+        fondo = game.assets.get("Imagenes/Opciones/menuOpciones.png", Texture.class);
+        atras = game.assets.get("Imagenes/Opciones/atras.png", Texture.class);
 
-        musicaTex = new Texture("Imagenes/Opciones/volMusica.png");
-        efectosTex = new Texture("Imagenes/Opciones/volEfectos.png");
+        musicaTex = game.assets.get("Imagenes/Opciones/volMusica.png", Texture.class);
+        efectosTex = game.assets.get("Imagenes/Opciones/volEfectos.png", Texture.class);
 
-        Texture texMenos = new Texture("Imagenes/Opciones/btnMenos.png");
-        Texture texMas = new Texture("Imagenes/Opciones/btnMas.png");
+        Texture texMenos = game.assets.get("Imagenes/Opciones/btnMenos.png", Texture.class);
+        Texture texMas = game.assets.get("Imagenes/Opciones/btnMas.png", Texture.class);
 
         // =========================
         // SPLIT CORRECTO (10 niveles)

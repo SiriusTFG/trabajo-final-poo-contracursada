@@ -28,6 +28,11 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Goblin;
+<<<<<<< Updated upstream
+=======
+import com.mortaTower.Modelo.Habilidad;
+import com.mortaTower.Modelo.Heroe;
+>>>>>>> Stashed changes
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
@@ -43,6 +48,7 @@ public class CombateVista {
     private Texture fondo, statusEnemigo, statusHeroe;
     
     private GlyphLayout layout; 
+    private ImageButton btnPausa;
 
     private List<ImageButton> botonesHabilidades = new ArrayList<>();
 
@@ -72,7 +78,11 @@ public class CombateVista {
     private Texture derrota;
 
     // CONSTRUCTOR
+<<<<<<< Updated upstream
     public CombateVista(FitViewport viewport, Main game, int nivel) {
+=======
+    public CombateVista(FitViewport viewport, CombateModelo modelo, Main game, int nivel, List<Habilidad> hab) {
+>>>>>>> Stashed changes
 
         //this.modelo = modelo;
         this.stage = new Stage(viewport, game.batch);
@@ -82,6 +92,13 @@ public class CombateVista {
         imgFondoGeneral = new Image(fondo);
         imgFondoGeneral.setPosition(0, 0);
         imgFondoGeneral.setSize(WORLD_WIDTH, WORLD_HEIGHT);
+
+        // Boton Pausa
+        Texture texBoton = game.assets.get("Imagenes/Opciones/pausa.png", Texture.class);
+        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(texBoton));
+        btnPausa = new ImageButton(drawable);
+        btnPausa.setSize(100, 100);
+        btnPausa.setPosition(0, 620);
 
         // cuadro stats del Heroe
         statusHeroe = game.assets.get("Imagenes/Combate/vidaHeroe.png", Texture.class);
@@ -117,6 +134,7 @@ public class CombateVista {
         lblDescripcion.setWrap(true);
 
         stage.addActor(imgFondoGeneral); 
+        stage.addActor(btnPausa);
         stage.addActor(stsHeroe); 
         stage.addActor(stsEnemigo); 
         crearUIInventario();
@@ -394,7 +412,9 @@ public class CombateVista {
 
     // GETTERS
     public Stage getStage() {return stage;}
+    public ImageButton getBtnPausa() {return btnPausa;}
     public ImageButton getBotonHabilidad(int index) {return botonesHabilidades.get(index);}   
+    public int getCantidadHabilidades() {return botonesHabilidades.size();}
 
     public float getTiempoAnimacionHeroe(Entidad.Estado estado){
         Animation<TextureRegion> animacion = animHeroe.get(estado);

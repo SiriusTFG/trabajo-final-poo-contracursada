@@ -1,13 +1,13 @@
 package com.mortaTower.Screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Hilo.GoblinAtacante;
 import com.mortaTower.Main;
+import com.mortaTower.Controlador.PausaControlador;
+import com.mortaTower.Controlador.RecompensaControlador;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.CombateModelo.Resultado;
 import com.mortaTower.Modelo.Entidad;
@@ -16,34 +16,29 @@ import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
-import com.mortaTower.Vista.OpcionesVista;
-import com.mortaTower.Vista.PausaVista;
+
 
 public class CombateScreen extends Screens {
 
     private CombateModelo modelo;
-    private RecompensaControlador recompensaControlador;
-    
-    private int volMusica = 9;
-    private int volFx = 9;
+    private PausaControlador pausaControlador;
 
-    private boolean mostrarOpciones = false;
+    private RecompensaControlador recompensaControlador;
+
     private CombateVista vista;     
-    private PausaVista vistaPausa;
-    private OpcionesVista opcionesVista;
 
     private boolean victoriaProcesada = false;
     private boolean danioAplicado;
     private int nivel;
+
+    private List<Habilidad> hab;
 
     private float contador = 0;
     private float tiempoPausa;
     private boolean proximoTurnoJugador;
 
     private boolean pausa = false;
-    private boolean opciones = false;
     private boolean seleccionandoReemplazo = false;
-    private Habilidad recompensaSeleccionada;
 
     private String resultado;
 
@@ -63,29 +58,23 @@ public class CombateScreen extends Screens {
         Heroe heroe = game.getPartidaActual().getHeroe();
         
         modelo = new CombateModelo(heroe, nivel);
+        
         recompensaControlador = new RecompensaControlador(game, this.nivel);
 
-        if (modelo.getEnemigo() != null) {
-            modelo.getEnemigo().cambiarComportamiento(new ComportamientoAgresivo());
-        }
-        
-        
+        if (modelo.getEnemigo() != null) {modelo.getEnemigo().cambiarComportamiento(new ComportamientoAgresivo());}
     }
 
     @Override
     public void show() {
-        cargarAssets();
         
-        /* if (nivel == 1){
-        hab = modelo.getHabilidadesPorEntidad();
+        if (nivel == 1){
+            hab = modelo.getHabilidadesPorEntidad();
         }else{
-
             hab = modelo.getHabilidadesPor();
         } */
 
-        vista = new CombateVista(viewport, game, nivel);
-        vistaPausa = new PausaVista(game);
-        opcionesVista = new OpcionesVista(viewport, game);
+        vista = new CombateVista(viewport,modelo,game,nivel,hab);
+        pausaControlador = new PausaControlador(game, vista.getStage());
 
         // un input a la vez
         setInput(vista.getStage());
@@ -95,27 +84,12 @@ public class CombateScreen extends Screens {
         String[] descripciones = modelo.getDescripcionesHabilidadesActuales();
         vista.cargarInventarioHabilidades(nombresHabilidades, tiposHabilidades);
 
-        vistaPausa.getBtnRenudar().addListener(new ClickListener() {
+        vista.getBtnPausa().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                pausa = false;
-                setInput(vista.getStage());
-            }
-        });
-
-        vistaPausa.getBtnOpciones().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                //pausa = false;
-                opciones = true;
-                setInput(opcionesVista.getStage());
-            }
-        });
-
-        vistaPausa.getBtnSalir().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new TransicionScreen(game, CombateScreen.this, new MenuScreen(game)));
+                
+                pausaControlador.setOpciones(true);
+                setInput(pausaControlador.getVista().getStage());
             }
         });
 
@@ -136,81 +110,23 @@ public class CombateScreen extends Screens {
             });
         });
 
-        configurarListenersOpcines();
-        listenersHabilidades(descripciones);
+        listenersHabilidades(); //descripciones
     }
 
     private void setInput(Stage stageActivo) {
         Gdx.input.setInputProcessor(stageActivo);
     }
 
-    private void configurarListenersOpcines() {
-        opcionesVista.getBtnMusicaMas().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent evento, float x, float y) {
-                if (volMusica < 9) {
-                    volMusica++;
-                    game.audio.setVolumenMusica(volMusica / 9f);
-                    opcionesVista.actualizarBarraMusica(volMusica);
-                }
-            }
-        });
+    private void listenersHabilidades() {
 
-        opcionesVista.getBtnMusicaMenos().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent evento, float x, float y) {
-                if (volMusica > 0) {
-                    volMusica--;
-                    game.audio.setVolumenMusica(volMusica / 9f);
-                    opcionesVista.actualizarBarraMusica(volMusica);
-                }
-            }
-        });
-
-        opcionesVista.getBtnFxMas().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent evento, float x, float y) {
-                if (volFx < 9) {
-                    volFx++;
-                    game.audio.setVolumenFx(volFx / 9f);
-                    game.audio.play(0);
-                    opcionesVista.actualizarBarraEfectos(volFx);
-                }
-            }
-        });
-
-        opcionesVista.getBtnFxMenos().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent evento, float x, float y) {
-                if (volFx > 0) {
-                    volFx--;
-                    game.audio.setVolumenFx(volFx / 9f);
-                    game.audio.play(0);
-                    opcionesVista.actualizarBarraEfectos(volFx);
-                }
-            }
-        });
-
-        opcionesVista.getBtnAtras().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent evento, float x, float y) {
-                game.audio.play(4);
-                opciones = false;
-                setInput(vistaPausa.getStage());
-            }
-        });
-    }
-
-    private void listenersHabilidades(String[] descripciones) {
-
-        //int cantidad = vista.getCantidadHabilidades();
+        int cantidad = vista.getCantidadHabilidades();
 
         for (int i = 0; i < 4; i++) {
 
             final int index = i;
-            final String desc = descripciones[i];
+            //final String desc = descripciones[i];
             vista.getBotonHabilidad(i).addListener(new ClickListener() {
-                @Override
+               /* @Override
                 public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
                     vista.setTextoDescripcion(desc);
                 }
@@ -218,7 +134,7 @@ public class CombateScreen extends Screens {
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor toActor) {
                     vista.setTextoDescripcion(""); // Limpiamos el texto
-                }
+                }*/
                 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -233,23 +149,6 @@ public class CombateScreen extends Screens {
     public void render(float delta) {
 
         super.render(delta);
-
-        // Toggle pausa
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-
-            if (opciones) {
-                opciones = false;
-                setInput(vistaPausa.getStage());
-            } else {
-                pausa = !pausa;
-
-                if (pausa) {
-                    setInput(vistaPausa.getStage());
-                } else {
-                    setInput(vista.getStage());
-                }
-            }
-        }
 
         vista.getStage().act(delta);
         vista.getStage().draw();
@@ -345,87 +244,78 @@ public class CombateScreen extends Screens {
             return;
         }
 
-        if (opciones) {
-            opcionesVista.getStage().act(delta);
-            opcionesVista.getStage().draw();
-            return;
-        }
-
-        if (pausa) {
-            vistaPausa.getStage().act(delta);
-            vistaPausa.getStage().draw();
-            return;
-        }
-
-        // LÓGICA SOLO SI NO PAUSADO
-        if (!pausa) {
-
-            modelo.getHeroe().actualizarAnimacion(delta);
-            if (modelo.getEnemigo() != null) {
-                modelo.getEnemigo().actualizarAnimacion(delta);
-            }
-
-            switch (modelo.getTurnoActual()) {
-
-                case JUGADOR -> {
-                    vista.mostrarInventario();
+        if (pausaControlador.opciones()) {
     
-                }
+            pausaControlador.render(delta);
+            return;
+        }
 
-                case ENEMIGO -> {
-                    contador += delta;
-                    if (contador >= tiempoPausa) {
-                        ejecutarTurnoEnemigo();
-                        modelo.setTurnoActual(CombateModelo.Turno.PROCESANDO);
-                        proximoTurnoJugador = true;
-                        contador = 0;
-                    }
-                }
 
-                case PROCESANDO -> {
-                    contador += delta;
-                    if (contador >= tiempoPausa / 2.0f && !danioAplicado) {
-                     if (proximoTurnoJugador == false) {
-                        modelo.getHeroe().realizarTurno(modelo.getEnemigo());
+        modelo.getHeroe().actualizarAnimacion(delta);
+        if (modelo.getEnemigo() != null) {
+            modelo.getEnemigo().actualizarAnimacion(delta);
+        }
+
+        switch (modelo.getTurnoActual()) {
+
+            case JUGADOR -> {
+                vista.mostrarInventario();
+
+            }
+
+            case ENEMIGO -> {
+                contador += delta;
+                if (contador >= tiempoPausa) {
+                    ejecutarTurnoEnemigo();
+                    modelo.setTurnoActual(CombateModelo.Turno.PROCESANDO);
+                    proximoTurnoJugador = true;
+                    contador = 0;
+                }
+            }
+
+            case PROCESANDO -> {
+                contador += delta;
+                if (contador >= tiempoPausa / 2.0f && !danioAplicado) {
+                    if (proximoTurnoJugador == false) {
+                    modelo.getHeroe().realizarTurno(modelo.getEnemigo());
+                } else {
+                    modelo.getEnemigo().realizarTurno(modelo.getHeroe());
+                }                                     
+                    danioAplicado = true;
+                }
+                if (contador >= tiempoPausa) {
+                    modelo.getHeroe().setEstadoActual(Entidad.Estado.PARADO);
+                    modelo.getEnemigo().setEstadoActual(Entidad.Estado.PARADO);
+
+                    if (modelo.getEnemigo().getVidaActual() <= 0) {
+                        modelo.setResultado(CombateModelo.Resultado.VICTORIA);
+                        resultado = "victoria";
+                        modelo.getEnemigo().setEstadoActual(Entidad.Estado.MUERTE);
+
+
+                    } else if (modelo.getHeroe().getVidaActual() <= 0) {
+                        modelo.setResultado(CombateModelo.Resultado.DERROTA);
+                        resultado = "derrota";
+                        modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
+
                     } else {
-                        modelo.getEnemigo().realizarTurno(modelo.getHeroe());
-                    }                                     
-                        danioAplicado = true;
+                        modelo.setTurnoActual(
+                            proximoTurnoJugador
+                                ? CombateModelo.Turno.JUGADOR
+                                : CombateModelo.Turno.ENEMIGO
+                        );
                     }
-                    if (contador >= tiempoPausa) {
-                        modelo.getHeroe().setEstadoActual(Entidad.Estado.PARADO);
-                        modelo.getEnemigo().setEstadoActual(Entidad.Estado.PARADO);
 
-                        if (modelo.getEnemigo().getVidaActual() <= 0) {
-                            modelo.setResultado(CombateModelo.Resultado.VICTORIA);
-                            resultado = "victoria";
-                            modelo.getEnemigo().setEstadoActual(Entidad.Estado.MUERTE);
-
-
-                        } else if (modelo.getHeroe().getVidaActual() <= 0) {
-                            modelo.setResultado(CombateModelo.Resultado.DERROTA);
-                            resultado = "derrota";
-                            modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
-
-                        } else {
-                            modelo.setTurnoActual(
-                                proximoTurnoJugador
-                                    ? CombateModelo.Turno.JUGADOR
-                                    : CombateModelo.Turno.ENEMIGO
-                            );
-                        }
-
-                        contador = 0;
-                    }
+                    contador = 0;
                 }
             }
+        }
 
-            if (modelo.getResultado() == Resultado.VICTORIA && !seleccionandoReemplazo) {
-                
-                victoriaProcesada = true;
-                recompensaControlador.mostrar();
-                setInput(recompensaControlador.getVista().getStage());
-            }
+        if (modelo.getResultado() == Resultado.VICTORIA && !seleccionandoReemplazo) {
+            
+            victoriaProcesada = true;
+            recompensaControlador.mostrar();
+            setInput(recompensaControlador.getVista().getStage());
         }
     }
 
@@ -465,38 +355,7 @@ public class CombateScreen extends Screens {
            // modelo.getEnemigo().realizarTurno(modelo.getHeroe());
 
             modelo.mostrarMensaje( modelo.getEnemigo().getNombre() + " usó " + modelo.getEnemigo().getUltimaHabilidadUsada() + "!");
-            //probar sprites y estados.
-            //modelo.getEnemigo().setEstadoActual(Entidad.Estado.ATAQUE);
-            //modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
-           // modelo.mostrarMensaje (modelo.getEnemigo().getNombre() + " ataca");
-           // modelo.getEnemigo().realizarTurno(modelo.getHeroe());
-           // game.teclado.resetPresiones();
         }
-    }
-
-    private void cargarAssets() {
-
-        game.assets.load("Imagenes/Combate/categorias.png", Texture.class);
-        game.assets.load("Imagenes/Combate/inventario2.png", Texture.class);
-        game.assets.load("Imagenes/Combate/cuadroHabilidad.png", Texture.class);
-
-        game.assets.load("Imagenes/Combate/vidaHeroe.png", Texture.class);
-        game.assets.load("Imagenes/Combate/vidaEnemigo.png", Texture.class);
-
-        game.assets.load("Imagenes/Combate/victoria.png", Texture.class);
-        game.assets.load("Imagenes/Combate/derrota.png", Texture.class);
-
-        game.assets.load("Imagenes/Combate/nivel1.png", Texture.class);
-        game.assets.load("Imagenes/Combate/nivel2.png", Texture.class);
-        game.assets.load("Imagenes/Combate/nivel3.png", Texture.class);
-        game.assets.load("Imagenes/Combate/nivel4.png", Texture.class);
-        game.assets.load("Imagenes/Combate/nivel5.png", Texture.class);
-
-        // PAUSA
-        game.assets.load("Imagenes/black.png", Texture.class);
-        game.assets.load("Imagenes/MenuInicio/renudar.png", Texture.class);
-
-        game.assets.finishLoading();
     }
 
     @Override

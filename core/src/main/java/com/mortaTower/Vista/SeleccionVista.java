@@ -26,84 +26,37 @@ public class SeleccionVista {
     private Group capaSinEspacio;
     private ImageButton btnIrPartidasGuardadas;
 
-    //botones y texto
     private ImageButton btnCaballero, btnMago, btnAtras, btnAtrasNombre, btnIniciarPartida;
     private TextField nombrePartida;
-    private final BitmapFont fuente;
-    private final TextField.TextFieldStyle style;
+    private  BitmapFont fuente;
+    private  TextField.TextFieldStyle style;
 
     public SeleccionVista(FitViewport viewport, Main game) {
+
         stage = new Stage(viewport, game.batch);
 
-        //capa seleccion
+        //Fondo
         Texture fondo = game.assets.get("Imagenes/SeleccionPersonaje/seleccionPersonaje.png", Texture.class);
         Image imgFondo = new Image(fondo);
         imgFondo.setSize(stage.getWidth(), stage.getHeight());
-        stage.addActor(imgFondo);
-
-        capaPrincipal = new Table();
-        capaPrincipal.setFillParent(true);
-        capaPrincipal.bottom().padBottom(50);
-        capaPrincipal.left().padLeft(140);
-       //capaPrincipal.debug();
-
+        
+        // Botones
         btnCaballero = crearBoton(game.assets.get("Imagenes/SeleccionPersonaje/seleccionCaballero.png", Texture.class));
         btnMago = crearBoton(game.assets.get("Imagenes/SeleccionPersonaje/seleccionMago.png", Texture.class));
         btnAtras = crearBoton(new Texture("Imagenes/Opciones/atras.png"));
 
+        btnAtrasNombre = crearBoton(new Texture("Imagenes/SeleccionPersonaje/atras.png"));
+        btnIniciarPartida = crearBoton(new Texture("Imagenes/SeleccionPersonaje/iniciarPartida.png"));
+
+        // Tabla para Botones
+        capaPrincipal = new Table();
+        capaPrincipal.setFillParent(true);
+        capaPrincipal.bottom().padBottom(50);
+        capaPrincipal.left().padLeft(140);
+
         capaPrincipal.add(btnAtras).size(150, 100).row();
         capaPrincipal.add(btnCaballero).size(225, 100).padTop(450);
         capaPrincipal.add(btnMago).size(225, 100).padLeft(35).padTop(450);
-
-        stage.addActor(capaPrincipal);
-
-        //capa ingreso de nombre
-        capaIngresoNombre = new Group();
-        capaIngresoNombre.setSize(stage.getWidth(), stage.getHeight());
-        capaIngresoNombre.setVisible(false);
-
-        Image imgOscura = new Image(new Texture("Imagenes/black.png"));
-        imgOscura.setSize(stage.getWidth(), stage.getHeight());
-        imgOscura.setColor(1, 1, 1, 0.8f);
-        capaIngresoNombre.addActor(imgOscura);
-
-        Image imgNombrePartida = new Image(new Texture("Imagenes/SeleccionPersonaje/nombrePersonaje.png"));
-        imgNombrePartida.setSize(stage.getWidth() - 700, stage.getHeight() - 300);
-        imgNombrePartida.setPosition(350, 200);
-        capaIngresoNombre.addActor(imgNombrePartida);
-
-        fuente = new BitmapFont();
-        fuente.getData().setScale(2.0f);
-        style = new TextField.TextFieldStyle();
-        style.font = fuente;
-        style.fontColor = Color.GOLD;
-        btnAtrasNombre = crearBoton(new Texture("Imagenes/SeleccionPersonaje/atras.png"));
-        btnIniciarPartida = crearBoton(new Texture("Imagenes/SeleccionPersonaje/iniciarPartida.png"));
-        
-        style.cursor = crearCursor(Color.GOLD, 2, 20);
-
-        style.background = null;
-        style.focusedBackground = null;
-
-        nombrePartida = new TextField("", style);
-        //nombrePartida.setSize(450,300);
-        nombrePartida.setPosition(stage.getWidth() / 2f - 200, stage.getHeight() / 2.7f);
-        nombrePartida.setMaxLength(25);
-        nombrePartida.setVisible(false);
-        stage.setKeyboardFocus(nombrePartida);
-
-        Table tablaNombrePartida = new Table();
-        tablaNombrePartida.setFillParent(true);
-        tablaNombrePartida.bottom().padBottom(230);
-        //tablaNombrePartida.debug();
-
-        tablaNombrePartida.add(nombrePartida).size(450, 50).colspan(2).row();
-        tablaNombrePartida.add(btnAtrasNombre).size(200, 50).padTop(60);
-        tablaNombrePartida.add(btnIniciarPartida).size(200, 50).padTop(60);
-        
-
-        capaIngresoNombre.addActor(tablaNombrePartida);
-        stage.addActor(capaIngresoNombre);
 
         capaSinEspacio = new Group();
         capaSinEspacio.setSize(stage.getWidth(), stage.getHeight());
@@ -116,18 +69,78 @@ public class SeleccionVista {
 
         btnIrPartidasGuardadas = crearBotonSeparado(
         game.assets.get("Imagenes/CargarPartida/IrPartidasGuardadas.png", Texture.class),
-        game.assets.get("Imagenes/CargarPartida/IrPartidasGuardadas1.png", Texture.class)
-    );
-        
-        
-        
+        game.assets.get("Imagenes/CargarPartida/IrPartidasGuardadas1.png", Texture.class));
         
         
         btnIrPartidasGuardadas.setSize(430, 90);
         btnIrPartidasGuardadas.setPosition(stage.getWidth() / 2f - 215, stage.getHeight() / 2f - 100);
         capaSinEspacio.addActor(btnIrPartidasGuardadas);
 
+        stage.addActor(imgFondo);
+        stage.addActor(capaPrincipal);
         stage.addActor(capaSinEspacio);
+    }
+    
+    public void ingresoNombre(boolean mostrar) {
+
+        // Si no existe la capa, la creamos (primera vez)
+        if (capaIngresoNombre == null) {
+
+            capaIngresoNombre = new Group();
+            capaIngresoNombre.setSize(stage.getWidth(), stage.getHeight());
+
+            Image imgOscura = new Image(new Texture("Imagenes/black.png"));
+            imgOscura.setSize(stage.getWidth(), stage.getHeight());
+            imgOscura.setColor(1, 1, 1, 0.8f);
+            capaIngresoNombre.addActor(imgOscura);
+
+            Image imgNombrePartida = new Image(new Texture("Imagenes/SeleccionPersonaje/nombrePersonaje.png"));
+            imgNombrePartida.setSize(stage.getWidth() - 700, stage.getHeight() - 300);
+            imgNombrePartida.setPosition(350, 200);
+            capaIngresoNombre.addActor(imgNombrePartida);
+
+            // Fuente y estilo
+            fuente = new BitmapFont();
+            fuente.getData().setScale(2.0f);
+            style = new TextField.TextFieldStyle();
+            style.font = fuente;
+            style.fontColor = Color.GOLD;
+            style.cursor = crearCursor(Color.GOLD, 2, 20);
+            style.background = null;
+            style.focusedBackground = null;
+
+            
+
+            // Campo de texto
+            nombrePartida = new TextField("", style);
+            nombrePartida.setPosition(stage.getWidth() / 2f - 200, stage.getHeight() / 2.7f);
+            nombrePartida.setMaxLength(25);
+            nombrePartida.setVisible(false);
+            stage.setKeyboardFocus(nombrePartida);
+
+            // Tabla para ordenar elementos
+            Table tablaNombrePartida = new Table();
+            tablaNombrePartida.setFillParent(true);
+            tablaNombrePartida.bottom().padBottom(230);
+            tablaNombrePartida.add(nombrePartida).size(450, 50).colspan(2).row();
+            tablaNombrePartida.add(btnAtrasNombre).size(200, 50).padTop(60);
+            tablaNombrePartida.add(btnIniciarPartida).size(200, 50).padTop(60);
+
+            capaIngresoNombre.addActor(tablaNombrePartida);
+            stage.addActor(capaIngresoNombre);
+        }
+
+        // Finalmente, solo mostramos u ocultamos
+        capaIngresoNombre.setVisible(mostrar);
+        if (nombrePartida != null) {
+            nombrePartida.setVisible(mostrar);
+            if (mostrar) {
+                nombrePartida.setText(""); // opcional: limpiar campo al mostrar
+                stage.setKeyboardFocus(nombrePartida);
+            } else {
+                stage.setKeyboardFocus(null);
+            }
+        }
     }
 
     private ImageButton crearBoton(Texture textura) {

@@ -15,45 +15,39 @@ public class MenuVista {
     private Stage stage;
     private Table capaPrincipal;
 
-    // botones menu
     private ImageButton btnJugar, btnCargar, btnOpciones, btnSalir;
 
     public MenuVista(FitViewport viewport, Main game) {
 
         stage = new Stage(viewport, game.batch);
 
-        // fondo
+        // Fondo
         Texture fondo = game.assets.get("Imagenes/MenuInicio/Fondo.png", Texture.class);
         Image imgFondoGeneral = new Image(fondo);
         imgFondoGeneral.setSize(stage.getWidth(), stage.getHeight());
-        stage.addActor(imgFondoGeneral);
-
-        // =========================
-        // MENU PRINCIPAL
-        // =========================
-        capaPrincipal = new Table();
-        capaPrincipal.setFillParent(true);
-        capaPrincipal.bottom().padBottom(70);
-        capaPrincipal.left().padLeft(160);
-
+        
+        // Botones
         btnJugar = crearBoton(game.assets.get("Imagenes/MenuInicio/nueva.png", Texture.class));
         btnCargar = crearBoton(game.assets.get("Imagenes/MenuInicio/cargar.png", Texture.class));
         btnOpciones = crearBoton(game.assets.get("Imagenes/MenuInicio/opciones.png", Texture.class));
         btnSalir = crearBoton(game.assets.get("Imagenes/MenuInicio/salir.png", Texture.class));
+
+        // Tabla para Botones
+        capaPrincipal = new Table();
+        capaPrincipal.setFillParent(true);
+        capaPrincipal.bottom().padBottom(70);
+        capaPrincipal.left().padLeft(160);
 
         capaPrincipal.add(btnJugar).width(280).height(80).row();
         capaPrincipal.add(btnCargar).width(280).height(80).row();
         capaPrincipal.add(btnOpciones).width(280).height(80).row();
         capaPrincipal.add(btnSalir).width(280).height(80).row();
 
+        stage.addActor(imgFondoGeneral);
         stage.addActor(capaPrincipal);
-
     }
     
-    // =========================
-    // BOTONES
-    // =========================
-
+    // CREACION BOTONES
     private ImageButton crearBoton(Texture textura) {
 
         int ancho = textura.getWidth() / 2;
