@@ -2,9 +2,9 @@ package com.mortaTower.Modelo;
 
 public class HabilidadCuracion extends Habilidad{
 
-    public HabilidadCuracion(String nombre, String descripcion, String tipo, int costoMana, int valorBase, int cooldownMax) {
+    public HabilidadCuracion(int id, String nombre, String descripcion, String tipo, int costoMana, int valorBase, int cooldownMax) {
         
-        super(nombre, descripcion, tipo, costoMana, valorBase, cooldownMax);
+        super(id, nombre, descripcion, tipo, costoMana, valorBase, cooldownMax);
     }
 
     @Override

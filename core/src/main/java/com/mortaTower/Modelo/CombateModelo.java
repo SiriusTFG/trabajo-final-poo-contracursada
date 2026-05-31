@@ -72,6 +72,28 @@ public class CombateModelo {
         }
     }
 
+    public List<Habilidad> getHabilidadesPor() {
+        try {
+            HabilidadDao dao = new HabilidadDao();
+
+            return dao.obtenerPorPartida(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Habilidad> getHabilidadesPartida(int idPartida) {
+        try {
+            HabilidadDao dao = new HabilidadDao();
+            return dao.obtenerPorPartida(idPartida);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
     private Enemigo cargarEnemigo(int numPiso) {
         try {
             EnemigoDao eDao = new EnemigoDao();

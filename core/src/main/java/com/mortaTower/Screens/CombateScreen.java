@@ -24,6 +24,7 @@ import com.mortaTower.Modelo.HabilidadMana;
 import com.mortaTower.Modelo.Heroe;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
+import com.mortaTower.Vista.OpcionesVista;
 import com.mortaTower.Vista.PausaVista;
 
 public class CombateScreen extends Screens {
@@ -31,8 +32,13 @@ public class CombateScreen extends Screens {
     private CombateModelo modelo;
     private RecompensaControlador recompensaControlador;
     
+    private int volMusica = 9;
+    private int volFx = 9;
+
+    private boolean mostrarOpciones = false;
     private CombateVista vista;     
     private PausaVista vistaPausa;
+    private OpcionesVista opcionesVista;
 
     private boolean victoriaProcesada = false;
     private boolean danioAplicado;
@@ -46,6 +52,7 @@ public class CombateScreen extends Screens {
     private boolean proximoTurnoJugador;
 
     private boolean pausa = false;
+    private boolean opciones = false;
     private boolean seleccionandoReemplazo = false;
     private Habilidad recompensaSeleccionada;
 
@@ -81,11 +88,17 @@ public class CombateScreen extends Screens {
 
         cargarAssets();
         
+        if (nivel == 1){
         hab = modelo.getHabilidadesPorEntidad();
+        }else{
+
+            hab = modelo.getHabilidadesPor();
+        }
 
         vista = new CombateVista(viewport,modelo,game,nivel,hab);
 
         vistaPausa = new PausaVista(game);
+        opcionesVista = new OpcionesVista(viewport, game);
 
         // un input a la vez
         setInput(vista.getStage());       
@@ -94,6 +107,16 @@ public class CombateScreen extends Screens {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 pausa = false;
+                setInput(vista.getStage());
+            }
+        });
+
+        vistaPausa.getBtnOpciones().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //pausa = false;
+                opciones = true;
+                setInput(opcionesVista.getStage());
             }
         });
 
@@ -121,11 +144,69 @@ public class CombateScreen extends Screens {
             });
         });
 
+        configurarListenersOpcines();
         listenersHabilidades();
     }
 
     private void setInput(Stage stageActivo) {
         Gdx.input.setInputProcessor(stageActivo);
+    }
+
+    private void configurarListenersOpcines() {
+        opcionesVista.getBtnMusicaMas().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent evento, float x, float y) {
+                if (volMusica < 9) {
+                    volMusica++;
+                    game.audio.setVolumenMusica(volMusica / 9f);
+                    opcionesVista.actualizarBarraMusica(volMusica);
+                }
+            }
+        });
+
+        opcionesVista.getBtnMusicaMenos().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent evento, float x, float y) {
+                if (volMusica > 0) {
+                    volMusica--;
+                    game.audio.setVolumenMusica(volMusica / 9f);
+                    opcionesVista.actualizarBarraMusica(volMusica);
+                }
+            }
+        });
+
+        opcionesVista.getBtnFxMas().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent evento, float x, float y) {
+                if (volFx < 9) {
+                    volFx++;
+                    game.audio.setVolumenFx(volFx / 9f);
+                    game.audio.play(0);
+                    opcionesVista.actualizarBarraEfectos(volFx);
+                }
+            }
+        });
+
+        opcionesVista.getBtnFxMenos().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent evento, float x, float y) {
+                if (volFx > 0) {
+                    volFx--;
+                    game.audio.setVolumenFx(volFx / 9f);
+                    game.audio.play(0);
+                    opcionesVista.actualizarBarraEfectos(volFx);
+                }
+            }
+        });
+
+        opcionesVista.getBtnAtras().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent evento, float x, float y) {
+                game.audio.play(4);
+                opciones = false;
+                setInput(vistaPausa.getStage());
+            }
+        });
     }
 
     private void listenersHabilidades() {
@@ -154,12 +235,17 @@ public class CombateScreen extends Screens {
         // Toggle pausa
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
 
-            pausa = !pausa;
-
-            if (pausa) {
+            if (opciones) {
+                opciones = false;
                 setInput(vistaPausa.getStage());
             } else {
-                setInput(vista.getStage());
+                pausa = !pausa;
+
+                if (pausa) {
+                    setInput(vistaPausa.getStage());
+                } else {
+                    setInput(vista.getStage());
+                }
             }
         }
 
@@ -250,12 +336,15 @@ public class CombateScreen extends Screens {
             return;
         }
 
-        // PAUSA
-        if (pausa) {
+        if (opciones) {
+            opcionesVista.getStage().act(delta);
+            opcionesVista.getStage().draw();
+            return;
+        }
 
+        if (pausa) {
             vistaPausa.getStage().act(delta);
             vistaPausa.getStage().draw();
-
             return;
         }
 

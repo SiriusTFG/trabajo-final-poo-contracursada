@@ -44,6 +44,8 @@ public class RecompensasVista {
     private List<ImageButton> botonesHabilidades = new ArrayList<>();
     private List<ImageButton> botonesRemplazo = new ArrayList<>();
 
+    private List<Habilidad> habilidades;
+
     public RecompensasVista(Main game) {
 
 
@@ -114,7 +116,7 @@ public class RecompensasVista {
         stage.addActor(tablaHab);
     }
 
-    public void cuadroRemplazo(Habilidad[] habilidad){
+    public void cuadroRemplazo(List<Habilidad> hab){
         
         Image fondoRemplazo = new Image(new TextureRegionDrawable(cuadroRemplazo));
         fondoRemplazo.setPosition(600, 100);
@@ -139,20 +141,21 @@ public class RecompensasVista {
 
         botonesRemplazo.clear();
 
-        for (int i = 0; i < habilidad.length; i++) {
+        
+        for (int i = 0; i < 4; i++) {
 
             btnRemplazo = crearBoton(barraRemplazo);
             btnRemplazo.setSize(600, 445);
 
-            //String nombre2 = habilidad[i].getNombre();
+            String nombre2 = hab.get(i).getNombre();
 
-            /*lbl = new Label(nombre2, styles);
+            lbl = new Label(nombre2, styles);
             lbl.setAlignment(Align.center);
-            lbl.setTouchable(Touchable.disabled);*/
+            lbl.setTouchable(Touchable.disabled);
 
             stack = new Stack();
             stack.add(btnRemplazo);
-            //stack.add(lbl);
+            stack.add(lbl);
 
             botonesRemplazo.add(btnRemplazo);
 

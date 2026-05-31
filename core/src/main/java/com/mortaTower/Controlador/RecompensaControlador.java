@@ -1,5 +1,8 @@
 package com.mortaTower.Controlador;
 
+import java.sql.SQLException;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -20,9 +23,11 @@ public class RecompensaControlador  extends Screens{
     private RecompensasModelo modeloRecompensa;
     private CombateModelo combateModelo;
 
+    private Habilidad recompensaSeleccionada;
     private RecompensasVista vistaRecompensa;
     private int nivel;
-    private Habilidad[] habilidad, habilidadActual;
+    private Habilidad[] habilidad;
+    private List<Habilidad> habilidadActual;
     private int habSelecionada;
     private int[] tipo;
 
@@ -38,7 +43,7 @@ public class RecompensaControlador  extends Screens{
         combateModelo = new CombateModelo(heroe, nivel);
 
         habilidad = modeloRecompensa.getHabilidad();
-        habilidadActual = modeloRecompensa.getHabilidadActual();
+        habilidadActual = combateModelo.getHabilidadesPorEntidad();
         tipo = modeloRecompensa.getipo();
 
         cargarAssets();
@@ -74,6 +79,7 @@ public class RecompensaControlador  extends Screens{
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
 
+                    //recompensaSeleccionada = modeloRecompensa.getHabilidad()[id];
                     habSelecionada = id;
                     cambiarEstado(EstadoRecompensa.REEMPLAZO);
                 }
@@ -100,7 +106,12 @@ public class RecompensaControlador  extends Screens{
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
 
-                    modeloRecompensa.reemplazarHab(habSelecionada ,slot);
+                    try {
+                        modeloRecompensa.reemplazarHab(habSelecionada, slot);
+                    } catch (SQLException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
 
                     game.setScreen(new TransicionScreen(game, RecompensaControlador.this, new CombateScreen(game, nivel + 1)));
                 }

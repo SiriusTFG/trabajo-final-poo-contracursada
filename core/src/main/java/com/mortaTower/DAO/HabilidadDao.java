@@ -41,10 +41,13 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
     }
 
     private Habilidad mapearHabilidad(ResultSet rs) throws SQLException {
+        
+        int id = rs.getInt("id");
         String tipo = rs.getString("tipo");
-
+        
         if (tipo.equalsIgnoreCase("Ataque")) {
-            return new HabilidadAtaque(rs.getString("nombre"),
+            return new HabilidadAtaque(id,
+                rs.getString("nombre"), 
                 rs.getString("descripcion"),
                 tipo, 
                 rs.getInt("costo_mana"), 
@@ -53,7 +56,8 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
                 rs.getInt("bonus_critico"), 
                 rs.getInt("cooldown_max"));
         } else if (tipo.equalsIgnoreCase("Defensa")) {
-            return new HabilidadDefensa(rs.getString("nombre"), 
+            return new HabilidadDefensa(id,
+            rs.getString("nombre"), 
             rs.getString("descripcion"), 
             tipo, 
             rs.getInt("costo_mana"), 
@@ -61,14 +65,16 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
             rs.getDouble("reduccion_danio"), 
             rs.getInt("cooldown_max"));
         } else if (tipo.equalsIgnoreCase("Curacion")) {
-            return new HabilidadCuracion(rs.getString("nombre"), 
+            return new HabilidadCuracion(id,
+            rs.getString("nombre"), 
             rs.getString("descripcion"), 
             tipo, 
             rs.getInt("costo_mana"), 
             rs.getInt("valor_base"), 
             rs.getInt("cooldown_max"));
         } else if (tipo.equalsIgnoreCase("Mana")) {
-            return new HabilidadMana(rs.getString("nombre"), 
+            return new HabilidadMana(id,
+                rs.getString("nombre"), 
             rs.getString("descripcion"), 
             tipo, 
             rs.getInt("costo_mana"), 
@@ -81,20 +87,27 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
     }
 
     public List<Habilidad> obtenerPorPartida(int idPartida) throws SQLException {
-        List<Habilidad> habilidades = new ArrayList<>();
-        String sql = "SELECT h.* FROM habilidades h " + 
-        "JOIN partida_habilidades ph ON h.id = ph.id_habilidad " + 
-        "WHERE ph.id_partida = ? ORDER BY ph.slot ASC";
 
-        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-            pstmt.setInt(1, idPartida);
-            try (ResultSet rs = pstmt.executeQuery()) {
+        List<Habilidad> habilidades = new ArrayList<>();
+
+        String sql = """
+            SELECT h.*, ph.slot
+            FROM partida_habilidades ph
+            JOIN habilidades h ON h.id = ph.id_habilidad
+            WHERE ph.id_partida = ?
+            ORDER BY ph.slot ASC
+        """;
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, idPartida);
+
+            try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     habilidades.add(mapearHabilidad(rs));
-                    
                 }
             }
         }
+
         return habilidades;
     }
 

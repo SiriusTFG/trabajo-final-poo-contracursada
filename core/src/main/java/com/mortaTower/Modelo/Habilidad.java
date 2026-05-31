@@ -2,6 +2,7 @@ package com.mortaTower.Modelo;
 
 public abstract class Habilidad {
     
+    private int id;
     private String nombre;
     private String descripcion;
     private String tipo;         //Ataque, Defensa, Curacion, Maná
@@ -10,8 +11,9 @@ public abstract class Habilidad {
     private int cooldownMax;    
     private int cooldownActual;
 
-    public Habilidad(String nombre, String descripcion, String tipo, int costoMana, int valorBase, int cooldownMax) {
-
+    public Habilidad(int id, String nombre, String descripcion, String tipo, int costoMana, int valorBase, int cooldownMax) {
+        
+        this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.tipo = tipo;
@@ -39,6 +41,7 @@ public abstract class Habilidad {
     }
 
     //Getters
+    public int getId() {return id;}
     public String getNombre() {return nombre;}
     public String getDescripcion() {return descripcion;}
     public String getTipo() {return tipo;}

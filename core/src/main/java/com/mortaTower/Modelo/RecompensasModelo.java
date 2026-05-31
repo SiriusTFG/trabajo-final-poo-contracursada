@@ -45,23 +45,6 @@ public class RecompensasModelo {
         generarRewards();
     }
 
-    public void habilidadActual() {
-
-        try {
-            lista = habilidadDao.obtenerPorPartida(1); // 🔥 SIEMPRE refrescar
-
-            habilidadActual = new Habilidad[4];
-
-            for (int i = 0; i < Math.min(4, lista.size()); i++) {
-                habilidadActual[i] = lista.get(i);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            habilidadActual = new Habilidad[4];
-        }
-    }
-
     // genera habilidades random y con usados guarda los indices de aquellas que fueron seleccionadas
     public void generarRewards() {
 
@@ -91,17 +74,12 @@ public class RecompensasModelo {
         }
     }
 
-    public void reemplazarHab(int idNuevaHabilidad, int slot) {
+    public void reemplazarHab(int indiceReward , int slot) throws SQLException {
 
-        try {
-            habilidadDao.reemplazarHabilidadEnPartida(1, idNuevaHabilidad, slot);
+    Habilidad nueva = rewards[indiceReward];
 
-            lista = habilidadDao.obtenerPorPartida(1); // 🔥 refresh
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    habilidadDao.reemplazarHabilidadEnPartida(1, nueva.getId(), slot);
+}
 
     public Opcion getOpcionActual(){return seleccion;}
 
