@@ -1,7 +1,5 @@
 package com.mortaTower.Screens;
 
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -32,8 +30,6 @@ public class CombateScreen extends Screens {
     private boolean victoriaProcesada = false;
     private boolean danioAplicado;
     private int nivel;
-
-    private List<Habilidad> hab;
 
     private float contador = 0;
     private float tiempoPausa;
@@ -68,12 +64,6 @@ public class CombateScreen extends Screens {
 
     @Override
     public void show() {
-        
-        /*if (nivel == 1){
-            hab = modelo.getHabilidadesPorEntidad();
-        }else{
-            hab = modelo.getHabilidadesPor();
-        }*/
 
         vista = new CombateVista(viewport,game,nivel);
         pausaControlador = new PausaControlador(game, vista.getStage());
@@ -112,31 +102,32 @@ public class CombateScreen extends Screens {
             });
         });
 
-        listenersHabilidades(); //descripciones
+        listenersHabilidades(descripciones); 
     }
 
     private void setInput(Stage stageActivo) {
         Gdx.input.setInputProcessor(stageActivo);
     }
 
-    private void listenersHabilidades() {
+    private void listenersHabilidades(String[] descripcion) {
 
         int cantidad = vista.getCantidadHabilidades();
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < cantidad; i++) {
 
             final int index = i;
             //final String desc = descripciones[i];
             vista.getBotonHabilidad(i).addListener(new ClickListener() {
-               /* @Override
+               
+                @Override
                 public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
-                    vista.setTextoDescripcion(desc);
+                    vista.setTextoDescripcion(descripcion[index]);
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor toActor) {
                     vista.setTextoDescripcion(""); // Limpiamos el texto
-                }*/
+                }
                 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {

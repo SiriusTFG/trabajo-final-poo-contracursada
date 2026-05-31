@@ -231,18 +231,6 @@ public class RecompensasVista {
         return new ImageButton(style);
     }
 
-    private Image crearCategoria(Texture textura, int columna){
-
-        ancho = textura.getWidth()/4;
-        alto = textura.getHeight();
-
-        x = columna * ancho;
-
-        TextureRegion region = new TextureRegion(textura, x, 0, ancho, alto);
-
-        return new Image(new TextureRegionDrawable(region));
-    }
-
     public void render(float delta) {
         stage.act(delta);
         stage.draw();

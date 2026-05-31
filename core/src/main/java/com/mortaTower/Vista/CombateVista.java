@@ -76,7 +76,6 @@ public class CombateVista {
 
     // CONSTRUCTOR
     public CombateVista(FitViewport viewport, Main game, int nivel) {
-     //public CombateVista(FitViewport viewport, CombateModelo modelo, Main game, int nivel, List<Habilidad> hab) {
 
         //this.modelo = modelo;
         this.stage = new Stage(viewport, game.batch);
@@ -162,6 +161,7 @@ public class CombateVista {
         //tabla.debug();
 
         for (int i = 0; i < 4; i++) {
+
             String nombre = nombresHabilidades[i];
             String tipo = tipoHabilidades[i];
 
