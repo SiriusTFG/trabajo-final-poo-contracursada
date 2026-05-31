@@ -1,5 +1,7 @@
 package com.mortaTower.Screens;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -67,13 +69,13 @@ public class CombateScreen extends Screens {
     @Override
     public void show() {
         
-        if (nivel == 1){
+        /*if (nivel == 1){
             hab = modelo.getHabilidadesPorEntidad();
         }else{
             hab = modelo.getHabilidadesPor();
-        } */
+        }*/
 
-        vista = new CombateVista(viewport,modelo,game,nivel,hab);
+        vista = new CombateVista(viewport,game,nivel);
         pausaControlador = new PausaControlador(game, vista.getStage());
 
         // un input a la vez

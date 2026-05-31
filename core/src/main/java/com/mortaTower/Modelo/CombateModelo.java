@@ -41,8 +41,6 @@ public class CombateModelo {
         this.resultado = resultado;
     }
 
-<<<<<<< Updated upstream
-=======
 /*     // Obtiene el Nombre de la Habilidad usada
     public String getNombreHabilidad(int indice) {
         if (heroe.getHabilidades()[indice] != null) {
@@ -63,7 +61,6 @@ public class CombateModelo {
         }
     }
 
->>>>>>> Stashed changes
     public List<Habilidad> getHabilidadesPor() {
         try {
             HabilidadDao dao = new HabilidadDao();

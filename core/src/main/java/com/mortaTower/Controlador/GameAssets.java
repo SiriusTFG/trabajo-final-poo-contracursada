@@ -53,6 +53,7 @@ public class GameAssets {
         manager.load("Imagenes/Combate/nivel1.png", Texture.class);
         manager.load("Imagenes/Combate/nivel2.png", Texture.class);
         manager.load("Imagenes/Combate/nivel3.png", Texture.class);
+        manager.load("Imagenes/Combate/nivel4.png", Texture.class);
         manager.load("Imagenes/Combate/nivel5.png", Texture.class);
 
         manager.load("Imagenes/CargarPartida/Fondo1.png", Texture.class);

@@ -28,11 +28,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Goblin;
-<<<<<<< Updated upstream
-=======
 import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
->>>>>>> Stashed changes
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
@@ -78,11 +75,8 @@ public class CombateVista {
     private Texture derrota;
 
     // CONSTRUCTOR
-<<<<<<< Updated upstream
     public CombateVista(FitViewport viewport, Main game, int nivel) {
-=======
-    public CombateVista(FitViewport viewport, CombateModelo modelo, Main game, int nivel, List<Habilidad> hab) {
->>>>>>> Stashed changes
+     //public CombateVista(FitViewport viewport, CombateModelo modelo, Main game, int nivel, List<Habilidad> hab) {
 
         //this.modelo = modelo;
         this.stage = new Stage(viewport, game.batch);
