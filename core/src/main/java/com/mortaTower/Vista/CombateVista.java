@@ -6,21 +6,30 @@ import java.util.List;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.*;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.scenes.scene2d.*;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.Enemigo;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Goblin;
-import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
@@ -36,8 +45,6 @@ public class CombateVista {
     // TEXTURAS
     private Image imgFondoGeneral, stsHeroe, stsEnemigo;
     private Texture fondo, statusEnemigo, statusHeroe;
-
-    Habilidad[] hab;
     
     private GlyphLayout layout; 
 
@@ -54,8 +61,7 @@ public class CombateVista {
     private Texture inventarioTex;
     private Texture categoriasTex;
     private Texture habilidadTex;
-
-    private final List<Habilidad> habilidades;
+    private Label lblDescripcion;
 
     // Render
     private BitmapFont font;
@@ -70,10 +76,9 @@ public class CombateVista {
     private Texture derrota;
 
     // CONSTRUCTOR
-    public CombateVista(FitViewport viewport, CombateModelo modelo, Main game, int nivel, List<Habilidad> hab) {
+    public CombateVista(FitViewport viewport, CombateModelo modelo, Main game, int nivel) {
 
         this.modelo = modelo;
-        this.habilidades = hab;
         this.stage = new Stage(viewport, game.batch);
 
         // fondo nivel
@@ -109,12 +114,17 @@ public class CombateVista {
         font.getData().setScale(1.5f);
         font.setColor(Color.WHITE);
 
+        lblDescripcion = new Label("", new Label.LabelStyle(font, Color.YELLOW));
+        lblDescripcion.setAlignment(Align.center);
+        lblDescripcion.setPosition(WORLD_WIDTH / 2f - 150, WORLD_HEIGHT * 0.28f); //y
+        lblDescripcion.setSize(150, 50);
+        lblDescripcion.setWrap(true);
+
         stage.addActor(imgFondoGeneral); 
         stage.addActor(stsHeroe); 
         stage.addActor(stsEnemigo); 
-        
         crearUIInventario();
-        cargarInventario();
+        stage.addActor(lblDescripcion);
         cargarAnimaciones();
     }
 
@@ -137,54 +147,53 @@ public class CombateVista {
         stage.addActor(tabla);
     }
 
-    private void cargarInventario() {
-
+    public void cargarInventarioHabilidades(String[] nombresHabilidades, String[] tipoHabilidades) {
         tabla.clearChildren();
+        tabla.setPosition(100, 0);
+        botonesHabilidades.clear();
+        //tabla.debug();
 
-        for (int i = 0; i < Math.min(4, habilidades.size()); i++) {
+        for (int i = 0; i < 4; i++) {
+            String nombre = nombresHabilidades[i];
+            String tipo = tipoHabilidades[i];
 
-            Habilidad hab = habilidades.get(i);
+            ImageButton btn = crearBotonHab(habilidadTex);
+            botonesHabilidades.add(btn);
 
-            tabla.add(crearFila(hab, i)).width(300).height(40).row();
+            Label lbl = new Label(nombre, new Label.LabelStyle(font, Color.WHITE));
+            lbl.setAlignment(Align.center);
+            lbl.setTouchable(Touchable.disabled);
+
+            Stack stack = new Stack();
+            stack.add(btn);
+            stack.add(lbl);
+
+            Image iconoCat = crearIconoTipo(tipo);
+
+            Table fila = new Table();
+            if (iconoCat != null) {
+                fila.add(iconoCat).size(40, 40).padRight(5);
+            }
+            fila.add(stack).size(200, 40);
+
+            tabla.add(fila).size(100, 40).row();
         }
     }
 
+    private Image crearIconoTipo(String tipo) {
+        if (tipo.equalsIgnoreCase("vacio")) return null;
 
-    private Actor crearFila(Habilidad hab, int index) {
+        int fila = 0;
+        if (tipo.equalsIgnoreCase("Ataque")) fila = 0;
+        else if (tipo.equalsIgnoreCase("Defensa")) fila = 1;
+        else if (tipo.equalsIgnoreCase("Curacion")) fila = 2;
+        else if (tipo.equalsIgnoreCase("Mana")) fila = 3;
 
-        Image cat = crearCategoria(categoriasTex, index);
+        int ancho = categoriasTex.getWidth();
+        int alto = categoriasTex.getHeight() / 4;
 
-        ImageButton btn = crearBotonHab(habilidadTex);
-
-        botonesHabilidades.add(btn);
-
-        Label lbl = new Label(hab.getNombre(), new Label.LabelStyle(font, Color.WHITE));
-        lbl.setAlignment(Align.center);
-        lbl.setTouchable(Touchable.disabled);
-
-        Stack stack = new Stack();
-        stack.add(btn);
-        stack.add(lbl);
-
-        Table fila = new Table();
-        fila.add(cat).size(40, 40).padRight(10);
-        fila.add(stack).size(240, 40);
-
-        return fila;
-    }
-
-    private Image crearCategoria(Texture textura, int fila){
-
-        int ancho = textura.getWidth();
-        int alto = textura.getHeight() / 4;
-
-        int y = fila * alto;
-
-        TextureRegion region = new TextureRegion(textura, 0, y, ancho, alto);
-
-        TextureRegionDrawable drawable = new TextureRegionDrawable(region);
-
-        return new Image(drawable);
+        TextureRegion region = new TextureRegion(categoriasTex, 0, fila * alto, ancho, alto);
+        return new Image(new TextureRegionDrawable(region));
     }
 
     private ImageButton crearBotonHab(Texture tex) {
@@ -395,8 +404,6 @@ public class CombateVista {
     // GETTERS
     public Stage getStage() {return stage;}
     public ImageButton getBotonHabilidad(int index) {return botonesHabilidades.get(index);}   
-    public int getCantidadHabilidades() {return habilidades.size();}
-    public Habilidad getHabilidad(int index) {return habilidades.get(index);}
 
     public float getTiempoAnimacionHeroe(Entidad.Estado estado){
         Animation<TextureRegion> animacion = animHeroe.get(estado);
@@ -420,5 +427,9 @@ public class CombateVista {
             return animacion.getAnimationDuration(); 
         }
         return 1.0f;
+    }
+
+    public void setTextoDescripcion(String texto) {
+        lblDescripcion.setText(texto);
     }
 }

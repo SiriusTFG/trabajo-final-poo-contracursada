@@ -142,14 +142,16 @@ public class SeleccionVista {
         style.imageOver = new TextureRegionDrawable(seleccionado);
         return new ImageButton(style);
     }
+    
     private ImageButton crearBotonSeparado(Texture normal, Texture hover) {
-    ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
 
-    style.imageUp = new TextureRegionDrawable(new TextureRegion(normal));
-    style.imageOver = new TextureRegionDrawable(new TextureRegion(hover));
+        style.imageUp = new TextureRegionDrawable(new TextureRegion(normal));
+        style.imageOver = new TextureRegionDrawable(new TextureRegion(hover));
 
-    return new ImageButton(style);
-}
+        return new ImageButton(style);
+    }
+
     private Drawable crearCursor(Color color, int width, int height) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.setColor(color);
@@ -175,12 +177,12 @@ public class SeleccionVista {
     public String getNombreDelField() {return nombrePartida.getText();}
 
     public void mostrarSinEspacio() {
-    capaIngresoNombre.setVisible(false);
-    nombrePartida.setVisible(false);
-    capaSinEspacio.setVisible(true);
+        capaIngresoNombre.setVisible(false);
+        nombrePartida.setVisible(false);
+        capaSinEspacio.setVisible(true);
     }
 
     public ImageButton getBtnIrPartidasGuardadas() {
-    return btnIrPartidasGuardadas;
-}
+        return btnIrPartidasGuardadas;
+    }
 }

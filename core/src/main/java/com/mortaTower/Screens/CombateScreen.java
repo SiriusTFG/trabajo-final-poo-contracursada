@@ -1,15 +1,13 @@
 package com.mortaTower.Screens;
 
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import java.util.List;
-import java.util.ArrayList;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mortaTower.Controlador.RecompensaControlador;
 import com.mortaTower.Hilo.GoblinAtacante;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
@@ -17,10 +15,6 @@ import com.mortaTower.Modelo.CombateModelo.Resultado;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Goblin;
 import com.mortaTower.Modelo.Habilidad;
-import com.mortaTower.Modelo.HabilidadAtaque;
-import com.mortaTower.Modelo.HabilidadCuracion;
-import com.mortaTower.Modelo.HabilidadDefensa;
-import com.mortaTower.Modelo.HabilidadMana;
 import com.mortaTower.Modelo.Heroe;
 import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
@@ -43,9 +37,6 @@ public class CombateScreen extends Screens {
     private boolean victoriaProcesada = false;
     private boolean danioAplicado;
     private int nivel;
-
-    private Habilidad[] habilidadesMostradas;
-    private List<Habilidad> hab;
 
     private float contador = 0;
     private float tiempoPausa;
@@ -85,7 +76,6 @@ public class CombateScreen extends Screens {
 
     @Override
     public void show() {
-
         cargarAssets();
         
         if (nivel == 1){
@@ -97,11 +87,17 @@ public class CombateScreen extends Screens {
 
         vista = new CombateVista(viewport,modelo,game,nivel,hab);
 
+        vista = new CombateVista(viewport, modelo, game, nivel);
         vistaPausa = new PausaVista(game);
         opcionesVista = new OpcionesVista(viewport, game);
 
         // un input a la vez
-        setInput(vista.getStage());       
+        setInput(vista.getStage());
+        
+        String[] nombresHabilidades = modelo.getNombreHabilidadesActuales();
+        String[] tiposHabilidades = modelo.getTipoHabilidadesActuales();
+        String[] descripciones = modelo.getDescripcionesHabilidadesActuales();
+        vista.cargarInventarioHabilidades(nombresHabilidades, tiposHabilidades);
 
         vistaPausa.getBtnRenudar().addListener(new ClickListener() {
             @Override
@@ -145,7 +141,7 @@ public class CombateScreen extends Screens {
         });
 
         configurarListenersOpcines();
-        listenersHabilidades();
+        listenersHabilidades(descripciones);
     }
 
     private void setInput(Stage stageActivo) {
@@ -216,11 +212,21 @@ public class CombateScreen extends Screens {
         for (int i = 0; i < cantidad; i++) {
 
             final int index = i;
-
+            final String desc = descripciones[i];
             vista.getBotonHabilidad(i).addListener(new ClickListener() {
                 @Override
-                public void clicked(InputEvent event, float x, float y) {
+                public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                    vista.setTextoDescripcion(desc);
+                }
 
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor toActor) {
+                    vista.setTextoDescripcion(""); // Limpiamos el texto
+                }
+                
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    vista.setTextoDescripcion("");
                     manejarEntradaJugador(index); 
                 }
             });
@@ -422,28 +428,22 @@ public class CombateScreen extends Screens {
 
     private void manejarEntradaJugador(int indiceHabilidad) {
 
-        Habilidad habilidad = vista.getHabilidad(indiceHabilidad);
-        Heroe heroe = modelo.getHeroe();
+        Habilidad habilidad = modelo.getHeroe().getHabilidades()[indiceHabilidad];
 
-        if (habilidad == null || !habilidad.puedeUsarse(heroe)) {
+        if (habilidad == null || !habilidad.puedeUsarse(modelo.getHeroe())) {
             return;
         }
 
-        System.out.println("Turno del " + heroe.getNombre());
-
+        System.out.println("Turno del " + modelo.getHeroe().getNombre());
         this.danioAplicado = false; //para reinicar Flag
 
-        heroe.setEstadoActual(Entidad.Estado.ATAQUE);
+        modelo.getHeroe().setEstadoActual(Entidad.Estado.ATAQUE);
         modelo.getEnemigo().setEstadoActual(Entidad.Estado.DANIO);
         this.tiempoPausa = vista.getTiempoAnimacionHeroe(Entidad.Estado.ATAQUE);
 
-        heroe.seleccionarHabilidad(habilidad);
+        modelo.getHeroe().seleccionarHabilidad(habilidad);
 
-        modelo.mostrarMensaje(
-            heroe.getNombre() + " usó " + habilidad.getNombre() + "!"
-        );
-
-        // heroe.realizarTurno(modelo.getEnemigo());
+        modelo.mostrarMensaje(modelo.getHeroe().getNombre() + " usó " + habilidad.getNombre() + "!");
 
         proximoTurnoJugador = false;
         vista.ocultarInventario();
