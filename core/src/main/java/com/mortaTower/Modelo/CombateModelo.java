@@ -6,6 +6,9 @@ import java.util.List;
 
 import com.mortaTower.DAO.EnemigoDao;
 import com.mortaTower.DAO.HabilidadDao;
+import com.mortaTower.Strategy.ComportamientoAgresivo;
+import com.mortaTower.Strategy.ComportamientoDefensivo;
+import com.mortaTower.Strategy.ComportamientoInteligente;
 
 public class CombateModelo {
     
@@ -58,9 +61,7 @@ public class CombateModelo {
     public List<Habilidad> getHabilidadesPor() {
         try {
             HabilidadDao dao = new HabilidadDao();
-
             return dao.obtenerPorPartida(1);
-
         } catch (SQLException e) {
             e.printStackTrace();
             return new ArrayList<>();
@@ -81,7 +82,18 @@ public class CombateModelo {
         try {
             EnemigoDao eDao = new EnemigoDao();
             Enemigo enemigo = eDao.obtenerEnemigoPorPiso(numPiso);
+
+            if (enemigo != null) {
+                if (numPiso <= 5 && numPiso >= 3) {
+                    enemigo.cambiarComportamiento(new ComportamientoInteligente());
+                } else if (numPiso == 2) {
+                    enemigo.cambiarComportamiento(new ComportamientoDefensivo());
+                } else {
+                    enemigo.cambiarComportamiento(new ComportamientoAgresivo());
+                }
+            }
             return enemigo;
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -123,7 +135,6 @@ public class CombateModelo {
         }
         return descripciones;
     }
- 
     
     // Getters
     public Turno getTurnoActual() {return turnoActual;}

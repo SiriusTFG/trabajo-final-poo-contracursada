@@ -4,17 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mortaTower.Hilo.GoblinAtacante;
-import com.mortaTower.Main;
 import com.mortaTower.Controlador.PausaControlador;
 import com.mortaTower.Controlador.RecompensaControlador;
+import com.mortaTower.Hilo.GoblinAtacante;
+import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.CombateModelo.Resultado;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Goblin;
 import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
-import com.mortaTower.Strategy.ComportamientoAgresivo;
 import com.mortaTower.Vista.CombateVista;
 
 
@@ -50,23 +49,15 @@ public class CombateScreen extends Screens {
 
     //constructor
     public CombateScreen(Main game, int nivel) {
-
         super(game);
-
         this.nivel = nivel;
-
         Heroe heroe = game.getPartidaActual().getHeroe();
-        
         modelo = new CombateModelo(heroe, nivel);
-        
         recompensaControlador = new RecompensaControlador(game, this.nivel);
-
-        if (modelo.getEnemigo() != null) {modelo.getEnemigo().cambiarComportamiento(new ComportamientoAgresivo());}
     }
 
     @Override
     public void show() {
-
         vista = new CombateVista(viewport,game,nivel);
         pausaControlador = new PausaControlador(game, vista.getStage(), nivel);
 
@@ -112,7 +103,6 @@ public class CombateScreen extends Screens {
     }
 
     private void listenersHabilidades(String[] descripcion) {
-
         int cantidad = vista.getCantidadHabilidades();
 
         for (int i = 0; i < cantidad; i++) {
@@ -142,7 +132,6 @@ public class CombateScreen extends Screens {
 
     @Override
     public void render(float delta) {
-
         super.render(delta);
 
         vista.getStage().act(delta);
@@ -345,7 +334,6 @@ public class CombateScreen extends Screens {
     }
 
     private void manejarEntradaJugador(int indiceHabilidad) {
-
         Habilidad habilidad = modelo.getHeroe().getHabilidades()[indiceHabilidad];
 
         if (habilidad == null || !habilidad.puedeUsarse(modelo.getHeroe())) {

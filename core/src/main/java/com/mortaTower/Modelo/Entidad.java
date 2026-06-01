@@ -78,6 +78,7 @@ public abstract class Entidad {
     public float getStatetime() {return statetime;}
     public void setId(int id) {this.id = id;}
     public void setAtaque(int ataque) {this.ataque = ataque;}
+    public void setDefensa(double defensa) {this.defensa = defensa;}
     public void setEstadoActual(Estado nuevoEstado) {
         if ( this.estadoActual != nuevoEstado) {
         this.estadoActual = nuevoEstado;
