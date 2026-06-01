@@ -27,10 +27,10 @@ public class MenuVista {
         imgFondoGeneral.setSize(stage.getWidth(), stage.getHeight());
         
         // Botones
-        btnJugar = crearBoton(game.assets.get("Imagenes/MenuInicio/nueva.png", Texture.class));
-        btnCargar = crearBoton(game.assets.get("Imagenes/MenuInicio/cargar.png", Texture.class));
+        btnJugar = crearBoton(game.assets.get("Imagenes/MenuInicio/nuevaPartida.png", Texture.class));
+        btnCargar = crearBoton(game.assets.get("Imagenes/MenuInicio/cargarPartida.png", Texture.class));
         btnOpciones = crearBoton(game.assets.get("Imagenes/MenuInicio/opciones.png", Texture.class));
-        btnSalir = crearBoton(game.assets.get("Imagenes/MenuInicio/salir.png", Texture.class));
+        btnSalir = crearBoton(game.assets.get("Imagenes/MenuInicio/salirDelJuego.png", Texture.class));
 
         // Tabla para Botones
         capaPrincipal = new Table();

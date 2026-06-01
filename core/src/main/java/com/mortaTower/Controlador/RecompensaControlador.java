@@ -104,10 +104,10 @@ public class RecompensaControlador  extends Screens{
                         Habilidad nuevaHabilidad = modeloRecompensa.getHabilidad()[habSelecionada];
                         game.getPartidaActual().getHeroe().setHabilidad(slot, nuevaHabilidad);
                     } catch (SQLException e) {
-                        // TODO Auto-generated catch block
+
                         e.printStackTrace();
                     }
-                    //game.setScreen(new TransicionScreen(game, RecompensaControlador.this, new CombateScreen(game, nivel + 1)));
+                
                     cambiarEstado(EstadoRecompensa.RESUMEN_EXP);
                 }
                 

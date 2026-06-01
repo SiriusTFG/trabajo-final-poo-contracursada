@@ -31,7 +31,7 @@ public class PausaVista {
         btnRenudar = crearBoton(game.assets.get("Imagenes/MenuInicio/renudar.png", Texture.class));
         btnReintentar = crearBoton(game.assets.get("Imagenes/MenuInicio/reintentar.png", Texture.class));
         btnOpciones = crearBoton(game.assets.get("Imagenes/MenuInicio/opciones.png", Texture.class));
-        btnSalir = crearBoton(game.assets.get("Imagenes/MenuInicio/salir.png", Texture.class));
+        btnSalir = crearBoton(game.assets.get("Imagenes/MenuInicio/menuPrincipal.png", Texture.class));
 
         // Layout
         Table tabla = new Table();

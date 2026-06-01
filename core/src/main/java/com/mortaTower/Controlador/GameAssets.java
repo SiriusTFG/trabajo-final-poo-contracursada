@@ -14,10 +14,11 @@ public class GameAssets {
         // Para Botones
         manager.load("Imagenes/MenuInicio/opciones.png", Texture.class);
         manager.load("Imagenes/MenuInicio/renudar.png", Texture.class);
-        manager.load("Imagenes/MenuInicio/nueva.png", Texture.class);
-        manager.load("Imagenes/MenuInicio/salir.png", Texture.class);
-        manager.load("Imagenes/MenuInicio/cargar.png", Texture.class);
+        manager.load("Imagenes/MenuInicio/nuevaPartida.png", Texture.class);
+        manager.load("Imagenes/MenuInicio/salirDelJuego.png", Texture.class);
+        manager.load("Imagenes/MenuInicio/cargarPartida.png", Texture.class);
         manager.load("Imagenes/MenuInicio/reintentar.png", Texture.class);
+        manager.load("Imagenes/MenuInicio/menuPrincipal.png", Texture.class);
 
         manager.load("Imagenes/Opciones/pausa.png", Texture.class);
         manager.load("Imagenes/Opciones/btnMas.png", Texture.class);
