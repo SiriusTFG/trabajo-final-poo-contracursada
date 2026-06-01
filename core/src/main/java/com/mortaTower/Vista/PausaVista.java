@@ -16,7 +16,7 @@ public class PausaVista {
     private Texture fondo;
 
     // BOTONES
-    private ImageButton btnRenudar, btnOpciones, btnSalir;
+    private ImageButton btnRenudar, btnReintentar, btnOpciones, btnSalir;
     
     public PausaVista(Main game){
 
@@ -29,6 +29,7 @@ public class PausaVista {
         fondoImg.setColor(0, 0, 0, 0.6f); // opcional translúcido
 
         btnRenudar = crearBoton(game.assets.get("Imagenes/MenuInicio/renudar.png", Texture.class));
+        btnReintentar = crearBoton(game.assets.get("Imagenes/MenuInicio/reintentar.png", Texture.class));
         btnOpciones = crearBoton(game.assets.get("Imagenes/MenuInicio/opciones.png", Texture.class));
         btnSalir = crearBoton(game.assets.get("Imagenes/MenuInicio/salir.png", Texture.class));
 
@@ -40,6 +41,7 @@ public class PausaVista {
         tabla.center();
 
         tabla.add(btnRenudar).width(380).height(80).padBottom(0).row();
+        tabla.add(btnReintentar).width(380).height(80).padBottom(0).row();
         tabla.add(btnOpciones).width(380).height(80).padBottom(0).row();
         tabla.add(btnSalir).width(380).height(80).padBottom(0).row();
 
@@ -69,6 +71,7 @@ public class PausaVista {
     // GETTERS
     public Stage getStage() { return stage; }
     public ImageButton getBtnRenudar() { return btnRenudar; }
+    public ImageButton getBtnReintentar() { return btnReintentar; }
     public ImageButton getBtnOpciones() { return btnOpciones; }
     public ImageButton getBtnSalir() { return btnSalir; }
     

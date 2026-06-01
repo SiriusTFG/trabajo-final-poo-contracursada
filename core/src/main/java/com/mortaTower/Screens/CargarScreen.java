@@ -36,8 +36,7 @@ public class CargarScreen extends Screens {
 
             vista.getBotonesPartidas().get(i).addListener(new ClickListener() {
                 @Override
-                public void enter(InputEvent event, float x, float y, int pointer,
-                                  com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                public void enter(InputEvent event, float x, float y, int pointer,com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
                     game.audio.play(1);
                 }
 

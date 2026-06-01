@@ -23,6 +23,8 @@ public class CombateModelo {
 
     public CombateModelo(Heroe heroe, int numPiso) {
         //De forma temporal,optimizar despues.
+        heroe.curarAlMaximo();
+        heroe.getManaMax();
         try {
         //HeroeDao hDao = new HeroeDao();
         //this.heroe = hDao.obtenerPorId(heroe.getId());

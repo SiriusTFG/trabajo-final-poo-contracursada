@@ -22,6 +22,9 @@ public class CombateScreen extends Screens {
 
     private CombateModelo modelo;
     private PausaControlador pausaControlador;
+    private boolean derrotaProcesada = false;
+    private float tiempoResultado = 0f;
+    private boolean esperandoRecompensa = false;
 
     private RecompensaControlador recompensaControlador;
 
@@ -36,7 +39,6 @@ public class CombateScreen extends Screens {
     private boolean proximoTurnoJugador;
 
     private boolean pausa = false;
-    private boolean seleccionandoReemplazo = false;
 
     private String resultado;
 
@@ -66,7 +68,7 @@ public class CombateScreen extends Screens {
     public void show() {
 
         vista = new CombateVista(viewport,game,nivel);
-        pausaControlador = new PausaControlador(game, vista.getStage());
+        pausaControlador = new PausaControlador(game, vista.getStage(), nivel);
 
         // un input a la vez
         setInput(vista.getStage());
@@ -159,6 +161,7 @@ public class CombateScreen extends Screens {
             modelo.getEnemigo().getNombre());
         vista.comentarista(spriteBatch, mensaje);
 
+        //temporizador?
         vista.resultado(spriteBatch, resultado); 
 
         if (heroeAturdido) {
@@ -220,9 +223,6 @@ public class CombateScreen extends Screens {
                 }
             }
             vista.dibujarGoblin(spriteBatch, goblin.getX(), goblin.getY(), goblin.getStateTime(), goblin.getEstadoActual());
-
-            
-            
         }
 
         spriteBatch.end();
@@ -282,13 +282,10 @@ public class CombateScreen extends Screens {
 
                     if (modelo.getEnemigo().getVidaActual() <= 0) {
                         modelo.setResultado(CombateModelo.Resultado.VICTORIA);
-                        resultado = "victoria";
                         modelo.getEnemigo().setEstadoActual(Entidad.Estado.MUERTE);
-
 
                     } else if (modelo.getHeroe().getVidaActual() <= 0) {
                         modelo.setResultado(CombateModelo.Resultado.DERROTA);
-                        resultado = "derrota";
                         modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
 
                     } else {
@@ -300,15 +297,50 @@ public class CombateScreen extends Screens {
                     }
 
                     contador = 0;
+                    modelo.mostrarMensaje("");
                 }
             }
         }
 
-        if (modelo.getResultado() == Resultado.VICTORIA && !seleccionandoReemplazo) {
-            
-            victoriaProcesada = true;
-            recompensaControlador.mostrar();
-            setInput(recompensaControlador.getVista().getStage());
+        if (modelo.getResultado() == Resultado.VICTORIA   && !esperandoRecompensa) {
+            game.audio.play(6);
+            resultado = "victoria";
+            esperandoRecompensa = true;
+            tiempoResultado = 0f;
+        }
+
+        if (modelo.getResultado() == Resultado.DERROTA && !derrotaProcesada && !esperandoRecompensa) {
+            game.audio.play(7);
+            resultado = "derrota";
+            esperandoRecompensa = true;
+            tiempoResultado = 0f;
+        }
+
+        if (esperandoRecompensa) {
+            tiempoResultado += delta;
+
+            if (tiempoResultado >= 3f) {
+
+                resultado = null;
+
+                if (modelo.getResultado() == Resultado.VICTORIA) {
+
+                    victoriaProcesada = true;
+                    recompensaControlador.mostrar();
+                    setInput(recompensaControlador.getVista().getStage());
+
+                } else if (modelo.getResultado() == Resultado.DERROTA) {
+
+                    pausaControlador.setOpciones(true);
+                    setInput(pausaControlador.getVista().getStage());
+                    derrotaProcesada = true;
+
+                }
+
+                esperandoRecompensa = false;
+            }
+
+            return;
         }
     }
 
@@ -350,7 +382,7 @@ public class CombateScreen extends Screens {
             modelo.mostrarMensaje( modelo.getEnemigo().getNombre() + " usó " + modelo.getEnemigo().getUltimaHabilidadUsada() + "!");
         }
     }
-
+    
     @Override
     public void dispose() {
         super.dispose();

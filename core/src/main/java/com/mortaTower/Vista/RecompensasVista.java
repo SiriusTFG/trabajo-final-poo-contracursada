@@ -22,7 +22,7 @@ import com.mortaTower.Main;
 public class RecompensasVista {
 
     // BOTONES
-    private ImageButton btn, btnRemplazo, btnAtras, btnContinuar;
+    private ImageButton btn, btnRemplazo, btnAtras;
     private Stage stage;
     private Stack stack;
 
@@ -197,20 +197,11 @@ public class RecompensasVista {
         Label lblExpTotal = new Label("Progreso de Experiencia: " + expTotal + " / " + expNecesaria, styleBlanco);
 
         //botón continuar
-        btnContinuar = crearBoton(barraRemplazo); 
-        Label lblContinuar = new Label("Siguiente Piso", styleBlanco);
-        lblContinuar.setAlignment(Align.center);
-        lblContinuar.setTouchable(Touchable.disabled);
-        
-        Stack stackBtn = new Stack();
-        stackBtn.add(btnContinuar);
-        stackBtn.add(lblContinuar);
 
         tablaExp.add(lblTitulo).padBottom(50).row();
         tablaExp.add(lblNivel).padBottom(20).row();
         tablaExp.add(lblExpGanada).padBottom(20).row();
         tablaExp.add(lblExpTotal).padBottom(60).row();
-        tablaExp.add(stackBtn).size(400, 80);
 
         stage.addActor(tablaExp);
     }
@@ -260,5 +251,4 @@ public class RecompensasVista {
     public int getCantidadHabilidades() {return botonesHabilidades.size();}
     public int getCantidadRemplazo() {return botonesRemplazo.size();}
     public ImageButton getBtnAtras() {return btnAtras;}
-    public ImageButton getBtnContinuar() {return btnContinuar;}
 }

@@ -17,6 +17,7 @@ public class GameAssets {
         manager.load("Imagenes/MenuInicio/nueva.png", Texture.class);
         manager.load("Imagenes/MenuInicio/salir.png", Texture.class);
         manager.load("Imagenes/MenuInicio/cargar.png", Texture.class);
+        manager.load("Imagenes/MenuInicio/reintentar.png", Texture.class);
 
         manager.load("Imagenes/Opciones/pausa.png", Texture.class);
         manager.load("Imagenes/Opciones/btnMas.png", Texture.class);

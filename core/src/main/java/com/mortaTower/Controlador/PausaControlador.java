@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Main;
+import com.mortaTower.Screens.CombateScreen;
 import com.mortaTower.Screens.MenuScreen;
 import com.mortaTower.Screens.Screens;
 import com.mortaTower.Screens.TransicionScreen;
@@ -17,9 +18,12 @@ public class PausaControlador extends Screens{
     private boolean pausa;
     private Stage menuStage;
 
-    public PausaControlador(Main game, Stage menuStage){
+    private int nivel;
+
+    public PausaControlador(Main game, Stage menuStage, int nivel){
 
         super(game);
+        this.nivel = nivel;
         this.menuStage = menuStage;
         vistaPausa = new PausaVista(game);
         listenerPausa();
@@ -44,8 +48,27 @@ public class PausaControlador extends Screens{
         vistaPausa.getBtnRenudar().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                
                 pausa = false;
                 Gdx.input.setInputProcessor(menuStage);
+            }
+        });
+
+        vistaPausa.getBtnReintentar().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+
+                game.audio.stop(7);
+
+                // Reiniciar pantalla de combate
+                CombateScreen nuevoCombate = new CombateScreen(game, nivel);
+
+                // Cambiar pantalla con transición
+                game.setScreen(new TransicionScreen(game, PausaControlador.this, nuevoCombate));
+
+                // Limpiar input antiguo
+                Gdx.input.setInputProcessor(null);
+            
             }
         });
 
@@ -61,11 +84,12 @@ public class PausaControlador extends Screens{
         vistaPausa.getBtnSalir().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-               game.setScreen(new TransicionScreen(game, PausaControlador.this, new MenuScreen(game)));
+                game.audio.stop(7);
+                game.setScreen(new TransicionScreen(game, PausaControlador.this, new MenuScreen(game)));
             }
         });
     }
-
+    
     // GETTERS
     public PausaVista getVista() {return vistaPausa;}
     public boolean opciones(){ return pausa;}

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 import com.mortaTower.DAO.PartidaDao;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
@@ -140,26 +141,28 @@ public class RecompensaControlador  extends Screens{
                 vistaRecompensa.limpiar();
                 Heroe heroe = game.getPartidaActual().getHeroe();
                 heroe.ganarExperiencia(expPorGanar);
-                heroe.curarAlMaximo();
                 vistaRecompensa.pantallaExperiencia(heroe.getNivel(), expPorGanar, heroe.getExperiencia(), heroe.getExperienciaNecesaria());
 
-                vistaRecompensa.getBtnContinuar().addListener(new ClickListener() {
+                // Programamos un cambio de pantalla automático a los 5 segundos
+                Timer.schedule(new Timer.Task() {
                     @Override
-                    public void clicked(InputEvent event, float x, float y) {
+                    public void run() {
+                        
                         try {
                             Partida partidaActual = game.getPartidaActual();
                             partidaActual.setPisoActual(nivel + 1);
                             PartidaDao partidaDao = new PartidaDao();
                             partidaDao.guardarProgreso(partidaActual);
-                            
+
                             System.out.println("Partida guardada exitosamente. Avanzando al piso " + (nivel + 1));
                         } catch (SQLException e) {
                             e.printStackTrace();
                             System.err.println("Error al intentar guardar la partida.");
                         }
+                        
                         game.setScreen(new TransicionScreen(game, RecompensaControlador.this, new CombateScreen(game, nivel + 1)));
                     }
-                });
+                }, 5f);
                 break;
         }
     }
