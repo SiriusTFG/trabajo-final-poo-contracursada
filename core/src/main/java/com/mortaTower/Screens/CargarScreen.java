@@ -21,13 +21,29 @@ public class CargarScreen extends Screens {
 
         this.anteriorScreen = anteriorScreen;
         this.modelo = new CargarModelo();
-        this.vista = new CargarVista(modelo, viewport, game);
+        this.vista = new CargarVista(modelo.getPartidas(), viewport, game);
 
         Gdx.input.setInputProcessor(vista.getStage());
 
         configurarBotonesPartidas();
         configurarBotonesBorrar();
         configurarBotonesModal();
+        configuracionBotonAtras();
+}
+    private void configuracionBotonAtras() {
+        vista.getBtnAtras().addListener(new ClickListener() {
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer,
+                              com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                game.audio.play(1);
+            }
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.audio.play(2);
+                game.setScreen(new TransicionScreen(game, CargarScreen.this, new MenuScreen(game)));
+            }
+        });
     }
 
     private void configurarBotonesPartidas() {
@@ -140,7 +156,7 @@ public class CargarScreen extends Screens {
     public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
             game.audio.play(1);
-            game.setScreen(new TransicionScreen(game, this, anteriorScreen));
+            game.setScreen(new TransicionScreen(game, this, new MenuScreen(game)));
         }
     }
 
