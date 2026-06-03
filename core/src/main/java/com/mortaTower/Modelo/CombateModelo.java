@@ -112,6 +112,32 @@ public class CombateModelo {
         return nombres;
     }
 
+    public int[] getDaniosActuales(){
+        int[] danio = new int[4];
+        for (int i = 0; i < 4; i++) {
+            if (heroe.getHabilidades()[i] != null) {
+                danio[i] = heroe.getHabilidades()[i].getValorBase();
+            } else {
+                danio[i] = 0;
+            }
+        }
+        return danio;
+    }
+
+    public int[] getConsumosActuales(){
+        int[] mana = new int[4];
+
+        for (int i = 0; i < 4; i++) {
+            if (heroe.getHabilidades()[i] != null) {
+                mana[i] = heroe.getHabilidades()[i].getCostoMana();
+            } else {
+                mana[i] = 0;
+            }
+        }
+        return mana;
+
+    }
+
     public String[] getTipoHabilidadesActuales() {
         String[] tipos = new String[4];
         for (int i = 0; i < 4; i++) {

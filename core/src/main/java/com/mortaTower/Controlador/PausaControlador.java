@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Main;
+import com.mortaTower.Modelo.Partida;
 import com.mortaTower.Screens.CombateScreen;
 import com.mortaTower.Screens.MenuScreen;
 import com.mortaTower.Screens.Screens;
@@ -60,8 +61,12 @@ public class PausaControlador extends Screens{
 
                 game.audio.stop(7);
 
+                 
+                Partida partidaActual = game.getPartidaActual();
+                String nombreHeroe = partidaActual.getNombrePartida();
+
                 // Reiniciar pantalla de combate
-                CombateScreen nuevoCombate = new CombateScreen(game, nivel);
+                CombateScreen nuevoCombate = new CombateScreen(game, nombreHeroe, nivel);
 
                 // Cambiar pantalla con transición
                 game.setScreen(new TransicionScreen(game, PausaControlador.this, nuevoCombate));

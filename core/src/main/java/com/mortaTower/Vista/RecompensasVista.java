@@ -189,7 +189,7 @@ public class RecompensasVista {
         tablaExp.setFillParent(true);
         tablaExp.center();
 
-        Label lblTitulo = new Label("¡PISO COMPLETADO!", styleOro);
+        Label lblTitulo = new Label("Nivel " +  nivel + " de 5 superado", styleOro);
         lblTitulo.setFontScale(2f);
         
         Label lblNivel = new Label("Nivel del Héroe: " + nivel, styleBlanco);

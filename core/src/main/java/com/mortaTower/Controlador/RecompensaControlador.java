@@ -47,8 +47,6 @@ public class RecompensaControlador  extends Screens{
         combateModelo = new CombateModelo(heroe, nivel);
 
         habilidad = modeloRecompensa.getHabilidad();
-       // habilidadActual = combateModelo.getHabilidadesPorEntidad();
-        //tipo = modeloRecompensa.getipo();
 
         cargarAssets();
 
@@ -148,11 +146,14 @@ public class RecompensaControlador  extends Screens{
                     @Override
                     public void run() {
                         
-                        try {
-                            Partida partidaActual = game.getPartidaActual();
+                        Partida partidaActual = game.getPartidaActual();
+                        String nombreHeroe = partidaActual.getNombrePartida();
+                        
+                        try {   
                             partidaActual.setPisoActual(nivel + 1);
                             PartidaDao partidaDao = new PartidaDao();
                             partidaDao.guardarProgreso(partidaActual);
+                            
 
                             System.out.println("Partida guardada exitosamente. Avanzando al piso " + (nivel + 1));
                         } catch (SQLException e) {
@@ -160,7 +161,7 @@ public class RecompensaControlador  extends Screens{
                             System.err.println("Error al intentar guardar la partida.");
                         }
                         
-                        game.setScreen(new TransicionScreen(game, RecompensaControlador.this, new CombateScreen(game, nivel + 1)));
+                        game.setScreen(new TransicionScreen(game, RecompensaControlador.this, new CombateScreen(game, nombreHeroe, nivel + 1)));
                     }
                 }, 5f);
                 break;

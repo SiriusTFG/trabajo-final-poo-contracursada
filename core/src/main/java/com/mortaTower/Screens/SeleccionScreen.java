@@ -79,7 +79,7 @@ public class SeleccionScreen extends Screens {
                 try {
                     Partida partida = confirmarYCrearPartida(nombrePartida, idHereoSelc);
                     game.setPartida(partida);
-                    game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new CombateScreen(game, 1)));
+                    game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new CombateScreen(game, nombrePartida, 1)));
                 } catch (SQLException e) {
                     e.printStackTrace();
                     vista.mostrarSinEspacio();

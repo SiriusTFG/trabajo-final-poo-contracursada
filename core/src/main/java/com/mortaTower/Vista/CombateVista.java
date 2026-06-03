@@ -61,9 +61,13 @@ public class CombateVista {
     private Texture categoriasTex;
     private Texture habilidadTex;
     private Label lblDescripcion;
+    private Label lblDanio, lblMana;
+
+    private Label lblVidaHeroe, lblVidaEnemy;
+private Label  lblManaHeroe, lblManaEnemy;
 
     // Render
-    private BitmapFont font;
+    private BitmapFont font, fontStats;
     private ShapeRenderer sr;
 
     // Animaciones
@@ -120,11 +124,40 @@ public class CombateVista {
         font.getData().setScale(1.5f);
         font.setColor(Color.WHITE);
 
+        fontStats = new BitmapFont();
+        fontStats.getData().setScale(1.0f);
+        fontStats.setColor(Color.WHITE);
+
+        lblVidaHeroe = new Label("", new Label.LabelStyle(fontStats, Color.WHITE));
+        lblVidaHeroe.setAlignment(Align.center);
+        lblVidaHeroe.setPosition(105, 140);
+
+        lblManaHeroe = new Label("", new Label.LabelStyle(fontStats, Color.WHITE));
+        lblManaHeroe.setAlignment(Align.center);
+        lblManaHeroe.setPosition(105, 115);
+
+        lblVidaEnemy = new Label("", new Label.LabelStyle(fontStats, Color.WHITE));
+        lblVidaEnemy.setAlignment(Align.center);
+        lblVidaEnemy.setPosition(1190, 140);
+
+        lblManaEnemy = new Label("", new Label.LabelStyle(fontStats, Color.WHITE));
+        lblManaEnemy.setAlignment(Align.center);
+        lblManaEnemy.setPosition(1190, 115);
+        
+
         lblDescripcion = new Label("", new Label.LabelStyle(font, Color.YELLOW));
         lblDescripcion.setAlignment(Align.center);
         lblDescripcion.setPosition(WORLD_WIDTH / 2f - 150, WORLD_HEIGHT * 0.28f); //y
         lblDescripcion.setSize(150, 50);
         lblDescripcion.setWrap(true);
+
+        lblDanio = new Label("", new Label.LabelStyle(font, Color.RED));
+        lblDanio.setAlignment(Align.center);
+        lblDanio.setPosition(WORLD_WIDTH - 550, WORLD_HEIGHT * 0.35f);
+
+        lblMana = new Label("", new Label.LabelStyle(font, Color.BLUE));
+        lblMana.setAlignment(Align.center);
+        lblMana.setPosition(WORLD_WIDTH - 550, WORLD_HEIGHT * 0.31f);
 
         stage.addActor(imgFondoGeneral); 
         stage.addActor(btnPausa);
@@ -132,6 +165,8 @@ public class CombateVista {
         stage.addActor(stsEnemigo); 
         crearUIInventario();
         stage.addActor(lblDescripcion);
+        stage.addActor(lblDanio);
+        stage.addActor(lblMana);
         cargarAnimaciones();
     }
 
@@ -261,34 +296,46 @@ public class CombateVista {
 
     // BARRA DE VIDA/MANA
     public void dibujarInterfazHeroe(SpriteBatch batch, int vidaActual, int vidaMax, int manaActual, int manaMax) {
+
+        lblVidaHeroe.setText(vidaActual + " / " + vidaMax);
+        lblManaHeroe.setText(manaActual + " / " + manaMax);
+
         sr.setProjectionMatrix(batch.getProjectionMatrix());
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        dibujarBarra(120, 132, vidaActual, vidaMax, Color.GREEN);
-        dibujarBarra(120, 106, manaActual, manaMax, Color.BLUE);
-        
+        stage.addActor(lblVidaHeroe);
+        dibujarBarra(140, 132, vidaActual, vidaMax, Color.GREEN);
+        stage.addActor(lblManaHeroe);
+        dibujarBarra(140, 106, manaActual, manaMax, Color.BLUE);
+
         sr.end();
     }
 
     public void dibujarInterfazEnemigo(SpriteBatch batch, int vidaActual, int vidaMax, int manaActual, int manaMax) {
+
+        lblVidaEnemy.setText(vidaActual + " / " + vidaMax);
+        lblManaEnemy.setText(manaActual + " / " + manaMax);
+
         sr.setProjectionMatrix(batch.getProjectionMatrix());
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        dibujarBarra(977, 136, vidaActual, vidaMax, Color.RED);
-        dibujarBarra(977, 110, manaActual, manaMax, Color.BLUE);
+        stage.addActor(lblVidaEnemy);
+        dibujarBarra(977, 132, vidaActual, vidaMax, Color.RED);
+        stage.addActor(lblManaEnemy);
+        dibujarBarra(977, 106, manaActual, manaMax, Color.BLUE);
         
         sr.end();
     }
 
     private void dibujarBarra(float x, float y, int actual, int max, Color color) {
         
-        ancho = 200f;
+        ancho = 180f;
         float porcentaje = (float) actual / max;
 
         sr.setColor(Color.BLACK);
-        sr.rect(x, y, ancho, 15);
+        sr.rect(x, y, ancho, 18);
         sr.setColor(color);
-        sr.rect(x, y, ancho * porcentaje, 20);
+        sr.rect(x, y, ancho * porcentaje, 18);
     }
 
     public void dibujarSprite(SpriteBatch batch, Entidad.Estado estadoHeroe, float timeHeroe, String nombreHeroe, 
@@ -434,7 +481,8 @@ public class CombateVista {
         return 1.0f;
     }
 
-    public void setTextoDescripcion(String texto) {
-        lblDescripcion.setText(texto);
-    }
+    public void setTextoDescripcion(String texto) {lblDescripcion.setText(texto);}
+    public void setTextoDanio(String danio) { lblDanio.setText(danio);}
+    public void setTextoMana(String mana) {lblMana.setText(mana);}
+
 }

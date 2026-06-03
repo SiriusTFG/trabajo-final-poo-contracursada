@@ -125,10 +125,11 @@ public class CargarScreen extends Screens {
         try {
             PartidaDao partidaDao = new PartidaDao();
             Partida partida = partidaDao.cargarPartida(idPartida);
+            String nombreHeroe = partida.getNombrePartida();
 
             if (partida != null) {
                 game.setPartida(partida);
-                game.setScreen(new TransicionScreen(game, this, new CombateScreen(game, partida.getPisoActual())));
+                game.setScreen(new TransicionScreen(game, this, new CombateScreen(game, nombreHeroe, partida.getPisoActual())));
             }
 
         } catch (Exception e) {
@@ -153,13 +154,13 @@ public class CargarScreen extends Screens {
         }
     }
 
-    public void update(float delta) {
+    /*public void update(float delta) {
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
             game.audio.play(1);
             game.setScreen(new TransicionScreen(game, this, new MenuScreen(game)));
 
         }
-    }
+    }*/
 
     @Override
     public void render(float delta) {

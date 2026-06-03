@@ -33,6 +33,7 @@ public class CombateScreen extends Screens {
     private boolean danioAplicado;
     private int nivel;
 
+    private String nombreHeroe;
     private float contador = 0;
     private float tiempoPausa;
     private boolean proximoTurnoJugador;
@@ -48,8 +49,9 @@ public class CombateScreen extends Screens {
     private boolean heroeAturdido = false;
 
     //constructor
-    public CombateScreen(Main game, int nivel) {
+    public CombateScreen(Main game, String nombreHeroe, int nivel) {
         super(game);
+        this.nombreHeroe = nombreHeroe;
         this.nivel = nivel;
         Heroe heroe = game.getPartidaActual().getHeroe();
         modelo = new CombateModelo(heroe, nivel);
@@ -67,6 +69,9 @@ public class CombateScreen extends Screens {
         String[] nombresHabilidades = modelo.getNombreHabilidadesActuales();
         String[] tiposHabilidades = modelo.getTipoHabilidadesActuales();
         String[] descripciones = modelo.getDescripcionesHabilidadesActuales();
+        int[] danio = modelo.getDaniosActuales();
+        int[] mana = modelo.getConsumosActuales();
+
         vista.cargarInventarioHabilidades(nombresHabilidades, tiposHabilidades);
 
         vista.getBtnPausa().addListener(new ClickListener() {
@@ -95,14 +100,14 @@ public class CombateScreen extends Screens {
             });
         });
 
-        listenersHabilidades(descripciones); 
+        listenersHabilidades(descripciones, danio, mana); 
     }
 
     private void setInput(Stage stageActivo) {
         Gdx.input.setInputProcessor(stageActivo);
     }
 
-    private void listenersHabilidades(String[] descripcion) {
+    private void listenersHabilidades(String[] descripcion, int[] danio, int[] mana) {
         int cantidad = vista.getCantidadHabilidades();
 
         for (int i = 0; i < cantidad; i++) {
@@ -114,11 +119,15 @@ public class CombateScreen extends Screens {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
                     vista.setTextoDescripcion(descripcion[index]);
+                    vista.setTextoDanio(Integer.toString(danio[index]));
+                    vista.setTextoMana(Integer.toString(mana[index]));
                 }
 
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor toActor) {
                     vista.setTextoDescripcion(""); // Limpiamos el texto
+                    vista.setTextoDanio("");
+                    vista.setTextoMana("");
                 }
                 
                 @Override
@@ -144,7 +153,7 @@ public class CombateScreen extends Screens {
         vista.dibujarSprite(spriteBatch, 
             modelo.getHeroe().getEstadoActual(), 
             modelo.getHeroe().getStatetime(), 
-            modelo.getHeroe().getNombre(),
+            nombreHeroe,
             modelo.getEnemigo().getEstadoActual(), 
             modelo.getEnemigo().getStatetime(), 
             modelo.getEnemigo().getNombre());
