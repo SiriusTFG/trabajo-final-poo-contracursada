@@ -28,6 +28,47 @@ public class Goblin {
         this.estadoActual = EstadoGoblin.CORRIENDO;
     }
 
+    public boolean actualizar(float delta, Heroe heroe, float posicionImpacto, float limitePantalla, float pisoY, float duracionAtaque) {
+        if (!activo) return false;
+        
+        this.stateTime += delta;
+        boolean impactoEsteFrame = false;
+
+        switch (estadoActual) {
+            case CORRIENDO -> {
+                float velocidad = 200f;
+                x -= velocidad * delta;
+                
+                if (x <= posicionImpacto) {
+                    cambiarEstado(EstadoGoblin.ATACANDO);
+                    heroe.recibirDanio(danio);
+                    impactoEsteFrame = true;
+                }
+            }
+
+            case ATACANDO -> {
+                if (stateTime >= duracionAtaque) {
+                    cambiarEstado(EstadoGoblin.ESCAPANDO);
+                }
+            }
+
+            case ESCAPANDO -> {
+                float velocidadX = 650f;
+                float fuerzaSalto = 800f;
+                float gravedad = 1000f;
+
+                x += velocidadX * delta;
+                y = pisoY + (fuerzaSalto * stateTime) - (0.5f * gravedad * (stateTime * stateTime));
+
+                if (x > limitePantalla) {
+                    activo = false; // se fue de la pantalla se desactiva solo
+                }
+            }
+        }
+        
+        return impactoEsteFrame;
+    }
+
     public void cambiarEstado(EstadoGoblin nuevoEstado) {
         this.estadoActual = nuevoEstado;
         this.stateTime = 0;
