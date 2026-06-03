@@ -74,7 +74,7 @@ public class CargarScreen extends Screens {
             vista.getBotonesBorrar().get(i).addListener(new ClickListener() {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer,
-                                  com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                                com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
                     game.audio.play(1);
                 }
 
@@ -157,6 +157,7 @@ public class CargarScreen extends Screens {
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
             game.audio.play(1);
             game.setScreen(new TransicionScreen(game, this, new MenuScreen(game)));
+
         }
     }
 
