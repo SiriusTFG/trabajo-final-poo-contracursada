@@ -61,6 +61,7 @@ public class GameAssets {
         manager.load("Imagenes/Combate/nivel5.png", Texture.class);
 
         manager.load("Imagenes/CargarPartida/Fondo1.png", Texture.class);
+        manager.load("Imagenes/Creditos/mortalTower.png", Texture.class);
 
         // Para Cuadros y otros
         manager.load("Imagenes/SeleccionPersonaje/nombrePersonaje.png", Texture.class);

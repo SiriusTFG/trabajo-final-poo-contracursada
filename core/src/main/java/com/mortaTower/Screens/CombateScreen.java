@@ -1,11 +1,14 @@
 package com.mortaTower.Screens;
 
+import java.sql.SQLException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Controlador.PausaControlador;
 import com.mortaTower.Controlador.RecompensaControlador;
+import com.mortaTower.DAO.PartidaDao;
 import com.mortaTower.Hilo.GoblinAtacante;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
@@ -14,10 +17,13 @@ import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Goblin;
 import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
+import com.mortaTower.Modelo.Partida;
 import com.mortaTower.Vista.CombateVista;
 
 
 public class CombateScreen extends Screens {
+
+    private int nivelesTotal = 5;
 
     private CombateModelo modelo;
     private PausaControlador pausaControlador;
@@ -51,6 +57,9 @@ public class CombateScreen extends Screens {
     //constructor
     public CombateScreen(Main game, String nombreHeroe, int nivel) {
         super(game);
+
+        System.out.println("COMBATE CREADO");
+
         this.nombreHeroe = nombreHeroe;
         this.nivel = nivel;
         Heroe heroe = game.getPartidaActual().getHeroe();
@@ -60,6 +69,9 @@ public class CombateScreen extends Screens {
 
     @Override
     public void show() {
+
+        System.out.println("SHOW COMBATE");
+        
         vista = new CombateVista(viewport,game,nivel);
         pausaControlador = new PausaControlador(game, vista.getStage(), nivel);
 
@@ -263,7 +275,7 @@ public class CombateScreen extends Screens {
         }
 
         if (modelo.getResultado() == Resultado.VICTORIA   && !esperandoRecompensa) {
-            game.audio.play(6);
+            //game.audio.play(6);
             resultado = "victoria";
             esperandoRecompensa = true;
             tiempoResultado = 0f;
@@ -283,18 +295,38 @@ public class CombateScreen extends Screens {
 
                 resultado = null;
 
-                if (modelo.getResultado() == Resultado.VICTORIA) {
+                if (modelo.getResultado() == Resultado.VICTORIA && nivel < nivelesTotal) {
 
                     victoriaProcesada = true;
+                    game.audio.play(8);
                     recompensaControlador.mostrar();
                     setInput(recompensaControlador.getVista().getStage());
+                
+                }else if(modelo.getResultado() == Resultado.VICTORIA && nivelesTotal == nivel){
+
+                    nivel = 0;
+
+                    Partida partidaActual = game.getPartidaActual();
+                        
+                    try {   
+                        partidaActual.setPisoActual(nivel + 1);
+                        PartidaDao partidaDao = new PartidaDao();
+                        partidaDao.guardarProgreso(partidaActual);
+                        
+
+                        System.out.println("Partida guardada exitosamente. Avanzando al piso " + (++nivel));
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                        System.err.println("Error al intentar guardar la partida.");
+                    }
+
+                    game.setScreen(new TransicionScreen(game, this, new CreditosScreen(game, spriteBatch)));
 
                 } else if (modelo.getResultado() == Resultado.DERROTA) {
 
                     pausaControlador.setOpciones(true);
                     setInput(pausaControlador.getVista().getStage());
                     derrotaProcesada = true;
-
                 }
 
                 esperandoRecompensa = false;

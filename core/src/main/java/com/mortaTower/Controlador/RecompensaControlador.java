@@ -31,7 +31,7 @@ public class RecompensaControlador  extends Screens{
     private int nivel;
     private Habilidad[] habilidad;
     private List<Habilidad> habilidadActual;
-    private int habSelecionada;
+    private int habSelecionada, habRemplazar;
     private int[] tipo;
 
     private enum EstadoRecompensa {LISTA_HABILIDADES, RESUMEN_EXP}
@@ -57,8 +57,9 @@ public class RecompensaControlador  extends Screens{
         String[] nombresRecompensas = modeloRecompensa.getNombresRecompensas();
         String[] nombresActuales = modeloRecompensa.getNombresHabilidadesActuales();
         String[] tipoRecompensas = modeloRecompensa.getTipoRecompensas();
+        String[] tipoHabilidadActual = modeloRecompensa.getTipoHabilidad();
 
-        vistaRecompensa.listaHabilidades(nombresRecompensas, nombresActuales, tipoRecompensas);
+        vistaRecompensa.listaHabilidades(nombresRecompensas, nombresActuales, tipoRecompensas, tipoHabilidadActual);
         Gdx.input.setInputProcessor(vistaRecompensa.getStage());
         listenersRecompensas();   
     }
@@ -72,6 +73,9 @@ public class RecompensaControlador  extends Screens{
     private void listenersRecompensas() {
         int cantidad = vistaRecompensa.getCantidadHabilidades();
 
+        String[] nueva = modeloRecompensa.getNombresRecompensas();
+        String[] reemplaza = modeloRecompensa.getNombresHabilidadesActuales();
+
         for (int i = 0; i < cantidad; i++) {
             int id = i;
             vistaRecompensa.getBoton(i).addListener(new ClickListener() {
@@ -79,6 +83,7 @@ public class RecompensaControlador  extends Screens{
                 public void clicked(InputEvent event, float x, float y) {
                     //recompensaSeleccionada = modeloRecompensa.getHabilidad()[id];
                     habSelecionada = id;
+                    vistaRecompensa.setNueva(nueva[id]);
                 }
             });
         }
@@ -89,21 +94,40 @@ public class RecompensaControlador  extends Screens{
             vistaRecompensa.getBtnRemplazo(i).addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    try {
-                        int idPartidaActual = game.getPartidaActual().getId();
-                        modeloRecompensa.reemplazarHab(idPartidaActual, habSelecionada, slot);
-                        Habilidad nuevaHabilidad = modeloRecompensa.getHabilidad()[habSelecionada];
-                        game.getPartidaActual().getHeroe().setHabilidad(slot, nuevaHabilidad);
-                    } catch (SQLException e) {
+                    
+                    habRemplazar = slot;
+                    vistaRecompensa.setReemplaza(reemplaza[slot]);
 
-                        e.printStackTrace();
-                    }
-                
-                    cambiarEstado(EstadoRecompensa.RESUMEN_EXP);
                 }
                 
             });
         }
+
+        vistaRecompensa.getBtnConfirmar().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                try {
+                    int idPartidaActual = game.getPartidaActual().getId();
+                    modeloRecompensa.reemplazarHab(idPartidaActual, habSelecionada, habRemplazar);
+                    Habilidad nuevaHabilidad = modeloRecompensa.getHabilidad()[habSelecionada];
+                    game.getPartidaActual().getHeroe().setHabilidad(habRemplazar, nuevaHabilidad);
+                } catch (SQLException e) {
+
+                    e.printStackTrace();
+                }
+            
+                cambiarEstado(EstadoRecompensa.RESUMEN_EXP);
+            }
+        });
+
+        vistaRecompensa.getBtnOmitir().addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            
+                cambiarEstado(EstadoRecompensa.RESUMEN_EXP);
+            }
+        });
+
 
     }
 
@@ -114,19 +138,23 @@ public class RecompensaControlador  extends Screens{
         switch (estado) {
 
             case LISTA_HABILIDADES:
+
+                //game.audio.play(8);
                 vistaRecompensa.limpiar();
                 String[] nombreRecompensas = modeloRecompensa.getNombresRecompensas();
                 String[] nombresActuales = modeloRecompensa.getNombresHabilidadesActuales();
                 String[] tipoRecompensa = modeloRecompensa.getTipoRecompensas();
-                vistaRecompensa.listaHabilidades(nombreRecompensas, nombresActuales, tipoRecompensa);
+                String[] tipoHabilidadActual = modeloRecompensa.getTipoHabilidad();
+                vistaRecompensa.listaHabilidades(nombreRecompensas, nombresActuales, tipoRecompensa, tipoHabilidadActual);
                 listenersRecompensas();
                 break;
 
             case RESUMEN_EXP : 
+                game.audio.play(9);
                 vistaRecompensa.limpiar();
                 Heroe heroe = game.getPartidaActual().getHeroe();
                 heroe.ganarExperiencia(expPorGanar);
-                vistaRecompensa.pantallaExperiencia(heroe.getNivel(), expPorGanar, heroe.getExperiencia(), heroe.getExperienciaNecesaria());
+                vistaRecompensa.pantallaExperiencia(heroe.getNivel(), nivel, expPorGanar, heroe.getExperiencia(), heroe.getExperienciaNecesaria());
 
                 // Programamos un cambio de pantalla automático a los 5 segundos
                 Timer.schedule(new Timer.Task() {
@@ -148,7 +176,7 @@ public class RecompensaControlador  extends Screens{
                             System.err.println("Error al intentar guardar la partida.");
                         }
                         
-                        game.setScreen(new TransicionScreen(game, RecompensaControlador.this, new CombateScreen(game, nombreHeroe, nivel + 1)));
+                        game.setScreen(new TransicionScreen(game, RecompensaControlador.this,new CombateScreen(game, nombreHeroe, ++nivel)));
                     }
                 }, 5f);
                 break;

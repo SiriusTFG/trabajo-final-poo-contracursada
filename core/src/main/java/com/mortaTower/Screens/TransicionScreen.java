@@ -5,77 +5,86 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.mortaTower.Main;
 
 public class TransicionScreen implements Screen {
 
     private final Game game;
-    private final Screen currentScreen;
-    private final Screen nextScreen;
-    private boolean nextShown = false;
+    private final Screen fromScreen;
+    private final Screen toScreen;
 
-    private ShapeRenderer shapeRenderer;
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     private float alpha = 0f;
-    private boolean changing = false;
+    private boolean switching = false;
+    private boolean finished = false;
 
-    public TransicionScreen(Main game, Screen currentScreen, Screen nextScreen) {
+    
+    private final float speed = 1.5f; // velocidad del fade
+    private final float fadeOutSpeed = 1.5f;
+    private final float fadeInSpeed = 0.8f;
+
+    public TransicionScreen(Game game, Screen fromScreen, Screen toScreen) {
         this.game = game;
-        this.currentScreen = currentScreen;
-        this.nextScreen = nextScreen;
-
-        shapeRenderer = new ShapeRenderer();
+        this.fromScreen = fromScreen;
+        this.toScreen = toScreen;
     }
 
     @Override
-   
-public void render(float delta) {
+    public void render(float delta) {
 
-    if (!changing) {
+        // 1. Actualiza lógica del fade
+        alpha += delta * speed;
 
-        currentScreen.render(delta);
-
-        alpha += delta;
-
-        if (alpha >= 1f) {
+        if (alpha >= 1f && !switching) {
             alpha = 1f;
-            changing = true;
+            switching = true;
+
+            // cambia la pantalla en el punto negro total
+            game.setScreen(toScreen);
         }
 
-    } else {
-
-        if (!nextShown) {
-            nextScreen.show();
-            nextShown = true;
+        if (alpha >= 2f) {
+            finished = true;
+            game.setScreen(toScreen);
+            return;
         }
 
-        nextScreen.render(delta);
+        // 2. Render del screen activo automáticamente
+        Screen current = switching ? toScreen : fromScreen;
+        current.render(delta);
 
-        alpha -= delta;
+        // 3. Overlay de transición
+        Gdx.gl.glEnable(GL20.GL_BLEND);
 
-        if (alpha <= 0f) {
-            game.setScreen(nextScreen);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        float fadeAlpha;
+        if (alpha <= 1f) {
+            // fade out
+            fadeAlpha = alpha;
+        } else {
+            // fade in
+            fadeAlpha = 2f - alpha;
         }
+
+        shapeRenderer.setColor(0, 0, 0, fadeAlpha);
+        shapeRenderer.rect(0, 0,
+                Gdx.graphics.getWidth(),
+                Gdx.graphics.getHeight());
+
+        shapeRenderer.end();
+
+        Gdx.gl.glDisable(GL20.GL_BLEND);
     }
-
-    Gdx.gl.glEnable(GL20.GL_BLEND);
-
-    shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-    shapeRenderer.setColor(0, 0, 0, alpha);
-    shapeRenderer.rect(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    shapeRenderer.end();
-
-    Gdx.gl.glDisable(GL20.GL_BLEND);
-}
-
-    @Override public void resize(int width, int height) {}
-    @Override public void pause() {}
-    @Override public void resume() {}
-    @Override public void hide() {}
-    @Override public void show() {}
 
     @Override
     public void dispose() {
         shapeRenderer.dispose();
     }
+
+    @Override public void show() {}
+    @Override public void resize(int width, int height) {}
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
 }

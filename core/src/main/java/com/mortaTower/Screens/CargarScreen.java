@@ -41,7 +41,7 @@ public class CargarScreen extends Screens {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.audio.play(2);
-                game.setScreen(new TransicionScreen(game, CargarScreen.this, new MenuScreen(game)));
+                game.setScreen(new TransicionScreen(game, CargarScreen.this,new MenuScreen(game)));
             }
         });
     }

@@ -22,9 +22,12 @@ public class Audio {
         sounds[5] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/sound4.wav"));
         sounds[6] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/victory.wav"));
         sounds[7] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/defeat.mp3"));
-        
+        sounds[8] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/openBook.wav"));
+        sounds[9] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/closeBook.wav"));
+
         music[0] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/untitled.wav"));
         music[1] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/battleLvl1.mp3"));
+        music[2] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/starWars.mp3"));
     }
 
     // PLAY (SFX)

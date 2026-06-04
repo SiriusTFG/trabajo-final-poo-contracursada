@@ -33,6 +33,7 @@ public class MenuScreen extends Screens {
                 game.audio.play(3);
                 game.audio.stop(0);
                 game.setScreen(new TransicionScreen(game, MenuScreen.this, new SeleccionScreen(game)));
+                
             }
         });
 
@@ -70,13 +71,13 @@ public class MenuScreen extends Screens {
     public void render(float delta) {
         super.render(delta); //limpia la pantalla
         
-        if(opcionesControlador.opciones()) {
+        vista.getStage().act(delta);
+        vista.getStage().draw();
 
-            opcionesControlador.render(delta);
-        } else {
+        if (opcionesControlador.opciones()) {
             
-            vista.getStage().act(delta);
-            vista.getStage().draw();
+            opcionesControlador.render(delta);
+            return;
         }
     }
 

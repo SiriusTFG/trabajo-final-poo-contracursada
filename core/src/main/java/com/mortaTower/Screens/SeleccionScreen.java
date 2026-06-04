@@ -40,7 +40,7 @@ public class SeleccionScreen extends Screens {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
                 game.audio.play(2);
-                game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new CargarScreen(game,SeleccionScreen.this)));
+                game.setScreen(new TransicionScreen(game,SeleccionScreen.this, new CargarScreen(game,SeleccionScreen.this)));
                 }
                        });
 
@@ -69,13 +69,16 @@ public class SeleccionScreen extends Screens {
         vista.getBtnIniciarPartida().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent eveto, float x, float y) {
+
+               
+
                 game.audio.play(2);
                 String nombrePartida = vista.getNombreDelField().trim();
 
                 if (nombrePartida.isEmpty()) {
                     return;
                 }
-
+                System.out.println("CLICK JUGAR");
                 try {
                     Partida partida = confirmarYCrearPartida(nombrePartida, idHereoSelc);
                     game.setPartida(partida);
@@ -90,7 +93,7 @@ public class SeleccionScreen extends Screens {
         vista.getBtnAtras().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
-                vista.cerrar();
+                
                 game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new MenuScreen(game)));
             }
         });

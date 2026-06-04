@@ -35,7 +35,8 @@ public class RecompensasVista {
     //Fuente
     private BitmapFont font;
     private Label lbl;
-    private Image img;
+    private Image img, imgRemp, fondoImg, cuadroRec;
+    private Label lblNueva, lblReemplaza;
 
     // TABLAS
     private Table tablaHab , tr;
@@ -49,12 +50,12 @@ public class RecompensasVista {
 
         fondo = game.assets.get("Imagenes/black.png", Texture.class);
 
-        Image fondoImg = new Image(new TextureRegionDrawable(fondo));
+        fondoImg = new Image(new TextureRegionDrawable(fondo));
         fondoImg.setFillParent(true);
         fondoImg.setColor(0, 0, 0, 0.6f); // opcional translúcido
 
         cuadroRecompensa = game.assets.get("Imagenes/SeccionRecompensa/cuadroRecompensa.png", Texture.class);
-        Image cuadroRec = new Image(new TextureRegionDrawable(cuadroRecompensa));
+        cuadroRec = new Image(new TextureRegionDrawable(cuadroRecompensa));
         cuadroRec.setFillParent(true);
 
         cuadro = game.assets.get("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
@@ -71,112 +72,118 @@ public class RecompensasVista {
         btnOmitir = crearBoton(new Texture("Imagenes/SeccionRecompensa/cancelar.png"));
         btnOmitir.setSize(260, 140);
         btnOmitir.setPosition(1430, 68);
+    }
 
+    public void listaHabilidades(String[] nombreHabilidades, String[] nombreHabilidadesActuales, String[] tipo, String[] tipoActual) {
+
+        stage.clear();
+        
         stage.addActor(fondoImg);
         stage.addActor(cuadroRec);
         stage.addActor(btnConfirmar);
         stage.addActor(btnOmitir);
 
-    }
-
-    public void listaHabilidades(String[] nombreHabilidades, String[] nombreHabilidadesActuales, String[] tipo) {
-        font = new BitmapFont();
-        Label.LabelStyle style = new Label.LabelStyle();
-        style.font = font;
-        style.fontColor = Color.WHITE;
+        botonesHabilidades.clear();
+        botonesRemplazo.clear();
 
         if (tablaHab != null) {
             tablaHab.remove();
             tablaHab.clear();
         }
 
+        font = new BitmapFont();
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.font = font;
+        style.fontColor = Color.WHITE;
+
         tablaHab = new Table();
+        tablaHab.defaults().space(10);
         tablaHab.setFillParent(true);
-        tablaHab.defaults().space(0);
-        tablaHab.left().padLeft(250);
-        tablaHab.bottom().padBottom(250);
+        tablaHab.top().left().padTop(300).padLeft(250);
 
-        botonesHabilidades.clear();
+        int max = Math.max(nombreHabilidades.length, nombreHabilidadesActuales.length);
 
-        for (int i = 0; i < nombreHabilidades.length; i++) {
-            String nombre = nombreHabilidades[i];
+        for (int i = 0; i < max; i++) {
 
-            btn = crearBoton(cuadro);
-            img = crearIconoTipo(tipo[i]);
+            // ====== ACTUAL ======
+            if (i < nombreHabilidades.length) {
+                btn = crearBoton(cuadro);
+                float h = btn.getPrefHeight() - 20;
 
-            lbl = new Label(nombre, style);
-            lbl.setAlignment(Align.center);
-            lbl.setTouchable(Touchable.disabled);
+                img = crearIconoTipo(tipo[i]);
 
-            stack = new Stack();
-            stack.add(btn);
-            stack.add(lbl);
+                lbl = new Label(nombreHabilidades[i], style);
+                lbl.setAlignment(Align.center);
+                lbl.setTouchable(Touchable.disabled);
 
-            botonesHabilidades.add(btn);
+                stack = new Stack();
+                stack.add(btn);
+                stack.add(lbl);
 
-            if (img != null) {
-                tablaHab.add(img).size(180, 180);
+                botonesHabilidades.add(btn);
+
+                tablaHab.add(img).size(h, h).padRight(10);
+                tablaHab.add(stack).size(btn.getPrefWidth() - 100, h).padRight(125);
             } else {
-                tablaHab.add().size(180, 180);
+                tablaHab.add().size(0); // placeholder
+                tablaHab.add().size(100);
             }
 
-            tablaHab.add(stack).width(500).height(200).row();;
+            // ====== REEMPLAZO ======
+            if (i < nombreHabilidadesActuales.length) {
+                btnRemplazo = crearBoton(cuadro);
+                float h = btnRemplazo.getPrefHeight() - 20;
+
+                imgRemp = crearIconoTipo(tipoActual[i]);
+
+                lbl = new Label(nombreHabilidadesActuales[i], style);
+                lbl.setAlignment(Align.center);
+                lbl.setTouchable(Touchable.disabled);
+
+                stack = new Stack();
+                stack.add(btnRemplazo);
+                stack.add(lbl);
+
+                botonesRemplazo.add(btnRemplazo);
+
+                //tablaHab.add().width(100); // separador opcional
+                tablaHab.add(imgRemp).size(h, h).padRight(10);
+                tablaHab.add(stack).size(btnRemplazo.getPrefWidth() - 100, h);
+            }
+
+            tablaHab.row();
         }
+
+        lblNueva = new Label("",new Label.LabelStyle(font, Color.WHITE));
+        lblNueva.setFontScale(2f);
+        lblNueva.setPosition(365, 165);
+
+        lblReemplaza = new Label("",new Label.LabelStyle(font, Color.WHITE));
+        lblReemplaza.setFontScale(2f);
+        lblReemplaza.setPosition(365, 145);
+
         stage.addActor(tablaHab);
-
-        if (tr != null) {
-            tr.remove();
-            tr.clear();
-        }
-
-        tr = new Table();
-        tr.setFillParent(true);
-        //tr.defaults().space(5);
-        tr.bottom().padBottom(280);
-        tr.left().padLeft(1030);
-        //tr.setDebug(true);
-
-        botonesRemplazo.clear();
-
-        
-        for (int i = 0; i < 4; i++) {
-            btnRemplazo = crearBoton(barraRemplazo);
-            btnRemplazo.setSize(600, 445);
-
-            String nombreViejaHabilidad = nombreHabilidadesActuales[i];
-
-            lbl = new Label(nombreViejaHabilidad, style);
-            lbl.setAlignment(Align.center);
-            lbl.setTouchable(Touchable.disabled);
-
-            stack = new Stack();
-            stack.add(btnRemplazo);
-            stack.add(lbl);
-
-            botonesRemplazo.add(btnRemplazo);
-
-            tr.add(stack).width(560).height(120).row();;
-        }
-        stage.addActor(tr);
+        stage.addActor(lblNueva);
+        stage.addActor(lblReemplaza);
     }
 
     private Image crearIconoTipo(String tipo) {
         if (tipo == null || tipo.equalsIgnoreCase("vacio")) return null;
 
-        int columna = 0;
-        if (tipo.equalsIgnoreCase("Ataque")) columna = 0;
-        else if (tipo.equalsIgnoreCase("Defensa")) columna = 1;
-        else if (tipo.equalsIgnoreCase("Curacion")) columna = 2;
-        else if (tipo.equalsIgnoreCase("Mana")) columna = 3;
+        int fila = 0;
+        if (tipo.equalsIgnoreCase("Ataque")) fila = 0;
+        else if (tipo.equalsIgnoreCase("Defensa")) fila = 1;
+        else if (tipo.equalsIgnoreCase("Curacion")) fila = 2;
+        else if (tipo.equalsIgnoreCase("Mana")) fila = 3;
 
-        int ancho = categorias.getWidth() / 4;
-        int alto = categorias.getHeight();
+        int ancho = categorias.getWidth();
+        int alto = categorias.getHeight()/4;
 
-        TextureRegion region = new TextureRegion(categorias, columna * ancho, 0, ancho, alto);
+        TextureRegion region = new TextureRegion(categorias, 0, fila * alto, ancho, alto);
         return new Image(new TextureRegionDrawable(region));
     }
 
-    public void pantallaExperiencia(int nivel, int expGanada, int expTotal, int expNecesaria) {
+    public void pantallaExperiencia(int nivelHeroe, int nivel, int expGanada, int expTotal, int expNecesaria) {
         font = new BitmapFont();
         font.getData().setScale(1.5f);
         Label.LabelStyle styleBlanco = new Label.LabelStyle(font, Color.WHITE);
@@ -189,7 +196,7 @@ public class RecompensasVista {
         Label lblTitulo = new Label("Nivel " +  nivel + " de 5 superado", styleOro);
         lblTitulo.setFontScale(2f);
         
-        Label lblNivel = new Label("Nivel del Héroe: " + nivel, styleBlanco);
+        Label lblNivel = new Label("Nivel del Héroe: " + nivelHeroe, styleBlanco);
         Label lblExpGanada = new Label("Experiencia Obtenida: +" + expGanada + " EXP", styleOro);
         Label lblExpTotal = new Label("Progreso de Experiencia: " + expTotal + " / " + expNecesaria, styleBlanco);
 
@@ -240,11 +247,19 @@ public class RecompensasVista {
         botonesHabilidades.clear();
         tablaHab = null;
     }
-
+    
     // GETTERS
     public Stage getStage() { return stage; }
     public ImageButton getBoton(int index) {return botonesHabilidades.get(index);} 
     public ImageButton getBtnRemplazo(int index) {return botonesRemplazo.get(index);}  
     public int getCantidadHabilidades() {return botonesHabilidades.size();}
     public int getCantidadRemplazo() {return botonesRemplazo.size();}
+
+    public ImageButton getBtnConfirmar() {return btnConfirmar;}
+    public ImageButton getBtnOmitir() {return btnOmitir;}
+
+    public void setNueva(String nueva) {lblNueva.setText(nueva);}
+    public void setReemplaza(String reemplaza) {lblReemplaza.setText(reemplaza);}
+
+
 }
