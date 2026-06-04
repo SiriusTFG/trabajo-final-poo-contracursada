@@ -34,7 +34,7 @@ public class RecompensaControlador  extends Screens{
     private int habSelecionada;
     private int[] tipo;
 
-    private enum EstadoRecompensa {LISTA_HABILIDADES, REEMPLAZO, RESUMEN_EXP}
+    private enum EstadoRecompensa {LISTA_HABILIDADES, RESUMEN_EXP}
     private int expPorGanar = 50;
     private EstadoRecompensa estado = EstadoRecompensa.LISTA_HABILIDADES;
 
@@ -55,9 +55,10 @@ public class RecompensaControlador  extends Screens{
 
     public void mostrar() {
         String[] nombresRecompensas = modeloRecompensa.getNombresRecompensas();
+        String[] nombresActuales = modeloRecompensa.getNombresHabilidadesActuales();
         String[] tipoRecompensas = modeloRecompensa.getTipoRecompensas();
 
-        vistaRecompensa.listaHabilidades(nombresRecompensas, tipoRecompensas);
+        vistaRecompensa.listaHabilidades(nombresRecompensas, nombresActuales, tipoRecompensas);
         Gdx.input.setInputProcessor(vistaRecompensa.getStage());
         listenersRecompensas();   
     }
@@ -78,17 +79,9 @@ public class RecompensaControlador  extends Screens{
                 public void clicked(InputEvent event, float x, float y) {
                     //recompensaSeleccionada = modeloRecompensa.getHabilidad()[id];
                     habSelecionada = id;
-                    cambiarEstado(EstadoRecompensa.REEMPLAZO);
                 }
             });
         }
-
-       vistaRecompensa.getBtnAtras().addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    cambiarEstado(EstadoRecompensa.LISTA_HABILIDADES);
-                }
-        });
 
         int cant = vistaRecompensa.getCantidadRemplazo();
         for (int i = 0; i < cant; i++) {
@@ -123,15 +116,9 @@ public class RecompensaControlador  extends Screens{
             case LISTA_HABILIDADES:
                 vistaRecompensa.limpiar();
                 String[] nombreRecompensas = modeloRecompensa.getNombresRecompensas();
-                String[] tipoRecompensa = modeloRecompensa.getTipoRecompensas();
-                vistaRecompensa.listaHabilidades(nombreRecompensas, tipoRecompensa);
-                listenersRecompensas();
-                break;
-
-            case REEMPLAZO:
-                vistaRecompensa.limpiar();
                 String[] nombresActuales = modeloRecompensa.getNombresHabilidadesActuales();
-                vistaRecompensa.cuadroRemplazo(nombresActuales);
+                String[] tipoRecompensa = modeloRecompensa.getTipoRecompensas();
+                vistaRecompensa.listaHabilidades(nombreRecompensas, nombresActuales, tipoRecompensa);
                 listenersRecompensas();
                 break;
 

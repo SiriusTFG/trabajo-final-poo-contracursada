@@ -22,7 +22,7 @@ import com.mortaTower.Main;
 public class RecompensasVista {
 
     // BOTONES
-    private ImageButton btn, btnRemplazo, btnAtras;
+    private ImageButton btn, btnRemplazo, btnAtras, btnConfirmar, btnOmitir;
     private Stage stage;
     private Stack stack;
 
@@ -30,7 +30,7 @@ public class RecompensasVista {
     private int alto;
     
     // TEXTURAS;
-    private Texture fondo, categorias, cuadro, cuadroRemplazo, barraRemplazo;
+    private Texture fondo, categorias, cuadro, cuadroRemplazo, barraRemplazo, cuadroRecompensa;
 
     //Fuente
     private BitmapFont font;
@@ -52,7 +52,11 @@ public class RecompensasVista {
         Image fondoImg = new Image(new TextureRegionDrawable(fondo));
         fondoImg.setFillParent(true);
         fondoImg.setColor(0, 0, 0, 0.6f); // opcional translúcido
-        
+
+        cuadroRecompensa = game.assets.get("Imagenes/SeccionRecompensa/cuadroRecompensa.png", Texture.class);
+        Image cuadroRec = new Image(new TextureRegionDrawable(cuadroRecompensa));
+        cuadroRec.setFillParent(true);
+
         cuadro = game.assets.get("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
         categorias = game.assets.get("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
 
@@ -60,15 +64,22 @@ public class RecompensasVista {
         
         barraRemplazo = game.assets.get("Imagenes/SeccionRecompensa/barraRemplazo.png", Texture.class);
 
-        stage.addActor(fondoImg);
+        btnConfirmar = crearBoton(new Texture("Imagenes/SeccionRecompensa/confirmar.png"));
+        btnConfirmar.setSize(260, 140);
+        btnConfirmar.setPosition(1100, 68);
 
-        btnAtras = crearBoton(new Texture("Imagenes/Opciones/atras.png"));
-        btnAtras.setSize(250, 250);
-        btnAtras.setPosition(260, 760);
-    
+        btnOmitir = crearBoton(new Texture("Imagenes/SeccionRecompensa/cancelar.png"));
+        btnOmitir.setSize(260, 140);
+        btnOmitir.setPosition(1430, 68);
+
+        stage.addActor(fondoImg);
+        stage.addActor(cuadroRec);
+        stage.addActor(btnConfirmar);
+        stage.addActor(btnOmitir);
+
     }
 
-    public void listaHabilidades(String[] nombreHabilidades, String[] tipo) {
+    public void listaHabilidades(String[] nombreHabilidades, String[] nombreHabilidadesActuales, String[] tipo) {
         font = new BitmapFont();
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = font;
@@ -82,7 +93,8 @@ public class RecompensasVista {
         tablaHab = new Table();
         tablaHab.setFillParent(true);
         tablaHab.defaults().space(0);
-        tablaHab.center();
+        tablaHab.left().padLeft(250);
+        tablaHab.bottom().padBottom(250);
 
         botonesHabilidades.clear();
 
@@ -103,14 +115,49 @@ public class RecompensasVista {
             botonesHabilidades.add(btn);
 
             if (img != null) {
-                tablaHab.add(img).size(210, 180);
+                tablaHab.add(img).size(180, 180);
             } else {
-                tablaHab.add().size(210, 180);
+                tablaHab.add().size(180, 180);
             }
 
-            tablaHab.add(stack).width(800).height(200).row();;
+            tablaHab.add(stack).width(500).height(200).row();;
         }
         stage.addActor(tablaHab);
+
+        if (tr != null) {
+            tr.remove();
+            tr.clear();
+        }
+
+        tr = new Table();
+        tr.setFillParent(true);
+        //tr.defaults().space(5);
+        tr.bottom().padBottom(280);
+        tr.left().padLeft(1030);
+        //tr.setDebug(true);
+
+        botonesRemplazo.clear();
+
+        
+        for (int i = 0; i < 4; i++) {
+            btnRemplazo = crearBoton(barraRemplazo);
+            btnRemplazo.setSize(600, 445);
+
+            String nombreViejaHabilidad = nombreHabilidadesActuales[i];
+
+            lbl = new Label(nombreViejaHabilidad, style);
+            lbl.setAlignment(Align.center);
+            lbl.setTouchable(Touchable.disabled);
+
+            stack = new Stack();
+            stack.add(btnRemplazo);
+            stack.add(lbl);
+
+            botonesRemplazo.add(btnRemplazo);
+
+            tr.add(stack).width(560).height(120).row();;
+        }
+        stage.addActor(tr);
     }
 
     private Image crearIconoTipo(String tipo) {
@@ -127,56 +174,6 @@ public class RecompensasVista {
 
         TextureRegion region = new TextureRegion(categorias, columna * ancho, 0, ancho, alto);
         return new Image(new TextureRegionDrawable(region));
-    }
-
-    public void cuadroRemplazo(String[] nombreHabilidadesActuales){
-        
-        Image fondoRemplazo = new Image(new TextureRegionDrawable(cuadroRemplazo));
-        fondoRemplazo.setPosition(600, 100);
-
-        font = new BitmapFont();
-
-        Label.LabelStyle styles = new Label.LabelStyle();
-        styles.font = font;
-        styles.fontColor = Color.WHITE;
-
-        if (tr != null) {
-            tr.remove();
-            tr.clear();
-        }
-
-        tr = new Table();
-        tr.setFillParent(true);
-        //tr.defaults().space(5);
-        tr.bottom().padBottom(220);
-        tr.left().padLeft(730);
-        //tr.setDebug(true);
-
-        botonesRemplazo.clear();
-
-        
-        for (int i = 0; i < 4; i++) {
-            btnRemplazo = crearBoton(barraRemplazo);
-            btnRemplazo.setSize(600, 445);
-
-            String nombreViejaHabilidad = nombreHabilidadesActuales[i];
-
-            lbl = new Label(nombreViejaHabilidad, styles);
-            lbl.setAlignment(Align.center);
-            lbl.setTouchable(Touchable.disabled);
-
-            stack = new Stack();
-            stack.add(btnRemplazo);
-            stack.add(lbl);
-
-            botonesRemplazo.add(btnRemplazo);
-
-            tr.add(stack).width(575).height(145).row();;
-        }
-
-        stage.addActor(btnAtras);
-        stage.addActor(fondoRemplazo);
-        stage.addActor(tr);
     }
 
     public void pantallaExperiencia(int nivel, int expGanada, int expTotal, int expNecesaria) {
@@ -250,5 +247,4 @@ public class RecompensasVista {
     public ImageButton getBtnRemplazo(int index) {return botonesRemplazo.get(index);}  
     public int getCantidadHabilidades() {return botonesHabilidades.size();}
     public int getCantidadRemplazo() {return botonesRemplazo.size();}
-    public ImageButton getBtnAtras() {return btnAtras;}
 }

@@ -26,7 +26,9 @@ public class GameAssets {
         manager.load("Imagenes/Opciones/atras.png", Texture.class);
 
         manager.load("Imagenes/SeccionRecompensa/barraRemplazo.png", Texture.class);
-        manager.load("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);   
+        manager.load("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
+        manager.load("Imagenes/SeccionRecompensa/cancelar.png", Texture.class);  
+        manager.load("Imagenes/SeccionRecompensa/confirmar.png", Texture.class);     
 
         manager.load("Imagenes/SeleccionPersonaje/atras.png", Texture.class);
         manager.load("Imagenes/SeleccionPersonaje/iniciarPartida.png", Texture.class);
@@ -63,6 +65,7 @@ public class GameAssets {
         // Para Cuadros y otros
         manager.load("Imagenes/SeleccionPersonaje/nombrePersonaje.png", Texture.class);
 
+        manager.load("Imagenes/SeccionRecompensa/cuadroRecompensa.png", Texture.class); 
         manager.load("Imagenes/SeccionRecompensa/cuadroRemplazo.png", Texture.class);   
         manager.load("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class); 
 
