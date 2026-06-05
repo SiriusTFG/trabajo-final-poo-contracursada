@@ -1,6 +1,6 @@
 package com.mortaTower.Modelo;
 
-import com.mortaTower.Strategy.ComportamientoEnemigo;
+import com.mortaTower.State.ComportamientoEnemigo;
 
 public class Enemigo extends Entidad {
 
@@ -11,7 +11,7 @@ public class Enemigo extends Entidad {
         super(nombre, vida, mana);
         this.id = id;
         this.ataque = ataque;
-        this.defensa = defensa;
+        this.defensaBase = defensa;
     }
 
     public void setUltimaHabilidadUsada (String ultimaHabilidadUsada) {
@@ -29,5 +29,9 @@ public class Enemigo extends Entidad {
 
     public void cambiarComportamiento(ComportamientoEnemigo nuevoComportamiento) {
         this.comportamiento = nuevoComportamiento;
+    }
+
+    public ComportamientoEnemigo getComportamiento() {
+        return comportamiento;
     }
 }

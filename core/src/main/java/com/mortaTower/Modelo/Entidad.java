@@ -6,7 +6,8 @@ public abstract class Entidad {
     protected int vidaActual, vidaMax;
     protected int manaActual, manaMax;
     protected int ataque;
-    protected double defensa = 1.0;
+    protected double defensaBase;
+    protected double defensaTemporal;
     protected Habilidad[] habilidades = new Habilidad[4];
     public enum Estado {PARADO, ATAQUE, DEFENSA, DANIO, MUERTE, MANA, CURACION, VIDA};    
     protected Estado estadoActual = Estado.PARADO;
@@ -28,11 +29,11 @@ public abstract class Entidad {
     public abstract void realizarTurno(Entidad objetivo);
 
     public void recibirDanio(int cantidad) {
-        System.out.println("DEBUG " + nombre + " -> Atacado con: " + cantidad + " | Mi defensa: " + defensa);
-        int danioFinal = (int) (cantidad * defensa);
+        System.out.println("DEBUG " + nombre + " -> Atacado con: " + cantidad + " | Mi defensa: " + defensaTemporal);
+        int danioFinal = (int) (cantidad * defensaBase * defensaTemporal);
         vidaActual -= danioFinal;
         if (this.vidaActual < 0) this.vidaActual = 0;
-        defensa = 1.0;
+        defensaTemporal = 1.0;
         System.out.println(nombre + ": recibio daño, su vida actual es: " + vidaActual);
     }
 
@@ -55,7 +56,7 @@ public abstract class Entidad {
     }
 
     public void activarDefensa(double cantidad) {
-        defensa = cantidad;
+        defensaTemporal = cantidad;
     }
 
     public void setHabilidad(int indice, Habilidad habilidad) {
@@ -72,13 +73,13 @@ public abstract class Entidad {
     public int getManaActual() {return manaActual;}
     public int getManaMax() {return manaMax;}
     public int getAtaque() {return ataque;}
-    public double getDefensa() {return defensa;}
+    public double getDefensaBase() {return defensaBase;}
     public int getId() {return id;}
     public Estado getEstadoActual() {return estadoActual;}
     public float getStatetime() {return statetime;}
     public void setId(int id) {this.id = id;}
     public void setAtaque(int ataque) {this.ataque = ataque;}
-    public void setDefensa(double defensa) {this.defensa = defensa;}
+    public void setDefensa(double defensa) {this.defensaBase = defensa;}
     public void setEstadoActual(Estado nuevoEstado) {
         if ( this.estadoActual != nuevoEstado) {
         this.estadoActual = nuevoEstado;

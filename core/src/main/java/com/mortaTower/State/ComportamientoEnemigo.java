@@ -1,4 +1,4 @@
-package com.mortaTower.Strategy;
+package com.mortaTower.State;
 
 import com.mortaTower.Modelo.Enemigo;
 import com.mortaTower.Modelo.Entidad;

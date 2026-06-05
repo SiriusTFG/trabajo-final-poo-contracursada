@@ -6,9 +6,7 @@ import java.util.List;
 
 import com.mortaTower.DAO.EnemigoDao;
 import com.mortaTower.DAO.HabilidadDao;
-import com.mortaTower.Strategy.ComportamientoAgresivo;
-import com.mortaTower.Strategy.ComportamientoDefensivo;
-import com.mortaTower.Strategy.ComportamientoInteligente;
+import com.mortaTower.State.ComportamientoFase1;
 
 public class CombateModelo {
     
@@ -84,13 +82,8 @@ public class CombateModelo {
             Enemigo enemigo = eDao.obtenerEnemigoPorPiso(numPiso);
 
             if (enemigo != null) {
-                if (numPiso <= 5 && numPiso >= 3) {
-                    enemigo.cambiarComportamiento(new ComportamientoInteligente());
-                } else if (numPiso == 2) {
-                    enemigo.cambiarComportamiento(new ComportamientoDefensivo());
-                } else {
-                    enemigo.cambiarComportamiento(new ComportamientoAgresivo());
-                }
+                enemigo.cambiarComportamiento(new ComportamientoFase1());
+
             }
             return enemigo;
             
