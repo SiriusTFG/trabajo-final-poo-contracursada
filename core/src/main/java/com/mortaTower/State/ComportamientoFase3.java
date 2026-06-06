@@ -8,23 +8,40 @@ public class ComportamientoFase3 implements ComportamientoEnemigo {
     
     @Override
     public void accionEnemigo(Enemigo enemigo, Entidad objetivo) {
-        Habilidad mejorHabilidad = buscarHabilidad(enemigo, "Curacion");
+        Habilidad mejorHabilidad = null;
 
-        if (mejorHabilidad == null) mejorHabilidad = buscarHabilidad(enemigo, "Defensa");
+        boolean vidaEstable = enemigo.getVidaActual() >= (enemigo.getVidaMax() * 0.5);
 
-        if (mejorHabilidad == null) mejorHabilidad = buscarHabilidad(enemigo, "Ataque");
-
-        if (mejorHabilidad == null) mejorHabilidad = buscarHabilidad(enemigo, "Mana");
+        if (vidaEstable) {
+            mejorHabilidad = buscarHabilidad(enemigo, "Ataque");
+            
+            if (mejorHabilidad == null) mejorHabilidad = buscarHabilidad(enemigo, "Mana");
+            if (mejorHabilidad == null) mejorHabilidad = buscarHabilidad(enemigo, "Defensa");
+            
+        } else {
+            mejorHabilidad = buscarHabilidad(enemigo, "Curacion");
+            
+            if (mejorHabilidad == null) mejorHabilidad = buscarHabilidad(enemigo, "Defensa");
+            if (mejorHabilidad == null) mejorHabilidad = buscarHabilidad(enemigo, "Mana");
+            
+            if (mejorHabilidad == null) mejorHabilidad = buscarHabilidad(enemigo, "Ataque");
+        }
 
         if (mejorHabilidad != null) {
             enemigo.setUltimaHabilidadUsada(mejorHabilidad.getNombre());
             mejorHabilidad.ejecutarHabilidad(enemigo, objetivo);
+        } else {
+            // Failsafe por si todas las habilidades están en cooldown o sin maná
+            System.out.println(enemigo.getNombre() + " está exhausto y pierde el turno.");
+            enemigo.setUltimaHabilidadUsada("nada (Exhausto)");
         }
     }
 
     private Habilidad buscarHabilidad(Enemigo enemigo, String tipo) {
         for (Habilidad h : enemigo.getHabilidades()) {
-            if (h != null && h.getTipo().equalsIgnoreCase(tipo) && h.puedeUsarse(enemigo)) return h;
+            if (h != null && h.getTipo().equalsIgnoreCase(tipo) && h.puedeUsarse(enemigo)) {
+                return h;
+            }
         }
         return null;
     }

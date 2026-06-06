@@ -6,6 +6,7 @@ public class Enemigo extends Entidad {
 
     private ComportamientoEnemigo comportamiento;
     private String ultimaHabilidadUsada = "";
+    private int faseVisual = 1;
 
     public Enemigo(int id, String nombre, int vida, int mana, int ataque, double defensa) {
         super(nombre, vida, mana);
@@ -34,4 +35,7 @@ public class Enemigo extends Entidad {
     public ComportamientoEnemigo getComportamiento() {
         return comportamiento;
     }
+
+    public int getFaseVisual() {return faseVisual;}
+    public void setFaseVisual(int faseVisual) {this.faseVisual = faseVisual;}
 }

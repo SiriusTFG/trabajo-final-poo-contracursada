@@ -168,7 +168,8 @@ public class CombateScreen extends Screens {
             nombreHeroe,
             modelo.getEnemigo().getEstadoActual(), 
             modelo.getEnemigo().getStatetime(), 
-            modelo.getEnemigo().getNombre());
+            modelo.getEnemigo().getNombre(),
+            modelo.getEnemigo().getFaseVisual());
         vista.comentarista(spriteBatch, mensaje);
 
         //temporizador?

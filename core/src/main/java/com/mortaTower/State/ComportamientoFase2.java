@@ -13,6 +13,7 @@ public class ComportamientoFase2 implements ComportamientoEnemigo {
 
             enemigo.setAtaque(enemigo.getAtaque() + 5);
             enemigo.activarDefensa(0.6);
+            enemigo.setFaseVisual(3);
 
             enemigo.cambiarComportamiento(new ComportamientoFase3());
             enemigo.realizarTurno(objetivo);

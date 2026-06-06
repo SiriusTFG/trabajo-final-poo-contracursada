@@ -28,8 +28,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Goblin;
-import com.mortaTower.Modelo.Habilidad;
-import com.mortaTower.Modelo.Heroe;
 import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
 import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
@@ -339,7 +337,7 @@ private Label  lblManaHeroe, lblManaEnemy;
     }
 
     public void dibujarSprite(SpriteBatch batch, Entidad.Estado estadoHeroe, float timeHeroe, String nombreHeroe, 
-                                Entidad.Estado estadoEnemigo, float timeEnemigo, String nombreEnemigo) {
+                                Entidad.Estado estadoEnemigo, float timeEnemigo, String nombreEnemigo, int faseVisual) {
         font.setColor(Color.WHITE);;
 
         Animation <TextureRegion> animacionH = animHeroe.get(estadoHeroe);
@@ -351,8 +349,39 @@ private Label  lblManaHeroe, lblManaEnemy;
 
         Animation <TextureRegion> animacionE = animEnemigo.get(estadoEnemigo);   
         if (animacionE != null) {
-            TextureRegion frame = animacionE.getKeyFrame(timeEnemigo, true);
-            batch.draw(frame, WORLD_WIDTH * 0.65f, WORLD_HEIGHT * 0.40f, 150, 150);;
+            TextureRegion frameE = animacionE.getKeyFrame(timeEnemigo, true);
+
+            float baseAncho = 150f;
+            float baseAlto = 150f;
+            float baseX = WORLD_WIDTH * 0.65f;
+            float baseY = WORLD_HEIGHT * 0.40f;
+
+            float scala = 1.0f;
+            Color colorAura = null;
+
+            if (faseVisual == 2) {
+                scala = 1.25f; // 25% mas grande
+                colorAura = new Color(1f, 0f, 0f, 0.7f); // aura roja 
+            } else if (faseVisual == 3) {
+                scala = 1.50f; // 50% mas grande
+                colorAura = new Color(0.6f, 0f, 1f, 0.7f); //aura violeta
+            }
+
+            float actualAncho = baseAncho * scala;
+            float actualAlto = baseAlto * scala;
+
+            float actualX = baseX - ((actualAncho - baseAncho) / 2f);
+            float actualY = baseY;
+
+            if (colorAura != null) {
+                batch.setColor(colorAura);
+                float desplazamiento = 15f;
+                batch.draw(frameE, actualX - (desplazamiento / 2f), actualY - (desplazamiento / 2f), actualAncho + desplazamiento, actualAlto + desplazamiento);
+            }
+
+            batch.setColor(Color.WHITE);
+            batch.draw(frameE, actualX, actualY, actualAncho, actualAlto);
+            
             font.draw(batch, nombreEnemigo, 957, 188);
         }
     }

@@ -13,6 +13,7 @@ public class ComportamientoFase1 implements ComportamientoEnemigo {
 
             enemigo.setAtaque(enemigo.getAtaque() + 10);
             enemigo.activarDefensa(0.8);
+            enemigo.setFaseVisual(2);
 
             enemigo.cambiarComportamiento(new ComportamientoFase2());
             enemigo.realizarTurno(objetivo);
@@ -21,8 +22,9 @@ public class ComportamientoFase1 implements ComportamientoEnemigo {
 
         Habilidad habilidadActual = buscarHabilidadPrioritaria(enemigo);
         if (habilidadActual != null) {
-            enemigo.setUltimaHabilidadUsada(habilidadActual.getNombre());
             habilidadActual.ejecutarHabilidad(enemigo, objetivo);
+            enemigo.setUltimaHabilidadUsada(habilidadActual.getNombre());
+            
         }
     }
 

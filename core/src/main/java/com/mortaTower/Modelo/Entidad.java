@@ -7,7 +7,7 @@ public abstract class Entidad {
     protected int manaActual, manaMax;
     protected int ataque;
     protected double defensaBase;
-    protected double defensaTemporal;
+    protected double defensaTemporal = 1.0;
     protected Habilidad[] habilidades = new Habilidad[4];
     public enum Estado {PARADO, ATAQUE, DEFENSA, DANIO, MUERTE, MANA, CURACION, VIDA};    
     protected Estado estadoActual = Estado.PARADO;
