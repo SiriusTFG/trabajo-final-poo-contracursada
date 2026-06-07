@@ -4,7 +4,7 @@ import com.mortaTower.Modelo.Enemigo;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Habilidad;
 
-public class ComportamientoFase1 implements ComportamientoEnemigo {
+public class ComportamientoAgresivoFase1 implements ComportamientoEnemigo {
 
     @Override 
     public void accionEnemigo(Enemigo enemigo, Entidad objetivo) {
@@ -15,7 +15,7 @@ public class ComportamientoFase1 implements ComportamientoEnemigo {
             enemigo.activarDefensa(0.8);
             enemigo.setFaseVisual(2);
 
-            enemigo.cambiarComportamiento(new ComportamientoFase2());
+            enemigo.cambiarComportamiento(new ComportamientoAgresivoFase2());
             enemigo.realizarTurno(objetivo);
             return;
         }
