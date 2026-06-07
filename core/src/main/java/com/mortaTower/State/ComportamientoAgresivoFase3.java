@@ -4,7 +4,7 @@ import com.mortaTower.Modelo.Enemigo;
 import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Habilidad;
 
-public class ComportamientoFase3 implements ComportamientoEnemigo {
+public class ComportamientoAgresivoFase3 implements ComportamientoEnemigo {
     
     @Override
     public void accionEnemigo(Enemigo enemigo, Entidad objetivo) {
@@ -30,11 +30,7 @@ public class ComportamientoFase3 implements ComportamientoEnemigo {
         if (mejorHabilidad != null) {
             enemigo.setUltimaHabilidadUsada(mejorHabilidad.getNombre());
             mejorHabilidad.ejecutarHabilidad(enemigo, objetivo);
-        } else {
-            // Failsafe por si todas las habilidades están en cooldown o sin maná
-            System.out.println(enemigo.getNombre() + " está exhausto y pierde el turno.");
-            enemigo.setUltimaHabilidadUsada("nada (Exhausto)");
-        }
+        } 
     }
 
     private Habilidad buscarHabilidad(Enemigo enemigo, String tipo) {
