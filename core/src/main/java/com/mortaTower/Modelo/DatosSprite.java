@@ -1,13 +1,13 @@
 package com.mortaTower.Modelo;
 
-public class Sprite {
+public class DatosSprite {
     
     private int id;
     private String rutaImagen;
     private String estado;
     private int orden;
 
-    public Sprite(int id, String rutaImagen, String estado, int orden) {
+    public DatosSprite(int id, String rutaImagen, String estado, int orden) {
         this.id = id;
         this.rutaImagen = rutaImagen;
         this.estado = estado;
