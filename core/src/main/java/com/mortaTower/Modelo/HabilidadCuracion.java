@@ -17,5 +17,13 @@ public class HabilidadCuracion extends Habilidad{
 
         activarCooldown();
     }
+    @Override
+    public Entidad.Estado getEstadoEjecucion() {
+        return Entidad.Estado.CURACION;
+    }
 
+    @Override
+    public Entidad.Estado getEstadoReaccion() {
+        return Entidad.Estado.PARADO;
+    }
 }

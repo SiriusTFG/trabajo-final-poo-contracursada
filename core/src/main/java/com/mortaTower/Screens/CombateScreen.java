@@ -1,6 +1,7 @@
 package com.mortaTower.Screens;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Controlador.PausaControlador;
 import com.mortaTower.Controlador.RecompensaControlador;
 import com.mortaTower.DAO.PartidaDao;
+import com.mortaTower.DAO.SpriteDao;
+import com.mortaTower.Modelo.DatosSprite;
 import com.mortaTower.Hilo.GoblinAtacante;
 import com.mortaTower.Main;
 import com.mortaTower.Modelo.CombateModelo;
@@ -19,7 +22,6 @@ import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
 import com.mortaTower.Modelo.Partida;
 import com.mortaTower.Vista.CombateVista;
-
 
 public class CombateScreen extends Screens {
 
@@ -71,8 +73,22 @@ public class CombateScreen extends Screens {
     public void show() {
 
         System.out.println("SHOW COMBATE");
-        
-        vista = new CombateVista(viewport,game,nivel);
+          SpriteDao spriteDao = new SpriteDao();
+        List<DatosSprite> spritesHeroe = null;
+        try {
+            spritesHeroe = spriteDao.obtenerSpritesPorHeroe(modelo.getHeroe().getId());
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        List<DatosSprite> spritesEnemigo = null;
+        try {
+            spritesEnemigo = spriteDao.obtenerSpritesPorEnemigo(modelo.getEnemigo().getId());
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        vista = new CombateVista(viewport,game,nivel,spritesHeroe, spritesEnemigo);      
         pausaControlador = new PausaControlador(game, vista.getStage(), nivel);
 
         // un input a la vez
@@ -84,6 +100,7 @@ public class CombateScreen extends Screens {
         int[] danio = modelo.getDaniosActuales();
         int[] mana = modelo.getConsumosActuales();
 
+ 
         vista.cargarInventarioHabilidades(nombresHabilidades, tiposHabilidades);
 
         vista.getBtnPausa().addListener(new ClickListener() {
@@ -190,11 +207,19 @@ public class CombateScreen extends Screens {
             boolean huboImpacto = goblin.actualizar(delta, modelo.getHeroe(), WORLD_WIDTH * 0.20f, WORLD_WIDTH + 100, WORLD_HEIGHT * 0.40f, duracionAtaque);
 
             if (huboImpacto) {
-                modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
-                heroeAturdido = true;
-                tempRecuperacionHeroe = vista.getTiempoAnimacionHeroe(Entidad.Estado.DANIO);
                 modelo.mostrarMensaje("¡Un duende te robó " + goblin.getDanio() + " de vida!");
-            }
+            
+            if(modelo.getHeroe().getVidaActual() <= 0) {
+                modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
+                modelo.setResultado(CombateModelo.Resultado.DERROTA);
+                victoriaProcesada = false;
+                vista.ocultarInventario();
+                } else {
+                    modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
+                    heroeAturdido = true;
+                    tempRecuperacionHeroe = vista.getTiempoAnimacionHeroe(Entidad.Estado.DANIO);               
+                }
+         }
             vista.dibujarGoblin(spriteBatch, goblin.getX(), goblin.getY(), goblin.getStateTime(), goblin.getEstadoActual());
         }
 
@@ -221,6 +246,7 @@ public class CombateScreen extends Screens {
         if (modelo.getEnemigo() != null) {
             modelo.getEnemigo().actualizarAnimacion(delta);
         }
+        if (modelo.getResultado() == CombateModelo.Resultado.NINGUNO) {
 
         switch (modelo.getTurnoActual()) {
 
@@ -274,6 +300,7 @@ public class CombateScreen extends Screens {
                 }
             }
         }
+    }
 
         if (modelo.getResultado() == Resultado.VICTORIA   && !esperandoRecompensa) {
             //game.audio.play(6);
@@ -335,6 +362,7 @@ public class CombateScreen extends Screens {
 
             return;
         }
+    
     }
 
     private void manejarEntradaJugador(int indiceHabilidad) {
@@ -342,19 +370,19 @@ public class CombateScreen extends Screens {
 
         if (habilidad == null || !habilidad.puedeUsarse(modelo.getHeroe())) {
             return;
-        }
+            }
 
         System.out.println("Turno del " + modelo.getHeroe().getNombre());
         this.danioAplicado = false; //para reinicar Flag
+        Entidad.Estado animacionHeroe = habilidad.getEstadoEjecucion();
+        Entidad.Estado animacionEnemigo = habilidad.getEstadoReaccion();
 
-        modelo.getHeroe().setEstadoActual(Entidad.Estado.ATAQUE);
-        modelo.getEnemigo().setEstadoActual(Entidad.Estado.DANIO);
-        this.tiempoPausa = vista.getTiempoAnimacionHeroe(Entidad.Estado.ATAQUE);
-
+        modelo.getHeroe().setEstadoActual(animacionHeroe);
+        modelo.getEnemigo().setEstadoActual(animacionEnemigo);
+        
+        this.tiempoPausa = vista.getTiempoAnimacionHeroe(animacionHeroe);
         modelo.getHeroe().seleccionarHabilidad(habilidad);
-
         modelo.mostrarMensaje(modelo.getHeroe().getNombre() + " usó " + habilidad.getNombre() + "!");
-
         proximoTurnoJugador = false;
         vista.ocultarInventario();
         modelo.setTurnoActual(CombateModelo.Turno.PROCESANDO);

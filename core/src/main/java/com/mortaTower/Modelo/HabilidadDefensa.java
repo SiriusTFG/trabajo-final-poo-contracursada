@@ -19,4 +19,13 @@ public class HabilidadDefensa extends Habilidad {
         // Activa estado defensivo en el usuario
         usuario.activarDefensa(reduccionDaño);
     }
+ @Override
+    public Entidad.Estado getEstadoEjecucion() {
+        return Entidad.Estado.DEFENSA;
+    }
+
+    @Override
+    public Entidad.Estado getEstadoReaccion() {
+        return Entidad.Estado.PARADO; 
+    }
 }

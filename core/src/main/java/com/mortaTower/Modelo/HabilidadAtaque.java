@@ -29,4 +29,13 @@ public class HabilidadAtaque extends Habilidad {
         objetivo.recibirDanio(daño);
         usuario.usarMana(getCostoMana());
     }
+    @Override
+    public Entidad.Estado getEstadoEjecucion() {
+        return Entidad.Estado.ATAQUE;
+    }
+
+    @Override
+    public Entidad.Estado getEstadoReaccion() {
+        return Entidad.Estado.DANIO;
+    }
 }

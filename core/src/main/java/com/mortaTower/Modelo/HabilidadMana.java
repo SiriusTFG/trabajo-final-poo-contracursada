@@ -17,4 +17,13 @@ public class HabilidadMana extends Habilidad {
 
         activarCooldown();
     }
+    @Override
+    public Entidad.Estado getEstadoEjecucion() {
+        return Entidad.Estado.MANA;
+    }
+
+    @Override
+    public Entidad.Estado getEstadoReaccion() {
+        return Entidad.Estado.PARADO; 
+    }
 }
