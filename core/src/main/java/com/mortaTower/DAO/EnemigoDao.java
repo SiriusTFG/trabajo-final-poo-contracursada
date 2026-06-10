@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mortaTower.Modelo.Enemigo;
-import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Habilidad;
 
 public class EnemigoDao implements EntidadDao<Enemigo> {

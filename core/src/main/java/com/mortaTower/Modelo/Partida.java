@@ -8,14 +8,12 @@ public class Partida {
     private String nombrePartida;
     private Heroe heroe;
     private int pisoActual;
-    private LocalDateTime fechaGuardado;
 
     public Partida(int id, String nombrePartida, Heroe heroe, int pisoActual, LocalDateTime fechaGuardado) {
         this.id = id;
         this.nombrePartida = nombrePartida;
         this.heroe = heroe;
         this.pisoActual = pisoActual;
-        this.fechaGuardado = fechaGuardado;
     }
 
     //Getters y Setters

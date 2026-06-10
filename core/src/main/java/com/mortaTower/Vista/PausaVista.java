@@ -1,31 +1,32 @@
 package com.mortaTower.Vista;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.mortaTower.Main;
+
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 
 public class PausaVista {
 
     private Stage stage;
-    private Texture fondo;
 
-    // BOTONES
+    private Table tabla;
+
     private ImageButton btnRenudar, btnReintentar, btnOpciones, btnSalir;
+
+    private Image imgFondo;
     
     public PausaVista(Main game){
 
-        stage = new Stage();
+        this.stage = new Stage();
 
-        fondo = game.assets.get("Imagenes/black.png", Texture.class);
-
-        Image fondoImg = new Image(new TextureRegionDrawable(fondo));
-        fondoImg.setFillParent(true);
-        fondoImg.setColor(0, 0, 0, 0.6f); // opcional translúcido
+        imgFondo = new Image(new TextureRegionDrawable(game.assets.get("Imagenes/black.png", Texture.class)));
+        imgFondo.setFillParent(true);
+        imgFondo.setColor(0, 0, 0, 0.6f); // opcional translúcido
 
         btnRenudar = crearBoton(game.assets.get("Imagenes/MenuInicio/renudar.png", Texture.class));
         btnReintentar = crearBoton(game.assets.get("Imagenes/MenuInicio/reintentar.png", Texture.class));
@@ -33,23 +34,21 @@ public class PausaVista {
         btnSalir = crearBoton(game.assets.get("Imagenes/MenuInicio/menuPrincipal.png", Texture.class));
 
         // Layout
-        Table tabla = new Table();
-        tabla.setFillParent(true); //ocupa la pantalla
-
-        // Posicion de tabla
+        tabla = new Table();
         tabla.center();
+        tabla.setFillParent(true); //ocupa la pantalla
 
         tabla.add(btnRenudar).width(380).height(80).padBottom(0).row();
         tabla.add(btnReintentar).width(380).height(80).padBottom(0).row();
         tabla.add(btnOpciones).width(380).height(80).padBottom(0).row();
         tabla.add(btnSalir).width(380).height(80).padBottom(0).row();
 
-        stage.addActor(fondoImg);
+        stage.addActor(imgFondo);
         stage.addActor(tabla);
-
     }
 
     private ImageButton crearBoton(Texture textura) {
+
         int ancho = textura.getWidth() / 2;
         int alto = textura.getHeight();
 
@@ -62,19 +61,12 @@ public class PausaVista {
         return new ImageButton(style);
     }
 
-    public void render(float delta) {
-        stage.act(delta);
-        stage.draw();
-    }
-
     // GETTERS
     public Stage getStage() { return stage; }
+
     public ImageButton getBtnRenudar() { return btnRenudar; }
     public ImageButton getBtnReintentar() { return btnReintentar; }
     public ImageButton getBtnOpciones() { return btnOpciones; }
     public ImageButton getBtnSalir() { return btnSalir; }
     
 }
-
-    
-

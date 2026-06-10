@@ -154,14 +154,6 @@ public class CargarScreen extends Screens {
         }
     }
 
-    /*public void update(float delta) {
-        if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.ESCAPE)) {
-            game.audio.play(1);
-            game.setScreen(new TransicionScreen(game, this, new MenuScreen(game)));
-
-        }
-    }*/
-
     @Override
     public void render(float delta) {
         super.render(delta);

@@ -1,30 +1,31 @@
 package com.mortaTower.Vista;
 
+import com.mortaTower.Main;
+
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mortaTower.Main;
 
 public class MenuVista {
 
     private Stage stage;
-    private Table capaPrincipal;
 
     private ImageButton btnJugar, btnCargar, btnOpciones, btnSalir;
 
+    private Table tabla;
+
+    private Image imgFondo;
+
     public MenuVista(FitViewport viewport, Main game) {
 
-        stage = new Stage(viewport, game.batch);
+        this.stage = new Stage(viewport, game.batch);
 
         // Fondo
-        Texture fondo = game.assets.get("Imagenes/MenuInicio/Fondo.png", Texture.class);
-        Image imgFondoGeneral = new Image(fondo);
-        imgFondoGeneral.setSize(stage.getWidth(), stage.getHeight());
+        imgFondo = new Image(game.assets.get("Imagenes/MenuInicio/Fondo.png", Texture.class));
+        imgFondo.setFillParent(true);
         
         // Botones
         btnJugar = crearBoton(game.assets.get("Imagenes/MenuInicio/nuevaPartida.png", Texture.class));
@@ -33,18 +34,18 @@ public class MenuVista {
         btnSalir = crearBoton(game.assets.get("Imagenes/MenuInicio/salirDelJuego.png", Texture.class));
 
         // Tabla para Botones
-        capaPrincipal = new Table();
-        capaPrincipal.setFillParent(true);
-        capaPrincipal.bottom().padBottom(70);
-        capaPrincipal.left().padLeft(160);
+        tabla = new Table();
+        tabla.setFillParent(true);
+        tabla.bottom().padBottom(70);
+        tabla.left().padLeft(160);
 
-        capaPrincipal.add(btnJugar).width(280).height(80).row();
-        capaPrincipal.add(btnCargar).width(280).height(80).row();
-        capaPrincipal.add(btnOpciones).width(280).height(80).row();
-        capaPrincipal.add(btnSalir).width(280).height(80).row();
+        tabla.add(btnJugar).width(280).height(80).row();
+        tabla.add(btnCargar).width(280).height(80).row();
+        tabla.add(btnOpciones).width(280).height(80).row();
+        tabla.add(btnSalir).width(280).height(80).row();
 
-        stage.addActor(imgFondoGeneral);
-        stage.addActor(capaPrincipal);
+        stage.addActor(imgFondo);
+        stage.addActor(tabla);
     }
     
     // CREACION BOTONES
@@ -57,6 +58,7 @@ public class MenuVista {
         TextureRegion over = new TextureRegion(textura, ancho, 0, ancho, alto);
 
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+
         style.imageUp = new TextureRegionDrawable(normal);
         style.imageOver = new TextureRegionDrawable(over);
 
@@ -69,7 +71,7 @@ public class MenuVista {
 
     // GETTERS
     public Stage getStage() { return stage; }
-    public Table getCapaPrincipal() { return capaPrincipal; }
+    public Table getCapaPrincipal() { return tabla; }
 
     public ImageButton getBtnJugar() { return btnJugar; }
     public ImageButton getBtnCargar() { return btnCargar; }

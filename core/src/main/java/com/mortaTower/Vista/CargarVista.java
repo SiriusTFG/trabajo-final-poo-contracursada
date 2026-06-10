@@ -1,190 +1,183 @@
 package com.mortaTower.Vista;
 
+import com.mortaTower.Main;
+import com.mortaTower.Screens.GameAssets;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mortaTower.Main;
-
-
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class CargarVista {
 
+    private Main game;
+    private Stage stage;
 
- private Stage stage;
- private List<ImageButton> botonesPartidas = new ArrayList<>();
- private List<ImageButton> botonesBorrar = new ArrayList<>();
+    private float w, h;
+    private String resumen, textoVisible;
 
- private Group modalEliminar;
- private Label textoPartidaEliminar;
- private ImageButton btnCancelarEliminar;
- private ImageButton btnConfirmarEliminar;
- private ImageButton btnAtras;
- 
+    private List<ImageButton> botonesPartidas = new ArrayList<>();
+    private List<ImageButton> botonesBorrar = new ArrayList<>();
+    private ImageButton btnCancelarEliminar, btnConfirmarEliminar, btnAtras, boton, botonBorrar;
 
-public CargarVista(List<String> partidas, FitViewport viewport, Main game) {
-    this.stage = new Stage(viewport, game.batch);
+    private Group modalEliminar;
+    private Table tabla, textoCentrado, fila;
+    private Stack stack;
 
-    Texture fondo = new Texture("Imagenes/CargarPartida/Fondo1.png");
-    Image imgFondo = new Image(fondo);
-    imgFondo.setSize(stage.getWidth(), stage.getHeight());
-    stage.addActor(imgFondo);
-    btnAtras = crearBotonSprite(new Texture("Imagenes/Opciones/atras.png"));
-    btnAtras.setSize(150,100);
-    btnAtras.setPosition(40, stage.getHeight() - 120);
-    stage.addActor(btnAtras);
+    private Label.LabelStyle estilo;
+    private Label textoPartidaEliminar, texto;
 
-    Table tabla = new Table();
-    tabla.setFillParent(true);
-    tabla.top().padTop(190);
-
-    Texture texNormal = new Texture("Imagenes/CargarPartida/boton.png");
-    Texture texSelected = new Texture("Imagenes/CargarPartida/boton1.png");
-    Texture texBorrar = new Texture("Imagenes/CargarPartida/calaberaBorrar.png");
-    Texture texBorrarHover = new Texture("Imagenes/CargarPartida/calaberaBorrar1.png"); 
-
-    for (int i = 0; i < partidas.size(); i++) {
-        ImageButton boton = crearBoton (texNormal, texSelected);
-        ImageButton botonBorrar = crearBoton(texBorrar, texBorrarHover);
-
-        Label.LabelStyle estilo = new Label.LabelStyle();
-        estilo.font = new com.badlogic.gdx.graphics.g2d.BitmapFont();
-       
+    private Texture texNormal, texSelected, texBorrar, texBorrarHover;
+    private Image imgFondo, cuadro;
+    
+    public CargarVista(List<String> partidas, FitViewport viewport, Main game) {
         
-        String resumen = partidas.get(i);
+        this.game = game;
+        this.stage = new Stage(viewport, game.batch);
 
-        String[] partes = resumen.split(" - ", 2);
-        String textoVisible = (partes.length > 1) ? partes[1] : resumen;
-        Label texto = new Label(textoVisible, estilo);
-        texto.setTouchable(Touchable.disabled); // Evita que el texto reciba eventos táctiles, permitiendo que el botón los maneje
-        Stack stack = new Stack();
+        w = stage.getViewport().getWorldWidth();
+        h = stage.getViewport().getWorldHeight();
 
-        texto.setAlignment(1); // centro
+        estilo = new Label.LabelStyle();
+        estilo.font = GameAssets.fuenteMedieval;
 
-        Table textoCentrado = new Table();
-        textoCentrado.setFillParent(true);
-        textoCentrado.add(texto).center();
+        imgFondo = new Image(game.assets.get("Imagenes/CargarPartida/Fondo1.png", Texture.class));
+        imgFondo.setFillParent(true);
+
+        btnAtras = crearBotonSprite(game.assets.get("Imagenes/Opciones/atras.png", Texture.class));
+        btnAtras.setSize(w * 0.05f, w * 0.05f);
+        btnAtras.setPosition(w - 1200, h - 116);
+        
+        texNormal = game.assets.get("Imagenes/CargarPartida/boton.png", Texture.class);
+        texSelected = game.assets.get("Imagenes/CargarPartida/boton1.png", Texture.class);
+        texBorrar = game.assets.get("Imagenes/CargarPartida/calaberaBorrar.png", Texture.class);
+        texBorrarHover = game.assets.get("Imagenes/CargarPartida/calaberaBorrar1.png", Texture.class); 
+
+        tabla = new Table();
+        tabla.setFillParent(true);
+        tabla.top().padTop(190);
+
+        for (int i = 0; i < partidas.size(); i++) {
+            
+            boton = crearBoton (texNormal, texSelected);
+            botonBorrar = crearBoton(texBorrar, texBorrarHover);
+            
+            botonesPartidas.add(boton);
+            botonesBorrar.add(botonBorrar);
+
+            resumen = partidas.get(i);
+
+            String[] partes = resumen.split(" - ", 2);
+            textoVisible = (partes.length > 1) ? partes[1] : resumen;
+            texto = new Label(textoVisible, estilo);
+            texto.setTouchable(Touchable.disabled); // Evita que el texto reciba eventos táctiles, permitiendo que el botón los maneje
+            
+            texto.setAlignment(1); // centro
+
+            textoCentrado = new Table();
+            textoCentrado.setFillParent(true);
+            textoCentrado.add(texto).center();
+        
+            stack = new Stack();
+            stack.add(boton);
+            stack.add(textoCentrado);
+
+            fila = new Table();
+            fila.add(stack).width(560).height(90).padRight(-50);
+            fila.add(botonBorrar).width(56).height(56);
+
+            tabla.add(fila).padBottom(-2).row();
+        }
     
+        stage.addActor(imgFondo);
+        stage.addActor(btnAtras);
+        stage.addActor(tabla);
 
-        stack.add(boton);
-        stack.add(textoCentrado);
-
-        Table fila = new Table();
-        fila.add(stack).width(560).height(90).padRight(-50);
-        fila.add(botonBorrar).width(56).height(56);
-      
-
-        tabla.add(fila).padBottom(-2).row();
-
-        botonesPartidas.add(boton);
-        botonesBorrar.add(botonBorrar);
-
-
+        crearModalEliminar();
     }
-   
-    
-    stage.addActor(tabla);
-    crearModalEliminar();
-    }
+
+    // CREACION VISTA ELIMINAR
     private void crearModalEliminar() {
+
         modalEliminar = new Group();
         modalEliminar.setSize(stage.getWidth(), stage.getHeight());
         modalEliminar.setVisible(false);
 
-        Image cuadro = new Image(new Texture("Imagenes/CargarPartida/CuadroEliminar.png"));
-        cuadro.setSize(620, 360);
-        cuadro.setPosition((stage.getWidth() - 620) / 2f, (stage.getHeight() - 320) / 2f);
-        modalEliminar.addActor(cuadro);
-        Label.LabelStyle estilo = new Label.LabelStyle();
-        estilo.font = new com.badlogic.gdx.graphics.g2d.BitmapFont();
+        cuadro = new Image(game.assets.get("Imagenes/CargarPartida/CuadroEliminar.png", Texture.class));
+        cuadro.setSize(w * 0.5f, w* 0.3f);
+        cuadro.setPosition((w - cuadro.getWidth()) / 2f, (h - cuadro.getHeight()) / 2f);
 
         textoPartidaEliminar = new Label("", estilo);
         textoPartidaEliminar.setAlignment(Align.center);
-        textoPartidaEliminar.setWidth(500);
-        textoPartidaEliminar.setPosition((stage.getWidth() - 500) / 2f, (stage.getHeight() + 95) / 2f - 15); 
-        modalEliminar.addActor(textoPartidaEliminar);
-        btnCancelarEliminar = crearBoton( new Texture("Imagenes/CargarPartida/cancelarBoton.png"), new Texture("Imagenes/CargarPartida/cancelarBoton1.png"));
-
-        btnConfirmarEliminar = crearBoton(new Texture("Imagenes/CargarPartida/eliminarBoton.png"), new Texture("Imagenes/CargarPartida/eliminarBoton1.png"));
+        textoPartidaEliminar.setPosition(w / 2f, (h + 20) / 2f); 
         
-        btnCancelarEliminar.setSize(190, 55);
-        btnConfirmarEliminar.setSize(190, 55);
+        btnCancelarEliminar = crearBoton( game.assets.get("Imagenes/CargarPartida/cancelarBoton.png", Texture.class), game.assets.get("Imagenes/CargarPartida/cancelarBoton1.png", Texture.class));
+        btnCancelarEliminar.setSize(w * 0.15f, w* 0.1f);
+        btnCancelarEliminar.setPosition((w / 2f) - 220, (h / 2f) - 150);
 
-        btnCancelarEliminar.setPosition(stage.getWidth() / 2f - 220, stage.getHeight() / 2f - 85);
-        btnConfirmarEliminar.setPosition(stage.getWidth() / 2f + 30, stage.getHeight() / 2f - 85);
+        btnConfirmarEliminar = crearBoton(game.assets.get("Imagenes/CargarPartida/eliminarBoton.png", Texture.class), game.assets.get("Imagenes/CargarPartida/eliminarBoton1.png", Texture.class));
+        btnConfirmarEliminar.setSize(w * 0.15f, w* 0.1f);
+        btnConfirmarEliminar.setPosition((w / 2f) + 30, (h / 2f) - 150);
 
+        modalEliminar.addActor(cuadro);
+        modalEliminar.addActor(textoPartidaEliminar);
         modalEliminar.addActor(btnCancelarEliminar);
         modalEliminar.addActor(btnConfirmarEliminar);
 
-    stage.addActor(modalEliminar);
-    
-}
+        stage.addActor(modalEliminar);
+    }
 
+    // CREACION BOTONES 
     private ImageButton crearBoton(Texture normal, Texture seleccionado) {
+
         ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
 
         style.imageUp = new TextureRegionDrawable(new TextureRegion(normal));
         style.imageOver = new TextureRegionDrawable(new TextureRegion(seleccionado));
+        
         return new ImageButton(style);
     }
+
+    // CREACION BOTON ATRAS
     private ImageButton crearBotonSprite(Texture textura) {
-    int ancho = textura.getWidth() / 2;
-    int alto = textura.getHeight();
 
-    TextureRegion normal = new TextureRegion(textura, 0, 0, ancho, alto);
-    TextureRegion hover = new TextureRegion(textura, ancho, 0, ancho, alto);
+        int ancho = textura.getWidth() / 2;
+        int alto = textura.getHeight();
 
-    ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-    style.imageUp = new TextureRegionDrawable(normal);
-    style.imageOver = new TextureRegionDrawable(hover);
+        TextureRegion normal = new TextureRegion(textura, 0, 0, ancho, alto);
+        TextureRegion hover = new TextureRegion(textura, ancho, 0, ancho, alto);
 
-    return new ImageButton(style);
-}
-    public Stage getStage() {
-        return stage;
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        style.imageUp = new TextureRegionDrawable(normal);
+        style.imageOver = new TextureRegionDrawable(hover);
+
+        return new ImageButton(style);
     }
 
-    public List<ImageButton> getBotonesPartidas() {
-        return botonesPartidas;
-    }
+    public void cerrar() {stage.dispose();}
 
-    public List<ImageButton> getBotonesBorrar() {
-        return botonesBorrar;
-    }
-    public ImageButton getBtnCancelarEliminar() {
-        return btnCancelarEliminar;
-    }
-    public ImageButton getBtnConfirmarEliminar() {
-        return btnConfirmarEliminar;
-    }
-    public void ocultarModalEliminar() {
-        modalEliminar.setVisible(false);
-    }
+    // GETTERS
+    public Stage getStage() {return stage;}
+
+    public List<ImageButton> getBotonesPartidas() {return botonesPartidas;}
+    public List<ImageButton> getBotonesBorrar() {return botonesBorrar;}
+    public ImageButton getBtnCancelarEliminar() {return btnCancelarEliminar;}
+    public ImageButton getBtnConfirmarEliminar() {return btnConfirmarEliminar;}
+    public ImageButton getBtnAtras() {return btnAtras;}
+
+    public void ocultarModalEliminar() {modalEliminar.setVisible(false);}
 
     public void mostrarModalEliminar(String textoPartida) {
         textoPartidaEliminar.setText(textoPartida);
         modalEliminar.setVisible(true);
-        
     }
-    public ImageButton getBtnAtras() {
-        return btnAtras;
-    }
-    public void cerrar() {
-        stage.dispose();
-    }
-    }
+}
     
     

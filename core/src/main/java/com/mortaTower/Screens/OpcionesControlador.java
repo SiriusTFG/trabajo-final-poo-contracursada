@@ -1,4 +1,4 @@
-package com.mortaTower.Controlador;
+package com.mortaTower.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Main;
-import com.mortaTower.Screens.Screens;
 import com.mortaTower.Vista.OpcionesVista;
 
 public class OpcionesControlador extends Screens {
@@ -30,8 +29,8 @@ public class OpcionesControlador extends Screens {
         // PREFERENCES
         // =========================
         prefs = Gdx.app.getPreferences("MisOpciones");
-        volMusica = prefs.getInteger("volMusica", 9); // valor por defecto 9
-        volFx = prefs.getInteger("volFx", 9);
+        volMusica = prefs.getInteger("volMusica", 10); // valor por defecto 10
+        volFx = prefs.getInteger("volFx", 10);
 
         // =========================
         // VISTA
@@ -43,8 +42,8 @@ public class OpcionesControlador extends Screens {
         opcionesVista.actualizarBarraEfectos(volFx);
 
         // sincronizar audio
-        game.audio.setVolumenMusica(volMusica / 9f);
-        game.audio.setVolumenFx(volFx / 9f);
+        game.audio.setVolumenMusica(volMusica / 10f);
+        game.audio.setVolumenFx(volFx / 10f);
 
         listenersOpcines();
     }
@@ -62,9 +61,9 @@ public class OpcionesControlador extends Screens {
         opcionesVista.getBtnMusicaMas().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
-                if (volMusica < 9) {
+                if (volMusica < 10) {
                     volMusica++;
-                    game.audio.setVolumenMusica(volMusica / 9f);
+                    game.audio.setVolumenMusica(volMusica / 10f);
                     opcionesVista.actualizarBarraMusica(volMusica);
 
                     prefs.putInteger("volMusica", volMusica);
@@ -81,7 +80,7 @@ public class OpcionesControlador extends Screens {
             public void clicked(InputEvent evento, float x, float y) {
                 if (volMusica > 0) {
                     volMusica--;
-                    game.audio.setVolumenMusica(volMusica / 9f);
+                    game.audio.setVolumenMusica(volMusica / 10f);
                     opcionesVista.actualizarBarraMusica(volMusica);
 
                     prefs.putInteger("volMusica", volMusica);
@@ -96,9 +95,9 @@ public class OpcionesControlador extends Screens {
         opcionesVista.getBtnFxMas().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
-                if (volFx < 9) {
+                if (volFx < 10) {
                     volFx++;
-                    game.audio.setVolumenFx(volFx / 9f);
+                    game.audio.setVolumenFx(volFx / 10f);
                     game.audio.play(0);
                     opcionesVista.actualizarBarraEfectos(volFx);
 
@@ -116,7 +115,7 @@ public class OpcionesControlador extends Screens {
             public void clicked(InputEvent evento, float x, float y) {
                 if (volFx > 0) {
                     volFx--;
-                    game.audio.setVolumenFx(volFx / 9f);
+                    game.audio.setVolumenFx(volFx / 10f);
                     game.audio.play(0);
                     opcionesVista.actualizarBarraEfectos(volFx);
 

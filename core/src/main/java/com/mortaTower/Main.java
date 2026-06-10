@@ -3,10 +3,10 @@ package com.mortaTower;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mortaTower.Controlador.Audio;
-import com.mortaTower.Controlador.GameAssets;
 import com.mortaTower.DAO.GestorDeConexion;
 import com.mortaTower.Modelo.Partida;
+import com.mortaTower.Screens.Audio;
+import com.mortaTower.Screens.GameAssets;
 import com.mortaTower.Screens.MenuScreen;
 
 
@@ -26,6 +26,7 @@ public class Main extends Game {
         assets = new AssetManager();
         GameAssets.load(assets);
         assets.finishLoading();
+        GameAssets.crearFuentes();
 
         batch = new SpriteBatch();
         audio = new Audio();

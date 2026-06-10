@@ -25,7 +25,12 @@ public class RecompensasModelo {
     // estas son las 3 opciones que se muestran en la vista
     private Habilidad[] rewards = new Habilidad[3];
     private String[] tiposRecompensas = new String[3];
+    private int[] danioRecompensa = new int[3];
+    private int[] manaRecompensa = new int[3];
+
     private String[] tiposHabActual = new String[4];
+    private int[] danioActual = new int[4];
+    private int[] manaActual = new int[4];
 
     public RecompensasModelo(Heroe heroe) {
         this.heroeActual = heroe;
@@ -72,6 +77,8 @@ public class RecompensasModelo {
             rewards[i] = habilidades.get(index);
 
             tiposRecompensas[i] = rewards[i].getTipo();
+            danioRecompensa[i] = rewards [i].getValorBase();
+            manaRecompensa[i] = rewards [i].getCostoMana();
         }
     }
 
@@ -95,6 +102,8 @@ public class RecompensasModelo {
             if (habilidadesHeroe[i] != null) {
                 nombres[i] = habilidadesHeroe[i].getNombre();
                 tiposHabActual[i] = habilidadesHeroe[i].getTipo();
+                danioActual[i] = habilidadesHeroe[i].getValorBase();
+                manaActual[i] = habilidadesHeroe[i].getCostoMana();
             } else {
                 nombres[i] = "Vacío";
             }
@@ -107,7 +116,12 @@ public class RecompensasModelo {
 
     public Habilidad[] getHabilidad() {return rewards;}
     public String[] getTipoRecompensas(){return tiposRecompensas;}
+    public int[] getValorRecompensa() {return danioRecompensa;}
+    public int[] getCostoManaRecompensa() {return manaRecompensa;}
+
     public String[] getTipoHabilidad(){return tiposHabActual;}
+    public int[] getValorActual() {return danioActual;}
+    public int[] getCostoActual() {return manaActual;}
 
     
 }

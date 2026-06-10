@@ -2,8 +2,8 @@ package com.mortaTower.Modelo;
 
 public class HabilidadAtaque extends Habilidad {
 
-    private double probabilidadCritico; //porcentaje que representa la probabilidad de un golpe crítico
-    private int bonusCritico;           //cantidad adicional de daño que se aplica si el ataque es crítico
+    private double probabilidadCritico; 
+    private int bonusCritico;           
 
     public HabilidadAtaque(int id, String nombre, String descripcion, String tipo, int costoMana, int valorBase, double probabilidadCritico, int bonusCritico, int cooldownMax) {
 
@@ -18,7 +18,7 @@ public class HabilidadAtaque extends Habilidad {
 
         if (!puedeUsarse(usuario)) return;
 
-        int daño = valorBase + usuario.getAtaque();
+        int daño = getValorBase() + usuario.getAtaque();
         daño = Math.max(daño, 0); //asegura que el daño nunca sea negativo.
 
         if (Math.random() < probabilidadCritico) {
@@ -29,6 +29,7 @@ public class HabilidadAtaque extends Habilidad {
         objetivo.recibirDanio(daño);
         usuario.usarMana(getCostoMana());
     }
+    
     @Override
     public Entidad.Estado getEstadoEjecucion() {
         return Entidad.Estado.ATAQUE;

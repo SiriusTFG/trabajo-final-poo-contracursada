@@ -12,11 +12,12 @@ public class HabilidadCuracion extends Habilidad{
 
         if (!puedeUsarse(usuario)) return;
 
-        usuario.curarVida(valorBase);
-        usuario.usarMana(getCostoMana()); //no consume mana la habilidad
+        usuario.curarVida(getValorBase());
+        usuario.usarMana(getCostoMana());
 
         activarCooldown();
     }
+
     @Override
     public Entidad.Estado getEstadoEjecucion() {
         return Entidad.Estado.CURACION;

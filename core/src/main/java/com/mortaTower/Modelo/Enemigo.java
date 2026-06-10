@@ -9,6 +9,7 @@ public class Enemigo extends Entidad {
     private int faseVisual = 1;
 
     public Enemigo(int id, String nombre, int vida, int mana, int ataque, double defensa) {
+
         super(nombre, vida, mana);
         this.id = id;
         this.ataque = ataque;
@@ -19,7 +20,7 @@ public class Enemigo extends Entidad {
         this.ultimaHabilidadUsada = ultimaHabilidadUsada;
     }
 
-     public String getUltimaHabilidadUsada() {
+    public String getUltimaHabilidadUsada() {
         return ultimaHabilidadUsada;
     }
 

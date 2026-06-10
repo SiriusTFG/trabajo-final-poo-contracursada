@@ -58,11 +58,7 @@ public abstract class Screens implements Screen {
         stage.draw();
     }
 
-    @Override
-    public void resize(int width, int height){
-        viewport.update(width, height, true);
-    }
-
+    @Override public void resize(int width, int height){ viewport.update(width, height, true); }
     @Override public void show() {}
     @Override public void pause() {}
     @Override public void resume() {}

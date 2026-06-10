@@ -1,4 +1,4 @@
-package com.mortaTower.Controlador;
+package com.mortaTower.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 
 public class Audio {
 
-    private Sound[] sounds = new Sound[10];
+    private Sound[] sounds = new Sound[13];
     private Music[] music = new Music[10];
 
     private float volFx = 1.0f;
@@ -24,10 +24,13 @@ public class Audio {
         sounds[7] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/defeat.mp3"));
         sounds[8] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/openBook.wav"));
         sounds[9] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/closeBook.wav"));
+        sounds[10] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/goblin1.mp3"));
+        sounds[11] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/goblin2.wav"));
+        sounds[12] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/goblin3.mp3"));
 
-        music[0] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/untitled.wav"));
+        music[0] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/menu.wav"));
         music[1] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/battleLvl1.mp3"));
-        music[2] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/starWars.mp3"));
+        music[6] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/starWars.mp3"));
     }
 
     // PLAY (SFX)

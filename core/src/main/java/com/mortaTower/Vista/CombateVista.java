@@ -1,232 +1,183 @@
 package com.mortaTower.Vista;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import com.mortaTower.Main;
+import com.mortaTower.Modelo.Goblin;
+import com.mortaTower.Screens.GameAssets;
+import com.mortaTower.Modelo.Entidad;
+import com.mortaTower.Modelo.DatosSprite;
+
 import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+import java.util.ArrayList;
+
+import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mortaTower.Main;
-import com.mortaTower.Modelo.Entidad;
-import com.mortaTower.Modelo.Goblin;
-import com.mortaTower.Modelo.DatosSprite;
-import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
-import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
+//import static com.mortaTower.Screens.Screens.WORLD_HEIGHT;
+//import static com.mortaTower.Screens.Screens.WORLD_WIDTH;
 
 public class CombateVista {
 
-    private final Stage stage;
+    private Main game;
+    private Stage stage;
 
-    private float ancho, x;
-    private float alto, y;
-    
-    // TEXTURAS
-    private Image imgFondoGeneral, stsHeroe, stsEnemigo;
-    private Texture fondo, statusEnemigo, statusHeroe;
-    
-    private GlyphLayout layout; 
-    private ImageButton btnPausa;
+    private float ancho, alto, x, y, w, h;
+    private String nombre, tipo;
 
     private List<ImageButton> botonesHabilidades = new ArrayList<>();
+    private ImageButton btnPausa, btn;
 
-    //ANIMACION GOBLIN
-    private Map<Goblin.EstadoGoblin, Animation<TextureRegion>> animacionesGoblin = new HashMap<>();
+    private Table tabla, fila;
+    private Stack stack;
 
-    // UI
-    private Table tabla;
-    private Image imgInventario;
+    private GlyphLayout layout; 
+    private Label.LabelStyle estilo, estilo2, estilo3;
+    private Label lblDescripcion,  lblDanio, lblMana;
+    private Label lbl;
 
-    // Assets
-    private Texture inventarioTex;
-    private Texture categoriasTex;
-    private Texture habilidadTex;
-    private Label lblDescripcion;
-    private Label lblDanio, lblMana;
-
-    private Label lblVidaHeroe, lblVidaEnemy;
-private Label  lblManaHeroe, lblManaEnemy;
-
-    // Render
-    private BitmapFont font, fontStats;
+    private TextureRegionDrawable drawable;
+    private Texture categoriasTex, habilidadTex;
+    private Texture victoria, derrota;
+    private Image imgFondoGeneral, steroe, stsEnemigo;
+    private Image imgInventario, iconCategoria;
+    
     private ShapeRenderer sr;
 
+    // Animacion Goblin
+    private Map<Goblin.EstadoGoblin, Animation<TextureRegion>> animacionesGoblin = new HashMap<>();    
+    
     // Animaciones
     private final Map<Entidad.Estado, Animation<TextureRegion>> animHeroe = new HashMap<>();
     private final Map<Entidad.Estado, Animation<TextureRegion>> animEnemigo = new HashMap<>();
-
-    // Resultado
-    private Texture victoria;
-    private Texture derrota;
-
-    // CONSTRUCTOR
+    
     public CombateVista(FitViewport viewport, Main game, int nivel,List<DatosSprite> spritesHeroe, List<DatosSprite> spritesEnemigo) {
 
-        //this.modelo = modelo;
         this.stage = new Stage(viewport, game.batch);
+        this.game = game;
+
+        w = stage.getViewport().getWorldWidth();
+        h = stage.getViewport().getWorldHeight();
+
+        sr = new ShapeRenderer();
+        layout = new GlyphLayout();
+
+        estilo = new Label.LabelStyle();
+        estilo.font = GameAssets.fuenteMedieval;
+
+        estilo3 = new Label.LabelStyle();
+        estilo3.font = GameAssets.fuenteMedievalChico;
+
+        estilo2 = new Label.LabelStyle();
+        estilo2.font = GameAssets.font;
 
         // fondo nivel
-        fondo = game.assets.get("Imagenes/Combate/nivel" + nivel + ".png", Texture.class);
-        imgFondoGeneral = new Image(fondo);
-        imgFondoGeneral.setPosition(0, 0);
-        imgFondoGeneral.setSize(WORLD_WIDTH, WORLD_HEIGHT);
+        imgFondoGeneral = new Image(game.assets.get("Imagenes/Combate/nivel" + nivel + ".png", Texture.class));
+        imgFondoGeneral.setFillParent(true);
 
         // Boton Pausa
-        Texture texBoton = game.assets.get("Imagenes/Opciones/pausa.png", Texture.class);
-        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(texBoton));
+        drawable = new TextureRegionDrawable(new TextureRegion(game.assets.get("Imagenes/Opciones/pausa.png", Texture.class)));
         btnPausa = new ImageButton(drawable);
         btnPausa.setSize(100, 100);
         btnPausa.setPosition(0, 620);
 
-        // cuadro stats del Heroe
-        statusHeroe = game.assets.get("Imagenes/Combate/vidaHeroe.png", Texture.class);
-        stsHeroe = new Image(statusHeroe);
-        stsHeroe.setSize(400, 200);
-        stsHeroe.setPosition(30, 50);
-
         // cuadro stats del Enemigo
-        statusEnemigo = game.assets.get("Imagenes/Combate/vidaEnemigo.png", Texture.class);
-        stsEnemigo = new Image(statusEnemigo);
-        stsEnemigo.setSize(400, 200);
-        stsEnemigo.setPosition( 860, 50);
+        stsEnemigo = new Image(game.assets.get("Imagenes/Combate/vidaEnemigo.png", Texture.class));
+        stsEnemigo.setSize(w * 0.65f, w * 0.08f);
+        stsEnemigo.setPosition( (w - stsEnemigo.getWidth()) /2, h - 120);
 
         // inventario
-        inventarioTex = game.assets.get("Imagenes/Combate/inventario2.png", Texture.class);
-        categoriasTex = game.assets.get("Imagenes/Combate/categorias.png", Texture.class);
-        habilidadTex = game.assets.get("Imagenes/Combate/cuadroHabilidad.png", Texture.class);
+        categoriasTex = game.assets.get("Imagenes/SeccionRecompensa/tipoHabilidad.png", Texture.class);
+        habilidadTex = game.assets.get("Imagenes/SeccionRecompensa/cuadroHabilidad.png", Texture.class);
 
         // resultado combate
         victoria = game.assets.get("Imagenes/Combate/victoria.png", Texture.class);
         derrota = game.assets.get("Imagenes/Combate/derrota.png", Texture.class);
         
-        sr = new ShapeRenderer();
-        font = new BitmapFont();
-        layout = new GlyphLayout();
-        font.getData().setScale(1.5f);
-        font.setColor(Color.WHITE);
-
-        fontStats = new BitmapFont();
-        fontStats.getData().setScale(1.0f);
-        fontStats.setColor(Color.WHITE);
-
-        lblVidaHeroe = new Label("", new Label.LabelStyle(fontStats, Color.WHITE));
-        lblVidaHeroe.setAlignment(Align.center);
-        lblVidaHeroe.setPosition(105, 140);
-
-        lblManaHeroe = new Label("", new Label.LabelStyle(fontStats, Color.WHITE));
-        lblManaHeroe.setAlignment(Align.center);
-        lblManaHeroe.setPosition(105, 115);
-
-        lblVidaEnemy = new Label("", new Label.LabelStyle(fontStats, Color.WHITE));
-        lblVidaEnemy.setAlignment(Align.center);
-        lblVidaEnemy.setPosition(1190, 140);
-
-        lblManaEnemy = new Label("", new Label.LabelStyle(fontStats, Color.WHITE));
-        lblManaEnemy.setAlignment(Align.center);
-        lblManaEnemy.setPosition(1190, 115);
-        
-
-        lblDescripcion = new Label("", new Label.LabelStyle(font, Color.YELLOW));
-        lblDescripcion.setAlignment(Align.center);
-        lblDescripcion.setPosition(WORLD_WIDTH / 2f - 150, WORLD_HEIGHT * 0.28f); //y
-        lblDescripcion.setSize(150, 50);
-        lblDescripcion.setWrap(true);
-
-        lblDanio = new Label("", new Label.LabelStyle(font, Color.RED));
-        lblDanio.setAlignment(Align.center);
-        lblDanio.setPosition(WORLD_WIDTH - 550, WORLD_HEIGHT * 0.35f);
-
-        lblMana = new Label("", new Label.LabelStyle(font, Color.BLUE));
-        lblMana.setAlignment(Align.center);
-        lblMana.setPosition(WORLD_WIDTH - 550, WORLD_HEIGHT * 0.31f);
-
         stage.addActor(imgFondoGeneral); 
         stage.addActor(btnPausa);
-        stage.addActor(stsHeroe); 
+
         stage.addActor(stsEnemigo); 
+
         crearUIInventario();
-        stage.addActor(lblDescripcion);
-        stage.addActor(lblDanio);
-        stage.addActor(lblMana);
+
         cargarAnimacionesDB(spritesHeroe, spritesEnemigo);
         cargarAnimacionesGoblin();
     }
 
     private void crearUIInventario() {
 
-        imgInventario = new Image(inventarioTex);
+        imgInventario = new Image(game.assets.get("Imagenes/Combate/inventario2.png", Texture.class));
 
-        float w = WORLD_WIDTH - 780;
-        float h = WORLD_HEIGHT - 280;
+        imgInventario.setSize(w - 780, h - 280);
+        imgInventario.setPosition((w- imgInventario.getWidth()) / 2f, h - 680);
 
-        imgInventario.setSize(w, h);
-        imgInventario.setPosition((WORLD_WIDTH - w) / 2f, 100);
+        lblDescripcion = new Label("", estilo);
+        lblDescripcion.setAlignment(Align.center);
+        lblDescripcion.setWidth(250);
+        lblDescripcion.setPosition(w / 2f - 200, h * 0.20f); //y
+        lblDescripcion.setWrap(true);
+        
+        lblDanio = new Label("", estilo3);
+        lblDanio.setAlignment(Align.center);
+        lblDanio.setPosition(w - 455, h * 0.229f);
+
+        lblMana = new Label("", estilo3);
+        lblMana.setAlignment(Align.center);
+        lblMana.setPosition(w - 480, h * 0.174f);
 
         tabla = new Table();
-        tabla.left().padLeft(495);
-        tabla.bottom().padBottom(292);
-        tabla.defaults().pad(2);
-
+        tabla.left().padLeft(500);
+        tabla.bottom().padBottom(272);
+        
         stage.addActor(imgInventario);
+        stage.addActor(lblDescripcion);
+        stage.addActor(lblDanio);
+        stage.addActor(lblMana);
         stage.addActor(tabla);
     }
 
     public void cargarInventarioHabilidades(String[] nombresHabilidades, String[] tipoHabilidades) {
-        tabla.clearChildren();
-        tabla.setPosition(100, 0);
+
         botonesHabilidades.clear();
-        //tabla.debug();
 
         for (int i = 0; i < 4; i++) {
 
-            String nombre = nombresHabilidades[i];
-            String tipo = tipoHabilidades[i];
+            nombre = nombresHabilidades[i];
+            tipo = tipoHabilidades[i];
 
-            ImageButton btn = crearBotonHab(habilidadTex);
+            btn = crearBotonHab(habilidadTex);
             botonesHabilidades.add(btn);
 
-            Label lbl = new Label(nombre, new Label.LabelStyle(font, Color.WHITE));
+            lbl = new Label(nombre, estilo3);
             lbl.setAlignment(Align.center);
             lbl.setTouchable(Touchable.disabled);
 
-            Stack stack = new Stack();
+            stack = new Stack();
             stack.add(btn);
             stack.add(lbl);
 
-            Image iconoCat = crearIconoTipo(tipo);
+            iconCategoria = crearIconoTipo(tipo);
 
-            Table fila = new Table();
-            if (iconoCat != null) {
-                fila.add(iconoCat).size(40, 40).padRight(5);
-            }
-            fila.add(stack).size(200, 40);
-
-            tabla.add(fila).size(100, 40).row();
+            tabla.add(iconCategoria).size(35, 35);
+            tabla.add(stack).size(300, 35).row();
         }
     }
 
     private Image crearIconoTipo(String tipo) {
+
         if (tipo.equalsIgnoreCase("vacio")) return null;
 
         int fila = 0;
+        
         if (tipo.equalsIgnoreCase("Ataque")) fila = 0;
         else if (tipo.equalsIgnoreCase("Defensa")) fila = 1;
         else if (tipo.equalsIgnoreCase("Curacion")) fila = 2;
@@ -268,12 +219,12 @@ private Label  lblManaHeroe, lblManaEnemy;
     public void comentarista(SpriteBatch batch, String mensaje){
 
         if (mensaje != null && !mensaje.isEmpty()) {
-            font.setColor(Color.WHITE);
-            layout.setText(font, mensaje);
+        
+            layout.setText(GameAssets.fuenteMedieval, mensaje);
 
-            float xMensaje = (WORLD_WIDTH - layout.width) / 2f;
-            float yMensaje = WORLD_HEIGHT * 0.90f;
-            font.draw(batch, mensaje, xMensaje, yMensaje);
+            float xMensaje = (w - layout.width) / 2f;
+            float yMensaje = h * 0.80f;
+            GameAssets.fuenteMedieval.draw(batch, mensaje, xMensaje, yMensaje);
         }
 
     }
@@ -281,11 +232,11 @@ private Label  lblManaHeroe, lblManaEnemy;
     // IMAGEN VICTORIA/DERROTA AL FINALIZAR LA PARTIDA
     public void resultado(SpriteBatch batch, String resultado) {
 
-        ancho = WORLD_WIDTH * 0.5f;
-        alto = WORLD_HEIGHT * 0.3f;
+        ancho = w * 0.3f;
+        alto = h * 0.5f;
 
-        x = (WORLD_WIDTH - ancho) / 2f;
-        y = (WORLD_HEIGHT - alto) / 2f + WORLD_HEIGHT * 0.25f;
+        x = (w - ancho) / 2f;
+        y = (h - alto) / 2f + h * 0.18f;
 
         if (resultado == "victoria") {
             batch.draw(victoria, x, y, ancho, alto);
@@ -295,100 +246,143 @@ private Label  lblManaHeroe, lblManaEnemy;
     }
 
     // BARRA DE VIDA/MANA
-    public void dibujarInterfazHeroe(SpriteBatch batch, int vidaActual, int vidaMax, int manaActual, int manaMax) {
+    public void dibujarInterfazHeroe(SpriteBatch batch, String nombreHeroe, int vidaActual, int vidaMax, int manaActual, int manaMax) {
 
-        lblVidaHeroe.setText(vidaActual + " / " + vidaMax);
-        lblManaHeroe.setText(manaActual + " / " + manaMax);
+        float barraVidaX = w - 952;
+        float barraVidaY = h - 88;
+
+        float barraManaX = w - 952;
+        float barraManaY = h - 114;
+
+        sr.setProjectionMatrix(batch.getProjectionMatrix());
+        sr.begin(ShapeRenderer.ShapeType.Filled);
+        
+
+        dibujarBarra(barraVidaX, barraVidaY, 230f, vidaActual, vidaMax, new Color(180/255f, 30/255f, 30/255f, 1f), false);
+        dibujarBarra(barraManaX, barraManaY, 158f, manaActual, manaMax, new Color(40/255f, 90/255f, 180/255f, 1f), false);
+
+        sr.end();
+
+        batch.begin();
+
+        GameAssets.fuenteMedieval.draw(batch, nombreHeroe, w - 900, h - 42);
+
+        String hp = "HP: " + vidaActual + " / " + vidaMax;
+        layout.setText(GameAssets.fontStats, hp);
+        GameAssets.fontStats.draw(batch, hp, barraVidaX + 2, barraVidaY + 14);
+
+        String mp = "MP: " + manaActual + " / " + manaMax;
+        layout.setText(GameAssets.fontStats, mp);
+        GameAssets.fontStats.draw(batch, mp, barraManaX + 2, barraManaY + 14);
+
+        batch.end();
+    }
+
+    public void dibujarInterfazEnemigo(SpriteBatch batch, String nombreEnemigo, int vidaActual, int vidaMax, int manaActual, int manaMax) {
+
+        float barraVidaX = w - 555;
+        float barraVidaY = h - 88;
+
+        float barraManaX = w - 485;
+        float barraManaY = h - 114;
 
         sr.setProjectionMatrix(batch.getProjectionMatrix());
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
-        stage.addActor(lblVidaHeroe);
-        dibujarBarra(140, 132, vidaActual, vidaMax, Color.GREEN);
-        stage.addActor(lblManaHeroe);
-        dibujarBarra(140, 106, manaActual, manaMax, Color.BLUE);
-
-        sr.end();
-    }
-
-    public void dibujarInterfazEnemigo(SpriteBatch batch, int vidaActual, int vidaMax, int manaActual, int manaMax) {
-
-        lblVidaEnemy.setText(vidaActual + " / " + vidaMax);
-        lblManaEnemy.setText(manaActual + " / " + manaMax);
-
-        sr.setProjectionMatrix(batch.getProjectionMatrix());
-        sr.begin(ShapeRenderer.ShapeType.Filled);
-
-        stage.addActor(lblVidaEnemy);
-        dibujarBarra(977, 132, vidaActual, vidaMax, Color.RED);
-        stage.addActor(lblManaEnemy);
-        dibujarBarra(977, 106, manaActual, manaMax, Color.BLUE);
+        dibujarBarra(barraVidaX, barraVidaY, 230f, vidaActual, vidaMax, new Color(180/255f, 30/255f, 30/255f, 1f), true);
+        dibujarBarra(barraManaX, barraManaY, 158f, manaActual, manaMax, new Color(40/255f, 90/255f, 180/255f, 1f), true);
         
         sr.end();
+
+        batch.begin();
+
+        GameAssets.fuenteMedieval.draw(batch, nombreEnemigo, w - 580, h - 45);
+
+        String hp = vidaMax + " / " + vidaActual + " :HP";
+        layout.setText(GameAssets.fontStats, hp);
+        GameAssets.fontStats.draw(batch, hp, barraVidaX + 138, barraVidaY + 14);
+
+        String mp = manaMax + " / " + manaActual + " :MP";
+        layout.setText(GameAssets.fontStats, mp);
+        GameAssets.fontStats.draw(batch, mp, barraManaX + 68, barraManaY + 14);
+
+        batch.end();
     }
 
-    private void dibujarBarra(float x, float y, int actual, int max, Color color) {
+    private void dibujarBarra(float x, float y, float acho, int actual, int max, Color color, boolean invertida) {
         
-        ancho = 180f;
+        ancho = acho;
         float porcentaje = (float) actual / max;
+        float fill = ancho * porcentaje;
 
-        sr.setColor(Color.BLACK);
-        sr.rect(x, y, ancho, 18);
         sr.setColor(color);
-        sr.rect(x, y, ancho * porcentaje, 18);
+        if (!invertida) {
+            sr.rect(x, y, fill, 16); // izquierda → derecha
+        } else {
+            sr.rect(x + (ancho - fill), y, fill, 16); // derecha → izquierda
+        }
     }
 
-    public void dibujarSprite(SpriteBatch batch, Entidad.Estado estadoHeroe, float timeHeroe, String nombreHeroe, 
-        Entidad.Estado estadoEnemigo, float timeEnemigo, String nombreEnemigo, int faseVisual) {
-        font.setColor(Color.WHITE);;
+    public void dibujarSprite(SpriteBatch batch, Entidad.Estado estadoHeroe, float timeHeroe, String nombreHeroe, Entidad.Estado estadoEnemigo, float timeEnemigo, String nombreEnemigo, int faseVisual) {
 
-        Animation <TextureRegion> animacionH = animHeroe.get(estadoHeroe);
-        if (animacionH != null) {
-            boolean loopear = animacionH.getPlayMode() == Animation.PlayMode.LOOP;
-            TextureRegion frame = animacionH.getKeyFrame(timeHeroe, loopear);
-            batch.draw(frame, WORLD_WIDTH * 0.15f, WORLD_HEIGHT * 0.40f, 150, 150);
-            font.draw(batch, nombreHeroe, 157, 188);
+        Animation<TextureRegion> animacionH = animHeroe.get(estadoHeroe);
+        Animation<TextureRegion> animacionE = animEnemigo.get(estadoEnemigo);
+
+        float baseAncho = 250f;
+        float baseAlto = 250f;
+
+        float baseY = h * 0.15f;
+
+        // Margen igual para ambos lados
+        float margen = 50f;
+
+        // Posición del héroe
+        float heroeX = margen;
+
+        float escala = 1.0f;
+        Color colorAura = null;
+
+        if (faseVisual == 2) {
+            escala = 1.25f;
+            colorAura = new Color(1f, 0f, 0f, 0.7f);
+        } else if (faseVisual == 3) {
+            escala = 1.50f;
+            colorAura = new Color(0.6f, 0f, 1f, 0.7f);
         }
 
-        Animation <TextureRegion> animacionE = animEnemigo.get(estadoEnemigo);   
+        float actualAncho = baseAncho * escala;
+        float actualAlto = baseAlto * escala;
+
+        // Posición del enemigo (misma distancia al borde derecho)
+        float enemigoX = w - margen - actualAncho;
+
+        // Dibujar héroe
+        if (animacionH != null) {
+            boolean loopearHeroe = animacionH.getPlayMode() == Animation.PlayMode.LOOP;
+            TextureRegion frameHeroe = animacionH.getKeyFrame(timeHeroe, loopearHeroe);
+
+            batch.draw(frameHeroe, heroeX, baseY, baseAncho, baseAlto);
+        }
+
+        // Dibujar enemigo
         if (animacionE != null) {
-            boolean loopear = animacionE.getPlayMode() == Animation.PlayMode.LOOP;
-            TextureRegion frameE = animacionE.getKeyFrame(timeEnemigo, loopear);
+            boolean loopearEnemigo = animacionE.getPlayMode() == Animation.PlayMode.LOOP;
+            TextureRegion frameEnemigo = animacionE.getKeyFrame(timeEnemigo, loopearEnemigo);
 
-            float baseAncho = 150f;
-            float baseAlto = 150f;
-            float baseX = WORLD_WIDTH * 0.65f;
-            float baseY = WORLD_HEIGHT * 0.40f;
-
-            float scala = 1.0f;
-            Color colorAura = null;
-
-            if (faseVisual == 2) {
-                scala = 1.25f; // 25% mas grande
-                colorAura = new Color(1f, 0f, 0f, 0.7f); // aura roja 
-            } else if (faseVisual == 3) {
-                scala = 1.50f; // 50% mas grande
-                colorAura = new Color(0.6f, 0f, 1f, 0.7f); //aura violeta
-            }
-
-            float actualAncho = baseAncho * scala;
-            float actualAlto = baseAlto * scala;
-
-            float actualX = baseX - ((actualAncho - baseAncho) / 2f);
-            float actualY = baseY;
-
+            // Aura
             if (colorAura != null) {
                 batch.setColor(colorAura);
+
                 float desplazamiento = 15f;
-                batch.draw(frameE, actualX - (desplazamiento / 2f), actualY - (desplazamiento / 2f), actualAncho + desplazamiento, actualAlto + desplazamiento);
+
+                batch.draw(frameEnemigo, enemigoX - desplazamiento / 2f, baseY - desplazamiento / 2f, actualAncho + desplazamiento, actualAlto + desplazamiento);
             }
 
             batch.setColor(Color.WHITE);
-            batch.draw(frameE, actualX, actualY, actualAncho, actualAlto);
-            
-            font.draw(batch, nombreEnemigo, 957, 188);
+            batch.draw(frameEnemigo, enemigoX, baseY, actualAncho, actualAlto);
         }
     }
+
     private void cargarAnimacionesDB(List<DatosSprite> spritesHeroe, List<DatosSprite> spritesEnemigo) {
         cargarAnimacionesEntidad(spritesHeroe, animHeroe);
         cargarAnimacionesEntidad(spritesEnemigo, animEnemigo);
@@ -421,40 +415,47 @@ private Label  lblManaHeroe, lblManaEnemy;
             } else if (estado == Entidad.Estado.DANIO) {
                 duracion = 0.30f;
             }
-             mapaAnimaciones.put(estado, new Animation<>(duracion, frames, modo));
+            mapaAnimaciones.put(estado, new Animation<>(duracion, frames, modo));
         }
     }
 
     private void cargarAnimacionesGoblin() {
-    Array<TextureRegion> framesGoblinC = new Array<>();
-    for (int i = 1; i <= 4; i++) {
-        String ruta = "Imagenes/Personajes/Enemigo/duende/duendeCorriendo" + i + ".png";
-        if (Gdx.files.internal(ruta).exists()) {
-            framesGoblinC.add(new TextureRegion(new Texture(Gdx.files.internal(ruta))));
+        
+        Array<TextureRegion> framesGoblinC = new Array<>();
+        for (int i = 1; i <= 4; i++) {
+
+            String ruta = "Imagenes/Personajes/Enemigo/duende/duendeCorriendo" + i + ".png";
+            if (Gdx.files.internal(ruta).exists()) {
+                framesGoblinC.add(new TextureRegion(new Texture(Gdx.files.internal(ruta))));
             }
         }
-    if (framesGoblinC.size > 0) {
-        animacionesGoblin.put(Goblin.EstadoGoblin.CORRIENDO, new Animation<>(0.15f, framesGoblinC, Animation.PlayMode.LOOP));
+        
+        if (framesGoblinC.size > 0) {
+            animacionesGoblin.put(Goblin.EstadoGoblin.CORRIENDO, new Animation<>(0.15f, framesGoblinC, Animation.PlayMode.LOOP));
         }
-    Array<TextureRegion> framesGoblinA = new Array<>();
-    for (int i = 1; i <= 2; i++) {
-        String ruta = "Imagenes/Personajes/Enemigo/duende/duendeAtaque" + i + ".png";
-        if (Gdx.files.internal(ruta).exists()) {
-            framesGoblinA.add(new TextureRegion(new Texture(Gdx.files.internal(ruta))));
+        
+        Array<TextureRegion> framesGoblinA = new Array<>();
+        for (int i = 1; i <= 2; i++) {
+            String ruta = "Imagenes/Personajes/Enemigo/duende/duendeAtaque" + i + ".png";
+            if (Gdx.files.internal(ruta).exists()) {
+                framesGoblinA.add(new TextureRegion(new Texture(Gdx.files.internal(ruta))));
             }
         }
-    if (framesGoblinA.size > 0) {
-        animacionesGoblin.put(Goblin.EstadoGoblin.ATACANDO, new Animation<>(0.15f, framesGoblinA, Animation.PlayMode.LOOP));
+        
+        if (framesGoblinA.size > 0) {
+            animacionesGoblin.put(Goblin.EstadoGoblin.ATACANDO, new Animation<>(0.15f, framesGoblinA, Animation.PlayMode.LOOP));
         }
-    Array<TextureRegion> framesGoblinS = new Array<>();
-    for (int i = 1; i <= 2; i++) {
-        String ruta = "Imagenes/Personajes/Enemigo/duende/duendeSaltando" + i + ".png";
-        if (Gdx.files.internal(ruta).exists()) {
-            framesGoblinS.add(new TextureRegion(new Texture(Gdx.files.internal(ruta))));
+        
+        Array<TextureRegion> framesGoblinS = new Array<>();
+        for (int i = 1; i <= 2; i++) {
+            String ruta = "Imagenes/Personajes/Enemigo/duende/duendeSaltando" + i + ".png";
+            if (Gdx.files.internal(ruta).exists()) {
+                framesGoblinS.add(new TextureRegion(new Texture(Gdx.files.internal(ruta))));
             }
         }
-    if (framesGoblinS.size > 0) {
-        animacionesGoblin.put(Goblin.EstadoGoblin.ESCAPANDO, new Animation<>(0.8f, framesGoblinS, Animation.PlayMode.NORMAL));
+
+        if (framesGoblinS.size > 0) {
+            animacionesGoblin.put(Goblin.EstadoGoblin.ESCAPANDO, new Animation<>(0.8f, framesGoblinS, Animation.PlayMode.NORMAL));
         }
     }
 
@@ -462,13 +463,11 @@ private Label  lblManaHeroe, lblManaEnemy;
         Animation<TextureRegion> animacionActual = animacionesGoblin.get(estado);
         if (animacionActual != null) {
             TextureRegion frame = animacionActual.getKeyFrame(stateTime, true);
-            batch.draw(frame, x, y, 150, 150);
+            batch.draw(frame, x, y, 200, 200);
         }
     }
  
-    public void cerrar() {
-        stage.dispose();
-    }
+    public void cerrar() {stage.dispose();}
 
     // GETTERS
     public Stage getStage() {return stage;}
@@ -500,6 +499,7 @@ private Label  lblManaHeroe, lblManaEnemy;
         return 1.0f;
     }
 
+    public Image getStsCombate() {return stsEnemigo;}
     public void setTextoDescripcion(String texto) {lblDescripcion.setText(texto);}
     public void setTextoDanio(String danio) { lblDanio.setText(danio);}
     public void setTextoMana(String mana) {lblMana.setText(mana);}

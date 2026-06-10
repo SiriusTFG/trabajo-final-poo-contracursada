@@ -150,7 +150,7 @@ public class PartidaDao {
         try (Statement stmt = conexion.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
                 while (rs.next()) {
-                    resumenes.add(rs.getInt("id") + " - " + rs.getString("nombre_partida") + " (Nivel " + rs.getInt("nivel_actual") + ") ");
+                    resumenes.add(rs.getInt("id") + " - " + rs.getString("nombre_partida") + " - Lvl " + rs.getInt("nivel_actual"));
                 }
              }
              return resumenes;

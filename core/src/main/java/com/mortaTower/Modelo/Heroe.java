@@ -46,10 +46,6 @@ public class Heroe extends Entidad {
  
         vidaMax += 20; // Incrementa la vida máxima al subir de nivel
         manaMax += 10; // Incrementa el mana máximo al subir de nivel
-
-        //vidaActual = vidaMax; // Restaura la vida al subir de nivel
-        //manaActual = manaMax; // Restaura el mana al subir de nivel
-    
     }
 
     public void seleccionarHabilidad(Habilidad habilidad) {

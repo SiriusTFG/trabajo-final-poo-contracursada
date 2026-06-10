@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Main;
-import com.mortaTower.Controlador.OpcionesControlador;
 import com.mortaTower.Vista.MenuVista;
 
 
@@ -16,14 +15,15 @@ public class MenuScreen extends Screens {
 
     public MenuScreen(Main game) {
         super(game);
+
         //game.audio.loop(0);
+        
+        vista = new MenuVista(viewport, game); 
+        opcionesControlador = new OpcionesControlador(game, vista.getStage());
     }
 
    @Override
     public void show() {
-
-        vista = new MenuVista(viewport, game); // el viewport es del screen
-        opcionesControlador = new OpcionesControlador(game, vista.getStage());
 
         Gdx.input.setInputProcessor(vista.getStage());
 
@@ -33,6 +33,7 @@ public class MenuScreen extends Screens {
                 game.audio.play(3);
                 game.audio.stop(0);
                 game.setScreen(new TransicionScreen(game, MenuScreen.this, new SeleccionScreen(game)));
+                //game.setScreen(new TransicionScreen(game, MenuScreen.this, new CreditosScreen(game, game.batch)));
                 
             }
         });
@@ -49,6 +50,7 @@ public class MenuScreen extends Screens {
         vista.getBtnOpciones().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
                 game.audio.play(5);
                 
                 opcionesControlador.setOpciones(true);
@@ -64,7 +66,6 @@ public class MenuScreen extends Screens {
             }
         });
 
-        opcionesControlador.listenersOpcines();
     }
 
     @Override

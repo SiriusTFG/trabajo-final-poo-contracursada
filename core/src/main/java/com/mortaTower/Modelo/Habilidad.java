@@ -5,9 +5,9 @@ public abstract class Habilidad {
     private int id;
     private String nombre;
     private String descripcion;
-    private String tipo;         //Ataque, Defensa, Curacion, Maná
+    private String tipo;
     private int costoMana;
-    protected int valorBase;    //Puede representar daño, curación, etc., dependiendo del tipo de habilidad
+    private int valorBase;    
     private int cooldownMax;    
     private int cooldownActual;
 
@@ -24,9 +24,9 @@ public abstract class Habilidad {
         this.cooldownActual = 0;
     }
 
-    public abstract void ejecutarHabilidad(Entidad usuario, Entidad objetivo); //atributos necesarios para ejecutar la habilidad, como el personaje objetivo, el personaje que la ejecuta, etc.
+    public abstract void ejecutarHabilidad(Entidad usuario, Entidad objetivo);
 
-    public boolean puedeUsarse(Entidad usuario) { //falta definir la clase Personaje, pero se asume que tiene un método getMana() que devuelve la cantidad de mana actual del personaje
+    public boolean puedeUsarse(Entidad usuario) {
         return usuario.getManaActual() >= costoMana && cooldownActual == 0;
     }
 
@@ -40,9 +40,10 @@ public abstract class Habilidad {
         }
     }
 
-        //Getters
+    // GETTERS
     public abstract Entidad.Estado getEstadoEjecucion(); 
-    public abstract Entidad.Estado getEstadoReaccion();  
+    public abstract Entidad.Estado getEstadoReaccion(); 
+     
     public int getId() {return id;}
     public String getNombre() {return nombre;}
     public String getDescripcion() {return descripcion;}

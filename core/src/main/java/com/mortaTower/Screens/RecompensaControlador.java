@@ -1,4 +1,4 @@
-package com.mortaTower.Controlador;
+package com.mortaTower.Screens;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
 import com.mortaTower.DAO.PartidaDao;
@@ -15,9 +16,6 @@ import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
 import com.mortaTower.Modelo.Partida;
 import com.mortaTower.Modelo.RecompensasModelo;
-import com.mortaTower.Screens.CombateScreen;
-import com.mortaTower.Screens.Screens;
-import com.mortaTower.Screens.TransicionScreen;
 import com.mortaTower.Vista.RecompensasVista;
 
 public class RecompensaControlador  extends Screens{
@@ -31,8 +29,9 @@ public class RecompensaControlador  extends Screens{
     private int nivel;
     private Habilidad[] habilidad;
     private List<Habilidad> habilidadActual;
-    private int habSelecionada, habRemplazar;
-    private int[] tipo;
+    private int habSelecionada = -1;
+    private int habRemplazar = -1;
+    private int[] tipo, valorRecompensa, costoManaRecompensa, valorActual, costoManaActual;
 
     private enum EstadoRecompensa {LISTA_HABILIDADES, RESUMEN_EXP}
     private int expPorGanar = 50;
@@ -50,7 +49,7 @@ public class RecompensaControlador  extends Screens{
 
         cargarAssets();
 
-        vistaRecompensa = new RecompensasVista(game);
+        vistaRecompensa = new RecompensasVista(viewport, game);
     }
 
     public void mostrar() {
@@ -58,6 +57,12 @@ public class RecompensaControlador  extends Screens{
         String[] nombresActuales = modeloRecompensa.getNombresHabilidadesActuales();
         String[] tipoRecompensas = modeloRecompensa.getTipoRecompensas();
         String[] tipoHabilidadActual = modeloRecompensa.getTipoHabilidad();
+
+        valorRecompensa = modeloRecompensa.getValorRecompensa();
+        costoManaRecompensa = modeloRecompensa.getCostoManaRecompensa();
+
+        valorActual = modeloRecompensa.getValorActual();
+        costoManaActual = modeloRecompensa.getCostoActual();
 
         vistaRecompensa.listaHabilidades(nombresRecompensas, nombresActuales, tipoRecompensas, tipoHabilidadActual);
         Gdx.input.setInputProcessor(vistaRecompensa.getStage());
@@ -68,6 +73,11 @@ public class RecompensaControlador  extends Screens{
 
         vistaRecompensa.getStage().act(delta);
         vistaRecompensa.getStage().draw();
+
+        if(habRemplazar != -1 && habSelecionada != -1){
+
+            vistaRecompensa.getBtnConfirmar().setTouchable(Touchable.enabled);
+        }
     }
 
     private void listenersRecompensas() {
@@ -79,9 +89,24 @@ public class RecompensaControlador  extends Screens{
         for (int i = 0; i < cantidad; i++) {
             int id = i;
             vistaRecompensa.getBoton(i).addListener(new ClickListener() {
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                    
+                    vistaRecompensa.setTextoDanio(Integer.toString(valorRecompensa[id]));
+                    vistaRecompensa.setTextoMana(Integer.toString(costoManaRecompensa[id]));
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor toActor) {
+                    
+                    vistaRecompensa.setTextoDanio("");
+                    vistaRecompensa.setTextoMana("");
+                }
+
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    //recompensaSeleccionada = modeloRecompensa.getHabilidad()[id];
+                    
                     habSelecionada = id;
                     vistaRecompensa.setNueva(nueva[id]);
                 }
@@ -91,7 +116,24 @@ public class RecompensaControlador  extends Screens{
         int cant = vistaRecompensa.getCantidadRemplazo();
         for (int i = 0; i < cant; i++) {
             int slot = i;
+
+            
             vistaRecompensa.getBtnRemplazo(i).addListener(new ClickListener() {
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                    
+                    vistaRecompensa.setTextoDanioAct(Integer.toString(valorActual[slot]));
+                    vistaRecompensa.setTextoManaAct(Integer.toString(costoManaActual[slot]));
+                }
+
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor toActor) {
+                    
+                    vistaRecompensa.setTextoDanioAct("");
+                    vistaRecompensa.setTextoManaAct("");
+                }
+
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     

@@ -7,8 +7,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mortaTower.Controlador.PausaControlador;
-import com.mortaTower.Controlador.RecompensaControlador;
 import com.mortaTower.DAO.PartidaDao;
 import com.mortaTower.DAO.SpriteDao;
 import com.mortaTower.Modelo.DatosSprite;
@@ -67,11 +65,13 @@ public class CombateScreen extends Screens {
         Heroe heroe = game.getPartidaActual().getHeroe();
         modelo = new CombateModelo(heroe, nivel);
         recompensaControlador = new RecompensaControlador(game, this.nivel);
+
+        game.audio.loop(nivel);
     }
 
     @Override
     public void show() {
-
+        
         System.out.println("SHOW COMBATE");
           SpriteDao spriteDao = new SpriteDao();
         List<DatosSprite> spritesHeroe = null;
@@ -121,10 +121,11 @@ public class CombateScreen extends Screens {
             //metodo de libgdx para dejar que el hilo secundario modifique el hilo principal
             Gdx.app.postRunnable(() -> {
                 if (!pausa && modelo.getResultado() == CombateModelo.Resultado.NINGUNO) {
-                    float posicionX = Gdx.graphics.getWidth(); //arranca por la derecha
-                    float posicionY = WORLD_HEIGHT * 0.40f;
+                    float posicionX = viewport.getWorldWidth() + 300; //arranca por la derecha
+                    float posicionY = WORLD_HEIGHT * 0.18f;
                     goblin.prepararCorrida(posicionX, posicionY);
                     System.out.println("el goblin entra al combate");
+                    game.audio.play(10);
                 }
             });
         });
@@ -175,22 +176,56 @@ public class CombateScreen extends Screens {
         vista.getStage().act(delta);
         vista.getStage().draw();
 
+        if(modelo.getResultado() != Resultado.DERROTA && modelo.getResultado() != Resultado.VICTORIA){
+        
+            vista.getStsCombate().setVisible(true);
+            vista.dibujarInterfazHeroe(spriteBatch, modelo.getHeroe().getNombre(), modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax());
+            vista.dibujarInterfazEnemigo(spriteBatch, modelo.getEnemigo().getNombre(), modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), modelo.getEnemigo().getManaActual(), modelo.getEnemigo().getManaMax());
+        } else {
+
+            vista.getStsCombate().setVisible(false);
+
+        }
+
         spriteBatch.begin();
         
         String mensaje = modelo.getMensajeCombate();
 
-        vista.dibujarSprite(spriteBatch, 
-            modelo.getHeroe().getEstadoActual(), 
-            modelo.getHeroe().getStatetime(), 
-            nombreHeroe,
-            modelo.getEnemigo().getEstadoActual(), 
-            modelo.getEnemigo().getStatetime(), 
-            modelo.getEnemigo().getNombre(),
-            modelo.getEnemigo().getFaseVisual());
         vista.comentarista(spriteBatch, mensaje);
-
-        //temporizador?
         vista.resultado(spriteBatch, resultado); 
+
+        //LOGICA Y DIBUJADO DEL GOBLIN
+        if (goblin != null && goblin.getActivo() && !pausa) {
+            
+            
+            float duracionAtaque = vista.getTiempoAnimacionGoblin(Goblin.EstadoGoblin.ATACANDO);
+            boolean huboImpacto = goblin.actualizar(delta, modelo.getHeroe(), WORLD_WIDTH * 0.20f, WORLD_WIDTH + 100, WORLD_HEIGHT * 0.40f, duracionAtaque);
+
+            if (huboImpacto) {
+
+                game.audio.play(11);
+                modelo.mostrarMensaje("¡Un duende te robó " + goblin.getDanio() + " de vida!");
+                
+                game.audio.play(12);
+                if(modelo.getHeroe().getVidaActual() <= 0) {
+                    modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
+                    modelo.setResultado(CombateModelo.Resultado.DERROTA);
+                    victoriaProcesada = false;
+                    vista.ocultarInventario();
+                } else {
+                    modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
+                    heroeAturdido = true;
+                    tempRecuperacionHeroe = vista.getTiempoAnimacionHeroe(Entidad.Estado.DANIO);               
+                }
+            }
+            vista.dibujarGoblin(spriteBatch, goblin.getX(), goblin.getY(), goblin.getStateTime(), goblin.getEstadoActual());
+        }
+
+        vista.dibujarSprite(spriteBatch, modelo.getHeroe().getEstadoActual(), modelo.getHeroe().getStatetime(), nombreHeroe, modelo.getEnemigo().getEstadoActual(), modelo.getEnemigo().getStatetime(), 
+            modelo.getEnemigo().getNombre(),
+            modelo.getEnemigo().getFaseVisual()
+            ); 
+
 
         if (heroeAturdido) {
             tempRecuperacionHeroe -= delta;
@@ -200,38 +235,15 @@ public class CombateScreen extends Screens {
             }
         }
 
-        //LOGICA Y DIBUJADO DEL GOBLIN
-       if (goblin != null && goblin.getActivo() && !pausa) {
-            
-            float duracionAtaque = vista.getTiempoAnimacionGoblin(Goblin.EstadoGoblin.ATACANDO);
-            boolean huboImpacto = goblin.actualizar(delta, modelo.getHeroe(), WORLD_WIDTH * 0.20f, WORLD_WIDTH + 100, WORLD_HEIGHT * 0.40f, duracionAtaque);
-
-            if (huboImpacto) {
-                modelo.mostrarMensaje("¡Un duende te robó " + goblin.getDanio() + " de vida!");
-            
-            if(modelo.getHeroe().getVidaActual() <= 0) {
-                modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
-                modelo.setResultado(CombateModelo.Resultado.DERROTA);
-                victoriaProcesada = false;
-                vista.ocultarInventario();
-                } else {
-                    modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
-                    heroeAturdido = true;
-                    tempRecuperacionHeroe = vista.getTiempoAnimacionHeroe(Entidad.Estado.DANIO);               
-                }
-         }
-            vista.dibujarGoblin(spriteBatch, goblin.getX(), goblin.getY(), goblin.getStateTime(), goblin.getEstadoActual());
-        }
+        
 
         spriteBatch.end();
 
-        vista.dibujarInterfazHeroe(spriteBatch, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax());
-        vista.dibujarInterfazEnemigo(spriteBatch, modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), modelo.getEnemigo().getManaActual(), modelo.getEnemigo().getManaMax());
+        
 
-        if (victoriaProcesada) {
-
+        if (victoriaProcesada) { 
+            
             recompensaControlador.render(delta);
-
             return;
         }
 
@@ -250,10 +262,7 @@ public class CombateScreen extends Screens {
 
         switch (modelo.getTurnoActual()) {
 
-            case JUGADOR -> {
-                vista.mostrarInventario();
-
-            }
+            case JUGADOR -> { vista.mostrarInventario();}
 
             case ENEMIGO -> {
                 contador += delta;
@@ -268,13 +277,16 @@ public class CombateScreen extends Screens {
             case PROCESANDO -> {
                 contador += delta;
                 if (contador >= tiempoPausa / 2.0f && !danioAplicado) {
+                    
                     if (proximoTurnoJugador == false) {
-                    modelo.getHeroe().realizarTurno(modelo.getEnemigo());
-                } else {
-                    modelo.getEnemigo().realizarTurno(modelo.getHeroe());
-                }                                     
+                        modelo.getHeroe().realizarTurno(modelo.getEnemigo());
+                    } else {
+                        modelo.getEnemigo().realizarTurno(modelo.getHeroe());
+                    }
+
                     danioAplicado = true;
                 }
+                
                 if (contador >= tiempoPausa) {
                     modelo.getHeroe().setEstadoActual(Entidad.Estado.PARADO);
                     modelo.getEnemigo().setEstadoActual(Entidad.Estado.PARADO);
@@ -299,17 +311,20 @@ public class CombateScreen extends Screens {
                     modelo.mostrarMensaje("");
                 }
             }
+        
         }
     }
 
         if (modelo.getResultado() == Resultado.VICTORIA   && !esperandoRecompensa) {
-            //game.audio.play(6);
+            game.audio.stop(nivel);
+            game.audio.play(6);
             resultado = "victoria";
             esperandoRecompensa = true;
             tiempoResultado = 0f;
         }
 
         if (modelo.getResultado() == Resultado.DERROTA && !derrotaProcesada && !esperandoRecompensa) {
+            game.audio.stop(nivel);
             game.audio.play(7);
             resultado = "derrota";
             esperandoRecompensa = true;
@@ -397,7 +412,6 @@ public class CombateScreen extends Screens {
             modelo.getEnemigo().setEstadoActual(Entidad.Estado.ATAQUE);
             modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
             this.tiempoPausa = vista.getTiempoAnimacionEnemigo(Entidad.Estado.ATAQUE);
-           // modelo.getEnemigo().realizarTurno(modelo.getHeroe());
 
             modelo.mostrarMensaje( modelo.getEnemigo().getNombre() + " usó " + modelo.getEnemigo().getUltimaHabilidadUsada() + "!");
         }

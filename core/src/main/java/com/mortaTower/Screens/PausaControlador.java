@@ -1,15 +1,14 @@
-package com.mortaTower.Controlador;
+package com.mortaTower.Screens;
+
+import java.sql.SQLException;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.Main;
+import com.mortaTower.DAO.PartidaDao;
 import com.mortaTower.Modelo.Partida;
-import com.mortaTower.Screens.CombateScreen;
-import com.mortaTower.Screens.MenuScreen;
-import com.mortaTower.Screens.Screens;
-import com.mortaTower.Screens.TransicionScreen;
 import com.mortaTower.Vista.PausaVista;
 
 public class PausaControlador extends Screens{
@@ -61,15 +60,21 @@ public class PausaControlador extends Screens{
 
                 game.audio.stop(7);
 
-                 
                 Partida partidaActual = game.getPartidaActual();
+
+                try {
+
+                    partidaActual.setPisoActual(1);
+                    PartidaDao partidaDao = new PartidaDao();
+                    partidaDao.guardarProgreso(partidaActual);
+                } catch (SQLException e) { 
+                    e.printStackTrace();
+                }
+
                 String nombreHeroe = partidaActual.getNombrePartida();
 
-                // Reiniciar pantalla de combate
-                CombateScreen nuevoCombate = new CombateScreen(game, nombreHeroe, nivel);
-
                 // Cambiar pantalla con transición
-                game.setScreen(new TransicionScreen(game, PausaControlador.this, nuevoCombate));
+                game.setScreen(new TransicionScreen(game, PausaControlador.this, new CombateScreen(game, nombreHeroe, 1)));
 
                 // Limpiar input antiguo
                 Gdx.input.setInputProcessor(null);

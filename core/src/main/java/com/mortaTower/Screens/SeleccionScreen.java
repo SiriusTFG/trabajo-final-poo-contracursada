@@ -28,29 +28,29 @@ public class SeleccionScreen extends Screens {
         vista = new SeleccionVista(viewport, game);
         Gdx.input.setInputProcessor(vista.getStage());
 
-        vista.getBtnCaballero().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent evento, float x, float y) {
-                game.audio.play(3);
-                idHereoSelc = 1;
-                mostrarIngresoNombre();
-            }
-        });
+        int cantidad = vista.getCantidadBtn();
+
+        for (int i = 0; i < cantidad ; i++) { 
+
+            final int index = i + 1;
+
+            vista.getBtn(i).addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent evento, float x, float y) {
+                    game.audio.play(3);
+                    idHereoSelc = index;
+                    mostrarIngresoNombre();
+                }
+            });
+
+        }
+
         vista.getBtnIrPartidasGuardadas().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
                 game.audio.play(2);
                 game.setScreen(new TransicionScreen(game,SeleccionScreen.this, new CargarScreen(game,SeleccionScreen.this)));
                 }
-                       });
-
-        vista.getBtnMago().addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent evento, float x, float y) {
-                game.audio.play(3);
-                idHereoSelc = 2;
-                mostrarIngresoNombre();
-            }
         });
 
         vista.getBtnAtrasNombre().addListener(new ClickListener() {
@@ -62,7 +62,7 @@ public class SeleccionScreen extends Screens {
                 vista.ingresoNombre(false);
                // vista.getNombrePartida().setVisible(false);
                 //vista.getCapaIngresoNombre().setVisible(false);
-                vista.getCapaPrincipal().setVisible(true);
+                vista.getTablaPrincipal().setVisible(true);
             }
         });
 
@@ -78,14 +78,15 @@ public class SeleccionScreen extends Screens {
                 if (nombrePartida.isEmpty()) {
                     return;
                 }
-                System.out.println("CLICK JUGAR");
+                
                 try {
                     Partida partida = confirmarYCrearPartida(nombrePartida, idHereoSelc);
                     game.setPartida(partida);
                     game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new CombateScreen(game, nombrePartida, 1)));
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    vista.mostrarSinEspacio();
+                    vista.ingresoNombre(false);
+                    vista.sinEspacio(true);
                 }
             }
         });
@@ -93,7 +94,7 @@ public class SeleccionScreen extends Screens {
         vista.getBtnAtras().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
-                
+    
                 game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new MenuScreen(game)));
             }
         });
@@ -101,7 +102,7 @@ public class SeleccionScreen extends Screens {
 
     private void mostrarIngresoNombre() {
         
-        vista.getCapaPrincipal().setVisible(false);
+        vista.getTablaPrincipal().setVisible(false);
         vista.ingresoNombre(true);
     }
 

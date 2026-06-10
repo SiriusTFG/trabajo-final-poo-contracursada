@@ -1,177 +1,141 @@
 package com.mortaTower.Vista;
 
+import com.mortaTower.Main;
+import com.mortaTower.Screens.GameAssets;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mortaTower.Main;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class CreditosVista {
 
-    private final Stage stage;
-    private final Table table;
+        private final Stage stage;
+        private final Table table;
 
-    private float scrollY;
 
-    private final Image logo;
-    private final Label finalText;
+        private float w, h;
 
-    private float delay = 6f;
-    private boolean startScroll = false;
+        private float scrollY;
+        private float logox, logoY;
 
-    private boolean finalTriggered = false;
+        private float delay = 6f;
+        private boolean startScroll = false;
 
-    private ImageButton btnSalir;
+        //private boolean finalTriggered = false;
+        private boolean finished = false;
 
-    private static final float INTRO_TIME = 6f;
+        private Label.LabelStyle estilo, estilo2;
+        private ImageButton btnSalir;
+        private TextureRegionDrawable drawable;
 
-    public CreditosVista(FitViewport viewport, Main game) {
+        private Image logo, imgFondo;
 
-        stage = new Stage(viewport, game.batch);
+        private static final float INTRO_TIME = 6f;
 
-        BitmapFont font = new BitmapFont();
+        public CreditosVista(FitViewport viewport, Main game) {
 
-        Label.LabelStyle style = new Label.LabelStyle();
-        style.font = font;
+                this.stage = new Stage(viewport, game.batch);
 
-        Texture texBoton = game.assets.get("Imagenes/Opciones/pausa.png", Texture.class);
-        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(texBoton));
-        btnSalir = new ImageButton(drawable);
-        btnSalir.setSize(200, 80);
-        btnSalir.setPosition(viewport.getWorldWidth() - 1320, viewport.getWorldHeight() - 100);
+                w = stage.getViewport().getWorldWidth();
+                h = stage.getViewport().getWorldHeight();
 
-        // ===== FONDO =====
-        Texture fondo = game.assets.get("Imagenes/black.png", Texture.class);
-        Image background = new Image(fondo);
-        background.setFillParent(true);
+                estilo = new Label.LabelStyle();
+                estilo.font = GameAssets.fuenteMedieval;
 
-        // ===== LOGO =====
-        logo = new Image(game.assets.get("Imagenes/Creditos/mortalTower.png", Texture.class));
-        logo.setSize(500, 300);
+                estilo2 = new Label.LabelStyle();
+                estilo2.font = GameAssets.fuenteMedieval;
+                estilo2.fontColor = Color.GOLDENROD;
 
-        logo.setColor(1, 1, 1, 0f);
-        logo.addAction(Actions.fadeIn(INTRO_TIME, Interpolation.fade));
+                drawable = new TextureRegionDrawable(new TextureRegion(game.assets.get("Imagenes/Opciones/pausa.png", Texture.class)));
 
-        delay = INTRO_TIME;
+                btnSalir = new ImageButton(drawable);
+                btnSalir.setSize(200, 80);
+                btnSalir.setPosition(w - 1320, h - 100);
 
-        float xLogo = (viewport.getWorldWidth() - 500) / 2f;
-        float yLogo = viewport.getWorldHeight() * 0.50f;
+                // ===== FONDO =====
+                imgFondo = new Image(game.assets.get("Imagenes/black.png", Texture.class));
+                imgFondo.setFillParent(true);
 
-        logo.setPosition(xLogo, yLogo);
+                // ===== LOGO =====
+                logo = new Image(game.assets.get("Imagenes/Creditos/mortalTower.png", Texture.class));
+                logo.setSize(500, 300);
+                logox = (w - logo.getWidth()) / 2f;
+                logoY = (h - logo.getHeight()) /2f;
+                logo.setPosition(logox, logoY);
+                logo.setColor(1, 1, 1, 0f);
+                logo.addAction(Actions.fadeIn(INTRO_TIME, Interpolation.fade));
 
-        // ===== CREDITOS =====
-        table = new Table();
-        table.center();
+                delay = INTRO_TIME;
 
-        table.add(new Label("PROGRAMACION GENERAL", style)).padBottom(20).row();
+                // CREDITOS
+                table = new Table();
+                table.center();
 
-        table.add(new Label("David", style)).padBottom(10).row();
-        table.add(new Label("Sandoval Jordan", style)).padBottom(10).row();
-        table.add(new Label("Almonacid Maximiliano", style)).padBottom(10).row();
-        table.add(new Label("Leal Isaac", style)).padBottom(40).row();
+                table.add(new Label("PROGRAMACION GENERAL", estilo2)).padBottom(20).row();
+                table.add(new Label("David", estilo)).padBottom(10).row();
+                table.add(new Label("Jordan", estilo)).padBottom(10).row();
+                table.add(new Label("Maximiliano", estilo)).padBottom(10).row();
+                table.add(new Label("Isaac", estilo)).padBottom(40).row();
+                table.add(new Label("ARTE Y DISEÑO", estilo2)).padBottom(20).row();
+                table.add(new Label("DAVID", estilo)).padBottom(10).row();
+                table.add(new Label("Isaac", estilo)).padBottom(10).row();
+                table.add(new Label("Jordan", estilo)).padBottom(10).row();
+                table.add(new Label("Maximiliano", estilo)).padBottom(10).row();
+                table.add(new Label("¡GRACIAS POR JUGAR!", estilo)).padTop(40).row();
+                table.pack();
 
-        table.add(new Label("ARTE Y DISEÑO", style)).padBottom(20).row();
+                scrollY = -table.getHeight();
 
-        table.add(new Label("DAVID", style)).padBottom(10).row();
-        table.add(new Label("Leal Isaac", style)).padBottom(10).row();
-        table.add(new Label("Sandoval Jordan", style)).padBottom(10).row();
-        table.add(new Label("Almonacid Maximiliano", style)).padBottom(10).row();
+                table.setPosition((w - table.getWidth()) / 2f, scrollY);
 
-        table.add(new Label("¡THANK YOU FOR PLAY!", style)).padTop(40).row();
-
-        table.pack();
-
-        table.setPosition(
-                (viewport.getWorldWidth() - table.getWidth()) / 2f,
-                -table.getHeight()
-        );
-
-        // ===== TEXTO FINAL (EPÍLOGO) =====
-        finalText = new Label(
-                "",
-                style
-        );
-
-        finalText.setAlignment(Align.center);
-        finalText.setColor(1, 1, 1, 0f);
-
-        finalText.setPosition(
-                (viewport.getWorldWidth() - finalText.getWidth()) / 2f,
-                viewport.getWorldHeight() * 0.5f
-        );
-
-        finalText.addAction(
-                Actions.sequence(
-                        Actions.delay(12f),   // aparece al final de los créditos
-                        Actions.fadeIn(2f),
-                        Actions.delay(3f),
-                        Actions.fadeOut(2f)
-                )
-        );
-
-        scrollY = -table.getHeight();
-
-        // ===== ADD ACTORS (ORDEN IMPORTA) =====
-        stage.addActor(background);
-        stage.addActor(btnSalir);
-        stage.addActor(table);
-        stage.addActor(logo);
-        stage.addActor(finalText);
-    }
-
-    public void update(float delta, float speed) {
-
-    stage.act(delta);
-
-    if (!startScroll) {
-
-        delay -= delta;
-
-        if (delay <= 0) {
-            startScroll = true;
+                // ===== ACTORS =====
+                stage.addActor(imgFondo);
+                stage.addActor(btnSalir);
+                stage.addActor(table);
+                stage.addActor(logo);
+                
         }
 
-        return;
-    }
+        public void update(float delta, float speed) {
 
-    scrollY += speed * delta;
+                stage.act(delta);
 
-    table.setY(scrollY);
+                // Espera mientras se muestra el logo
+                if (!startScroll) {
 
-    float endOfScroll = stage.getViewport().getWorldHeight() + table.getHeight();
+                        delay -= delta;
 
-    if (!finalTriggered && scrollY >= endOfScroll) {
+                        if (delay <= 0) {
+                                startScroll = true;
+                        }
 
-        finalTriggered = true;
+                        return;
+                }
 
-        finalText.addAction(
-                Actions.sequence(
-                        Actions.fadeIn(2f),
-                        Actions.delay(3f),
-                        Actions.fadeOut(2f)
-                )
-        );
-    }
-}
+                float movement = speed * delta;
 
-    public void draw(float delta) {
-        stage.draw();
-    }
+                // Créditos
+                scrollY += movement;
+                table.setY(scrollY);
 
-    public Stage getStage() {
-        return stage;
-    }
+                // Logo (sube junto con los créditos)
+                logoY += movement;
+                logo.setY(logoY);
 
-    public Button getBtnSalir() {return btnSalir;}
+                float endOfScroll = table.getHeight() + 180;
+
+                if (scrollY >= endOfScroll) {finished = true;}
+        }
+
+        public boolean isFinished() {return finished;}
+
+        public void draw(float delta) {stage.draw();}
+        public Stage getStage() {return stage;}
+        public Button getBtnSalir() {return btnSalir;}
 }

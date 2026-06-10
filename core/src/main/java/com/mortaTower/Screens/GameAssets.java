@@ -1,13 +1,17 @@
-package com.mortaTower.Controlador;
+package com.mortaTower.Screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
 public class GameAssets {
-    
-    public static Texture btnCargar;
-    public static Texture btnJugar;
-    public static Texture fondoMenu;
+
+    public static BitmapFont font;
+    public static BitmapFont fontStats;
+    public static BitmapFont fuenteMedieval, fuenteMedievalChico;
 
     public static void load(AssetManager manager) {
 
@@ -32,7 +36,7 @@ public class GameAssets {
 
         manager.load("Imagenes/SeleccionPersonaje/atras.png", Texture.class);
         manager.load("Imagenes/SeleccionPersonaje/iniciarPartida.png", Texture.class);
-        manager.load("Imagenes/SeleccionPersonaje/seleccionCaballero.png", Texture.class);
+        manager.load("Imagenes/SeleccionPersonaje/seleccion.png", Texture.class);
         manager.load("Imagenes/SeleccionPersonaje/seleccionMago.png", Texture.class);
 
         manager.load("Imagenes/Combate/cuadroHabilidad.png", Texture.class);
@@ -83,6 +87,29 @@ public class GameAssets {
 
         manager.load("Imagenes/CargarPartida/CuadroEliminar.png", Texture.class);
         manager.load("Imagenes/CargarPartida/menuSinespacio.png", Texture.class);
+    }
 
+    public static void crearFuentes() {
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Jersey10-Regular.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter p = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+        p.size = 30;
+        fuenteMedieval = generator.generateFont(p);
+
+        p.size = 18;
+        fuenteMedievalChico = generator.generateFont(p);
+
+        generator.dispose();
+
+        // Fuente default de LibGDX
+        font = new BitmapFont();
+        font.getData().setScale(1.5f);
+        font.setColor(Color.WHITE);
+
+        // Otra fuente default
+        fontStats = new BitmapFont();
+        fontStats.getData().setScale(1.0f);
+        fontStats.setColor(Color.WHITE);
     }
 }
