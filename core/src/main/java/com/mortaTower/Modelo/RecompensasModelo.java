@@ -37,7 +37,7 @@ public class RecompensasModelo {
         habilidadDao = new HabilidadDao();
 
         try {
-            habilidades = habilidadDao.obtenerTodas();
+            habilidades = habilidadDao.obtenerRecompensasHeroe();
         } catch (SQLException e) {
             e.printStackTrace();
             habilidades = new ArrayList<>();

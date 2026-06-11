@@ -128,9 +128,9 @@ public class CargarScreen extends Screens {
             String nombreHeroe = partida.getNombrePartida();
 
             if (partida != null) {
-                game.setPartida(partida);
-                game.setScreen(new TransicionScreen(game, this, new CombateScreen(game, nombreHeroe, partida.getPisoActual())));
-            }
+            game.setPartida(partida);
+            game.setScreen(new TransicionScreen(game, this, new IntroPisoScreen(game, partida.getPisoActual())));
+}
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -144,4 +144,24 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
             pstmt.executeUpdate();
         }
     }
+    public List<Habilidad> obtenerRecompensasHeroe() throws SQLException {
+        List<Habilidad> habilidades = new ArrayList<>();
+
+        String sql = "SELECT * FROM habilidades WHERE origen = 'HEROE' ORDER BY id ASC";
+
+        try (PreparedStatement pstmt = conexion.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+
+                Habilidad h = mapearHabilidad(rs);
+
+                if (h != null) {
+                    habilidades.add(h);
+                }
+            }
+        }
+
+        return habilidades;
+    }
 }

@@ -218,7 +218,8 @@ public class RecompensaControlador  extends Screens{
                             System.err.println("Error al intentar guardar la partida.");
                         }
                         
-                        game.setScreen(new TransicionScreen(game, RecompensaControlador.this,new CombateScreen(game, nombreHeroe, ++nivel)));
+                        game.setScreen(new TransicionScreen(game,RecompensaControlador.this,new IntroPisoScreen(game, ++nivel)));
+
                     }
                 }, 5f);
                 break;

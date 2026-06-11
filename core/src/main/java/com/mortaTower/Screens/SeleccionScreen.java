@@ -3,7 +3,6 @@ package com.mortaTower.Screens;
 import java.sql.SQLException;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mortaTower.DAO.PartidaDao;
@@ -82,7 +81,7 @@ public class SeleccionScreen extends Screens {
                 try {
                     Partida partida = confirmarYCrearPartida(nombrePartida, idHereoSelc);
                     game.setPartida(partida);
-                    game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new CombateScreen(game, nombrePartida, 1)));
+                    game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new IntroPisoScreen(game, 1)));
                 } catch (SQLException e) {
                     e.printStackTrace();
                     vista.ingresoNombre(false);
