@@ -16,18 +16,19 @@ public class IntroPisoScreen extends Screens {
         super(game);
         this.nivel = nivel;
     }
+    
     @Override
     public void show() {
-    String ruta = "Imagenes/IntroPisos/piso" + nivel + ".png";
+        String ruta = "Imagenes/IntroPisos/piso" + nivel + ".png";
 
-    if (!Gdx.files.internal(ruta).exists()) {
-        System.out.println("NO EXISTE LA INTRO: " + ruta);
-    } else {
-        System.out.println("CARGANDO INTRO: " + ruta);
+        if (!Gdx.files.internal(ruta).exists()) {
+            System.out.println("NO EXISTE LA INTRO: " + ruta);
+        } else {
+            System.out.println("CARGANDO INTRO: " + ruta);
+        }
+
+        imagenIntro = new Texture(ruta);
     }
-
-    imagenIntro = new Texture(ruta);
-}
 
 
     @Override
