@@ -323,7 +323,7 @@ public class CombateVista {
         }
     }
 
-    public void dibujarSprite(SpriteBatch batch, Entidad.Estado estadoHeroe, float timeHeroe, String nombreHeroe, Entidad.Estado estadoEnemigo, float timeEnemigo, String nombreEnemigo, int faseVisual) {
+    public void dibujarSprite(SpriteBatch batch, Entidad.Estado estadoHeroe, float timeHeroe, Entidad.Estado estadoEnemigo, float timeEnemigo, String nombreEnemigo, int faseVisual) {
 
         Animation<TextureRegion> animacionH = animHeroe.get(estadoHeroe);
         Animation<TextureRegion> animacionE = animEnemigo.get(estadoEnemigo);

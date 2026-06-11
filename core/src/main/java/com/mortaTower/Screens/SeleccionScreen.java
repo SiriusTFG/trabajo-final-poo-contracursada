@@ -34,9 +34,15 @@ public class SeleccionScreen extends Screens {
             final int index = i + 1;
 
             vista.getBtn(i).addListener(new ClickListener() {
+
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                    game.audio.play(12);
+                }
+
                 @Override
                 public void clicked(InputEvent evento, float x, float y) {
-                    game.audio.play(3);
+                    game.audio.play(0);
                     idHereoSelc = index;
                     mostrarIngresoNombre();
                 }
@@ -47,7 +53,7 @@ public class SeleccionScreen extends Screens {
         vista.getBtnIrPartidasGuardadas().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
-                game.audio.play(2);
+                game.audio.play(0);
                 game.setScreen(new TransicionScreen(game,SeleccionScreen.this, new CargarScreen(game,SeleccionScreen.this)));
                 }
         });
@@ -55,7 +61,7 @@ public class SeleccionScreen extends Screens {
         vista.getBtnAtrasNombre().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
-                game.audio.play(4);
+                game.audio.play(3);
                 idHereoSelc = -1;
 
                 vista.ingresoNombre(false);
@@ -69,9 +75,7 @@ public class SeleccionScreen extends Screens {
             @Override
             public void clicked(InputEvent eveto, float x, float y) {
 
-               
-
-                game.audio.play(2);
+                game.audio.play(1);
                 String nombrePartida = vista.getNombreDelField().trim();
 
                 if (nombrePartida.isEmpty()) {
@@ -91,9 +95,16 @@ public class SeleccionScreen extends Screens {
         });
 
         vista.getBtnAtras().addListener(new ClickListener() {
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                game.audio.play(12);
+            }
+
             @Override
             public void clicked(InputEvent evento, float x, float y) {
-    
+
+                game.audio.play(3);
                 game.setScreen(new TransicionScreen(game, SeleccionScreen.this, new MenuScreen(game)));
             }
         });

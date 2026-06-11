@@ -31,7 +31,7 @@ public class CreditosScreen extends Screens {
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                game.audio.stop(2);
+                game.audio.stop(6);
                 game.setScreen(new TransicionScreen(game,CreditosScreen.this,new MenuScreen(game)));
             }
         });
@@ -48,7 +48,7 @@ public class CreditosScreen extends Screens {
 
             cambiandoPantalla = true;
 
-            game.audio.stop(2);
+            game.audio.stop(6);
             game.setScreen(new TransicionScreen(game, CreditosScreen.this, new MenuScreen(game)));
 
             return;

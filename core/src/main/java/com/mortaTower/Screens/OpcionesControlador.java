@@ -131,7 +131,7 @@ public class OpcionesControlador extends Screens {
         opcionesVista.getBtnAtras().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
-                game.audio.play(4);
+                game.audio.play(3);
                 estado = false;
                 Gdx.input.setInputProcessor(menuStage);
             }
