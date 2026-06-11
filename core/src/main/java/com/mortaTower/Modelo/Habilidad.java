@@ -40,10 +40,10 @@ public abstract class Habilidad {
         }
     }
 
-    // GETTERS
     public abstract Entidad.Estado getEstadoEjecucion(); 
     public abstract Entidad.Estado getEstadoReaccion(); 
-     
+
+    // GETTERS
     public int getId() {return id;}
     public String getNombre() {return nombre;}
     public String getDescripcion() {return descripcion;}

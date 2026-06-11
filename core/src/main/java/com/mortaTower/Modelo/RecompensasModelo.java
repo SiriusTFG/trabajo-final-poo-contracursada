@@ -49,7 +49,7 @@ public class RecompensasModelo {
     public void generarRewards() {
         if (habilidades.isEmpty()) return;
 
-        Set<Integer> usados = new HashSet<>();
+        Set<Integer> usados = new HashSet<>(); //colección que no permite elementos duplicados
         Habilidad[] habilidadesHereo = heroeActual.getHabilidades();
 
         for (Habilidad habEquipada : habilidadesHereo) {

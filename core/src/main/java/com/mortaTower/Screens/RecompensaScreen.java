@@ -18,7 +18,7 @@ import com.mortaTower.Modelo.Partida;
 import com.mortaTower.Modelo.RecompensasModelo;
 import com.mortaTower.Vista.RecompensasVista;
 
-public class RecompensaControlador  extends Screens{
+public class RecompensaScreen  extends Screens{
 
     //private Main game;
     private RecompensasModelo modeloRecompensa;
@@ -37,7 +37,7 @@ public class RecompensaControlador  extends Screens{
     private int expPorGanar = 50;
     private EstadoRecompensa estado = EstadoRecompensa.LISTA_HABILIDADES;
 
-    public RecompensaControlador(Main game, int nivel) {
+    public RecompensaScreen(Main game, int nivel) {
 
         super(game);
         this.nivel = nivel;
@@ -218,7 +218,7 @@ public class RecompensaControlador  extends Screens{
                             System.err.println("Error al intentar guardar la partida.");
                         }
                         
-                        game.setScreen(new TransicionScreen(game,RecompensaControlador.this,new IntroPisoScreen(game, ++nivel)));
+                        game.setScreen(new TransicionScreen(game,RecompensaScreen.this,new IntroPisoScreen(game, ++nivel)));
 
                     }
                 }, 5f);

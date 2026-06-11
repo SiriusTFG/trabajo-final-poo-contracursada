@@ -11,7 +11,7 @@ public abstract class Entidad {
     protected int manaActual, manaMax;
     protected int ataque;
     protected double defensaBase;
-    protected double defensaTemporal = 1.0;
+    protected double defensaTemporal = 1.0; //Por que en 1.0?
 
     protected Habilidad[] habilidades = new Habilidad[4];
 

@@ -31,7 +31,7 @@ public class CombateScreen extends Screens {
     private float tiempoResultado = 0f;
     private boolean esperandoRecompensa = false;
 
-    private RecompensaControlador recompensaControlador;
+    private RecompensaScreen recompensaControlador;
 
     private CombateVista vista;     
 
@@ -62,7 +62,7 @@ public class CombateScreen extends Screens {
         this.nivel = nivel;
         Heroe heroe = game.getPartidaActual().getHeroe();
         modelo = new CombateModelo(heroe, nivel);
-        recompensaControlador = new RecompensaControlador(game, this.nivel);
+        recompensaControlador = new RecompensaScreen(game, this.nivel);
 
         game.audio.loop(nivel);
     }

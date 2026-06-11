@@ -5,7 +5,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mortaTower.DAO.GestorDeConexion;
 import com.mortaTower.Modelo.Partida;
-import com.mortaTower.Screens.Audio;
+import com.mortaTower.Screens.GameAudio;
 import com.mortaTower.Screens.GameAssets;
 import com.mortaTower.Screens.MenuScreen;
 
@@ -14,7 +14,7 @@ public class Main extends Game {
 
     public AssetManager assets;
     public SpriteBatch batch;
-    public Audio audio;
+    public GameAudio audio;
 
     private Partida partidaActual;
 
@@ -29,7 +29,7 @@ public class Main extends Game {
         GameAssets.crearFuentes();
 
         batch = new SpriteBatch();
-        audio = new Audio();
+        audio = new GameAudio();
         setScreen(new MenuScreen(this));
     }
 

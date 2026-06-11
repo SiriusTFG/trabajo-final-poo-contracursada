@@ -124,12 +124,13 @@ public class GestorDeConexion {
             System.out.println("Tabla 'habilidades' creada o ya existente");
             
             try {stmt.execute("ALTER TABLE habilidades ADD COLUMN origen TEXT NOT NULL DEFAULT 'HEROE'");
-            System.out.println("Columna 'origen' agregada a habilidades");
+                System.out.println("Columna 'origen' agregada a habilidades");
             } catch (SQLException e) {
-            if (!e.getMessage().contains("duplicate column name")) {
-            System.err.println("Error agregando columna origen: " + e.getMessage());
+                if (!e.getMessage().contains("duplicate column name")) {
+                    System.err.println("Error agregando columna origen: " + e.getMessage());
+                }
             }
-            }
+
             stmt.executeUpdate("UPDATE habilidades SET origen = 'ENEMIGO' WHERE id BETWEEN 25 AND 44");
             stmt.executeUpdate("UPDATE habilidades SET origen = 'HEROE' WHERE id BETWEEN 1 AND 24");
             stmt.execute(tablaHeroeHabilidades);

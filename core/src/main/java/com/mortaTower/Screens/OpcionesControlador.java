@@ -55,9 +55,7 @@ public class OpcionesControlador extends Screens {
 
     public void listenersOpcines() {
 
-        // =========================
         // MUSICA +
-        // =========================
         opcionesVista.getBtnMusicaMas().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
@@ -72,9 +70,7 @@ public class OpcionesControlador extends Screens {
             }
         });
 
-        // =========================
         // MUSICA -
-        // =========================
         opcionesVista.getBtnMusicaMenos().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
@@ -89,9 +85,7 @@ public class OpcionesControlador extends Screens {
             }
         });
 
-        // =========================
         // EFECTOS +
-        // =========================
         opcionesVista.getBtnFxMas().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
@@ -107,9 +101,7 @@ public class OpcionesControlador extends Screens {
             }
         });
 
-        // =========================
         // EFECTOS -
-        // =========================
         opcionesVista.getBtnFxMenos().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {
@@ -125,9 +117,7 @@ public class OpcionesControlador extends Screens {
             }
         });
 
-        // =========================
         // ATRAS
-        // =========================
         opcionesVista.getBtnAtras().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent evento, float x, float y) {

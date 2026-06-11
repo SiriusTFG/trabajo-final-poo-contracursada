@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
-public class Audio {
+public class GameAudio {
 
     private Sound[] sounds = new Sound[13];
     private Music[] music = new Music[13];
@@ -12,7 +12,7 @@ public class Audio {
     private float volFx = 1.0f;
     private float volMusica = 1.0f;
 
-    public Audio() {
+    public GameAudio() {
 
         sounds[0] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/click.mp3"));
         sounds[1] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/Fantasy_UI (21).wav"));

@@ -111,32 +111,6 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
         return habilidades;
     }
 
-    public List<Habilidad> obtenerTodas() throws SQLException {
-
-        List<Habilidad> habilidades = new ArrayList<>();
-
-        String sql = "SELECT * FROM habilidades WHERE origen = ?ORDER BY id ASC";
-
-        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-
-            pstmt.setString(1, "HEROE");
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-
-                while (rs.next()) {
-
-                    Habilidad h = mapearHabilidad(rs);
-
-                    if (h != null) {
-                        habilidades.add(h);
-                    }
-                }
-            }
-        }
-
-        return habilidades;
-    }
-
     public void reemplazarHabilidadEnPartida(int idPartida, int idNuevaHabilidad, int slot) throws SQLException {
         String sql = "UPDATE partida_habilidades SET id_habilidad = ? " +
         "WHERE id_partida = ? AND slot =?";
