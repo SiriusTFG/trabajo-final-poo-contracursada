@@ -9,14 +9,14 @@ import com.mortaTower.Modelo.CombateModelo;
 import com.mortaTower.Modelo.*;
 import com.mortaTower.Vista.CombateVista;
 
-public class GoblinController {
+public class GoblinControlador {
 
     private final Goblin goblin;
     private final GoblinAtacante hilo;
 
     private boolean iniciado = false;
 
-    public GoblinController() {
+    public GoblinControlador() {
         this.goblin = new Goblin();
         this.hilo = new GoblinAtacante();
     }

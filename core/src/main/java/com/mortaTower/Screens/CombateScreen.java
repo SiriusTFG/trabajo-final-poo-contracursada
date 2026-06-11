@@ -4,7 +4,6 @@ import com.mortaTower.Main;
 import com.mortaTower.DAO.*;
 import com.mortaTower.Modelo.*;
 import com.mortaTower.Vista.CombateVista;
-import com.mortaTower.Hilo.GoblinAtacante;
 import com.mortaTower.Modelo.CombateModelo.Resultado;
 
 import java.sql.SQLException;
@@ -40,7 +39,7 @@ public class CombateScreen extends Screens {
     private String resultado;
 
     //Goblin
-    private GoblinController goblinController;
+    private GoblinControlador goblinControlador;
     private float tempRecuperacionHeroe = 0f;
     private boolean heroeAturdido = false;
 
@@ -101,8 +100,8 @@ public class CombateScreen extends Screens {
         });
 
         //manejo del hilo en el combate
-        goblinController = new GoblinController();
-        goblinController.iniciar(game, modelo, pausaControlador, viewport);
+        goblinControlador = new GoblinControlador();
+        goblinControlador.iniciar(game, modelo, pausaControlador, viewport);
 
         listenersHabilidades(descripciones, danio, mana); 
     }
@@ -169,8 +168,8 @@ public class CombateScreen extends Screens {
         vista.resultado(spriteBatch, resultado); 
 
         //LOGICA Y DIBUJADO DEL GOBLIN
-        goblinController.update(delta, modelo, pausaControlador, vista, game, WORLD_WIDTH, WORLD_HEIGHT);
-        goblinController.render(spriteBatch, vista);
+        goblinControlador.update(delta, modelo, pausaControlador, vista, game, WORLD_WIDTH, WORLD_HEIGHT);
+        goblinControlador.render(spriteBatch, vista);
 
         vista.dibujarSprite(spriteBatch, modelo.getHeroe().getEstadoActual(), modelo.getHeroe().getStatetime(), modelo.getEnemigo().getEstadoActual(), modelo.getEnemigo().getStatetime(), 
             modelo.getEnemigo().getNombre(),
@@ -282,7 +281,7 @@ public class CombateScreen extends Screens {
 
         if (esperandoRecompensa) {
 
-            goblinController.detener();
+            goblinControlador.detener();
             tiempoResultado += delta;
 
             if (tiempoResultado >= 3f) {
@@ -373,8 +372,8 @@ public class CombateScreen extends Screens {
         super.dispose();
         vista.cerrar();
 
-        if (goblinController != null) {
-            goblinController.detener();
+        if (goblinControlador != null) {
+            goblinControlador.detener();
         }
 
     }
