@@ -46,8 +46,17 @@ public class PausaControlador extends Screens{
     public void listenerPausa(){
 
         vistaPausa.getBtnRenudar().addListener(new ClickListener() {
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                
+                game.audio.play(12);
+            }
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
+
+                game.audio.play(3);
                 
                 pausa = false;
                 Gdx.input.setInputProcessor(menuStage);
@@ -55,10 +64,18 @@ public class PausaControlador extends Screens{
         });
 
         vistaPausa.getBtnReintentar().addListener(new ClickListener() {
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                
+                game.audio.play(12);
+            }
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
 
-                game.audio.stop(7);
+                game.audio.play(3);
+                game.audio.stop(nivel);
 
                 Partida partidaActual = game.getPartidaActual();
 
@@ -83,18 +100,34 @@ public class PausaControlador extends Screens{
         });
 
         vistaPausa.getBtnOpciones().addListener(new ClickListener() {
+            
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                
+                game.audio.play(12);
+            }
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 
+                game.audio.play(0);
                 opcionesControlador.setOpciones(true);
                 Gdx.input.setInputProcessor(opcionesControlador.getVista().getStage());
             }
         });
 
         vistaPausa.getBtnSalir().addListener(new ClickListener() {
+
+            @Override
+            public void enter(InputEvent event, float x, float y, int pointer, com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
+                
+                game.audio.play(12);
+            }
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.audio.stop(7);
+                game.audio.stop(nivel);
+                game.audio.play(1);
                 game.setScreen(new TransicionScreen(game, PausaControlador.this, new MenuScreen(game)));
             }
         });

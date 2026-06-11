@@ -44,8 +44,6 @@ public class CombateScreen extends Screens {
     private float tiempoPausa;
     private boolean proximoTurnoJugador;
 
-    private boolean pausa = false;
-
     private String resultado;
 
     //Goblin
@@ -78,14 +76,12 @@ public class CombateScreen extends Screens {
         try {
             spritesHeroe = spriteDao.obtenerSpritesPorHeroe(modelo.getHeroe().getId());
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         List<DatosSprite> spritesEnemigo = null;
         try {
             spritesEnemigo = spriteDao.obtenerSpritesPorEnemigo(modelo.getEnemigo().getId());
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         vista = new CombateVista(viewport,game,nivel,spritesHeroe, spritesEnemigo);      
@@ -106,7 +102,7 @@ public class CombateScreen extends Screens {
         vista.getBtnPausa().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                
+                game.audio.play(0);
                 pausaControlador.setOpciones(true);
                 setInput(pausaControlador.getVista().getStage());
             }
@@ -117,15 +113,15 @@ public class CombateScreen extends Screens {
         hiloGoblin = new GoblinAtacante();
 
         //se inicia el hilo secundario
-        hiloGoblin.iniciar(10, 15, () -> {
+        hiloGoblin.iniciar(10, 30, () -> {
             //metodo de libgdx para dejar que el hilo secundario modifique el hilo principal
             Gdx.app.postRunnable(() -> {
-                if (!pausa && modelo.getResultado() == CombateModelo.Resultado.NINGUNO) {
+                if (!pausaControlador.opciones() && modelo.getResultado() == CombateModelo.Resultado.NINGUNO) {
                     float posicionX = viewport.getWorldWidth() + 300; //arranca por la derecha
                     float posicionY = WORLD_HEIGHT * 0.18f;
                     goblin.prepararCorrida(posicionX, posicionY);
                     System.out.println("el goblin entra al combate");
-                    game.audio.play(10);
+                    game.audio.play(8);
                 }
             });
         });
@@ -179,7 +175,7 @@ public class CombateScreen extends Screens {
         if(modelo.getResultado() != Resultado.DERROTA && modelo.getResultado() != Resultado.VICTORIA){
         
             vista.getStsCombate().setVisible(true);
-            vista.dibujarInterfazHeroe(spriteBatch, modelo.getHeroe().getNombre(), modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax());
+            vista.dibujarInterfazHeroe(spriteBatch, nombreHeroe, modelo.getHeroe().getVidaActual(), modelo.getHeroe().getVidaMax(), modelo.getHeroe().getManaActual(), modelo.getHeroe().getManaMax());
             vista.dibujarInterfazEnemigo(spriteBatch, modelo.getEnemigo().getNombre(), modelo.getEnemigo().getVidaActual(), modelo.getEnemigo().getVidaMax(), modelo.getEnemigo().getManaActual(), modelo.getEnemigo().getManaMax());
         } else {
 
@@ -195,33 +191,40 @@ public class CombateScreen extends Screens {
         vista.resultado(spriteBatch, resultado); 
 
         //LOGICA Y DIBUJADO DEL GOBLIN
-        if (goblin != null && goblin.getActivo() && !pausa) {
+        if (goblin != null && goblin.getActivo()) {
             
             
-            float duracionAtaque = vista.getTiempoAnimacionGoblin(Goblin.EstadoGoblin.ATACANDO);
-            boolean huboImpacto = goblin.actualizar(delta, modelo.getHeroe(), WORLD_WIDTH * 0.20f, WORLD_WIDTH + 100, WORLD_HEIGHT * 0.40f, duracionAtaque);
+            if (!pausaControlador.opciones()) {
 
-            if (huboImpacto) {
+                float duracionAtaque = vista.getTiempoAnimacionGoblin(
+                    Goblin.EstadoGoblin.ATACANDO
+                );
+            
+                boolean huboImpacto = goblin.actualizar(delta, modelo.getHeroe(), WORLD_WIDTH * 0.20f, WORLD_WIDTH + 100, WORLD_HEIGHT * 0.40f, duracionAtaque);
 
-                game.audio.play(11);
-                modelo.mostrarMensaje("¡Un duende te robó " + goblin.getDanio() + " de vida!");
-                
-                game.audio.play(12);
-                if(modelo.getHeroe().getVidaActual() <= 0) {
-                    modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
-                    modelo.setResultado(CombateModelo.Resultado.DERROTA);
-                    victoriaProcesada = false;
-                    vista.ocultarInventario();
-                } else {
-                    modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
-                    heroeAturdido = true;
-                    tempRecuperacionHeroe = vista.getTiempoAnimacionHeroe(Entidad.Estado.DANIO);               
+                if (huboImpacto) {
+
+                    game.audio.play(9);
+                    modelo.mostrarMensaje("¡Un duende te robó " + goblin.getDanio() + " de vida!");
+                    
+                    game.audio.play(10);
+                    if(modelo.getHeroe().getVidaActual() <= 0) {
+                        modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
+                        modelo.setResultado(CombateModelo.Resultado.DERROTA);
+                        victoriaProcesada = false;
+                        vista.ocultarInventario();
+                    } else {
+                        
+                        modelo.getHeroe().setEstadoActual(Entidad.Estado.DANIO);
+                        heroeAturdido = true;
+                        tempRecuperacionHeroe = vista.getTiempoAnimacionHeroe(Entidad.Estado.DANIO);               
+                    }
                 }
             }
             vista.dibujarGoblin(spriteBatch, goblin.getX(), goblin.getY(), goblin.getStateTime(), goblin.getEstadoActual());
         }
 
-        vista.dibujarSprite(spriteBatch, modelo.getHeroe().getEstadoActual(), modelo.getHeroe().getStatetime(), nombreHeroe, modelo.getEnemigo().getEstadoActual(), modelo.getEnemigo().getStatetime(), 
+        vista.dibujarSprite(spriteBatch, modelo.getHeroe().getEstadoActual(), modelo.getHeroe().getStatetime(), modelo.getEnemigo().getEstadoActual(), modelo.getEnemigo().getStatetime(), 
             modelo.getEnemigo().getNombre(),
             modelo.getEnemigo().getFaseVisual()
             ); 
@@ -300,11 +303,7 @@ public class CombateScreen extends Screens {
                         modelo.getHeroe().setEstadoActual(Entidad.Estado.MUERTE);
 
                     } else {
-                        modelo.setTurnoActual(
-                            proximoTurnoJugador
-                                ? CombateModelo.Turno.JUGADOR
-                                : CombateModelo.Turno.ENEMIGO
-                        );
+                        modelo.setTurnoActual( proximoTurnoJugador ? CombateModelo.Turno.JUGADOR : CombateModelo.Turno.ENEMIGO);
                     }
 
                     contador = 0;
@@ -313,11 +312,13 @@ public class CombateScreen extends Screens {
             }
         
         }
+
+        
     }
 
         if (modelo.getResultado() == Resultado.VICTORIA   && !esperandoRecompensa) {
             game.audio.stop(nivel);
-            game.audio.play(6);
+            game.audio.play(4);
             resultado = "victoria";
             esperandoRecompensa = true;
             tiempoResultado = 0f;
@@ -325,13 +326,15 @@ public class CombateScreen extends Screens {
 
         if (modelo.getResultado() == Resultado.DERROTA && !derrotaProcesada && !esperandoRecompensa) {
             game.audio.stop(nivel);
-            game.audio.play(7);
+            game.audio.play(5);
             resultado = "derrota";
             esperandoRecompensa = true;
             tiempoResultado = 0f;
         }
 
         if (esperandoRecompensa) {
+
+            hiloGoblin.pararHilo();
             tiempoResultado += delta;
 
             if (tiempoResultado >= 3f) {
@@ -341,7 +344,7 @@ public class CombateScreen extends Screens {
                 if (modelo.getResultado() == Resultado.VICTORIA && nivel < nivelesTotal) {
 
                     victoriaProcesada = true;
-                    game.audio.play(8);
+                    game.audio.play(6);
                     recompensaControlador.mostrar();
                     setInput(recompensaControlador.getVista().getStage());
                 

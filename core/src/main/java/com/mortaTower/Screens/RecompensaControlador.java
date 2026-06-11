@@ -192,7 +192,7 @@ public class RecompensaControlador  extends Screens{
                 break;
 
             case RESUMEN_EXP : 
-                game.audio.play(9);
+                game.audio.play(7);
                 vistaRecompensa.limpiar();
                 Heroe heroe = game.getPartidaActual().getHeroe();
                 heroe.ganarExperiencia(expPorGanar);

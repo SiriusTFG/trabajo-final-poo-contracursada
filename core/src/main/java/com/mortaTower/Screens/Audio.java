@@ -7,29 +7,33 @@ import com.badlogic.gdx.audio.Sound;
 public class Audio {
 
     private Sound[] sounds = new Sound[13];
-    private Music[] music = new Music[10];
+    private Music[] music = new Music[13];
 
     private float volFx = 1.0f;
     private float volMusica = 1.0f;
 
     public Audio() {
 
-        sounds[0] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/sound1.wav"));
-        sounds[1] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/vgmenuhighlight.wav"));
-        sounds[2] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/Fantasy_UI (21).wav"));
-        sounds[3] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/sound2.wav"));
-        sounds[4] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/sound3.wav"));
-        sounds[5] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/sound4.wav"));
-        sounds[6] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/victory.wav"));
-        sounds[7] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/defeat.mp3"));
-        sounds[8] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/openBook.wav"));
-        sounds[9] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/closeBook.wav"));
-        sounds[10] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/goblin1.mp3"));
-        sounds[11] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/goblin2.wav"));
-        sounds[12] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/goblin3.mp3"));
+        sounds[0] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/click.mp3"));
+        sounds[1] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/Fantasy_UI (21).wav"));
+        sounds[2] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/sound2.wav"));
+        sounds[3] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/back.mp3"));
+        sounds[4] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/victory.wav"));
+        sounds[5] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/defeat.mp3"));
+        sounds[6] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/openBook.wav"));
+        sounds[7] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/closeBook.wav"));
+        sounds[8] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/goblin1.mp3"));
+        sounds[9] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/goblin2.wav"));
+        sounds[10] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/goblin3.mp3"));
+        sounds[12] = Gdx.audio.newSound(Gdx.files.internal("Sonidos/Fx/move.wav"));
+
 
         music[0] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/menu.wav"));
         music[1] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/battleLvl1.mp3"));
+        music[2] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/battleLvl2.mp3"));
+        music[3] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/battleLvl3.mp3"));
+        music[4] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/battleLvl4.wav"));
+        music[5] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/battleLvl5.mp3"));
         music[6] = Gdx.audio.newMusic(Gdx.files.internal("Sonidos/Intro/starWars.mp3"));
     }
 

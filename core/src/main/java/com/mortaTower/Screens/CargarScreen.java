@@ -35,12 +35,12 @@ public class CargarScreen extends Screens {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer,
                               com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
-                game.audio.play(1);
+                game.audio.play(12);
             }
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.audio.play(2);
+                game.audio.play(3);
                 game.setScreen(new TransicionScreen(game, CargarScreen.this,new MenuScreen(game)));
             }
         });
@@ -53,13 +53,13 @@ public class CargarScreen extends Screens {
             vista.getBotonesPartidas().get(i).addListener(new ClickListener() {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer,com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
-                    game.audio.play(1);
+                    game.audio.play(12);
                 }
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     
-                    game.audio.play(2);
+                    game.audio.play(1);
                     modelo.setSeleccion(index);
                     cargarPartidaSeleccionada();
                 }
@@ -75,12 +75,12 @@ public class CargarScreen extends Screens {
                 @Override
                 public void enter(InputEvent event, float x, float y, int pointer,
                                 com.badlogic.gdx.scenes.scene2d.Actor fromActor) {
-                    game.audio.play(1);
+                    game.audio.play(12);
                 }
 
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    game.audio.play(2);
+                    game.audio.play(0);
 
                     indicePartidaAEliminar = index;
 
@@ -98,7 +98,7 @@ public class CargarScreen extends Screens {
         vista.getBtnCancelarEliminar().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.audio.play(1);
+                game.audio.play(3);
                 indicePartidaAEliminar = -1;
                 vista.ocultarModalEliminar();
             }
@@ -107,7 +107,7 @@ public class CargarScreen extends Screens {
         vista.getBtnConfirmarEliminar().addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.audio.play(2);
+                game.audio.play(0);
 
                 if (indicePartidaAEliminar >= 0) {
                     eliminarPartidaSeleccionada();
