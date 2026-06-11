@@ -1,6 +1,5 @@
 package com.mortaTower.DAO;
 
-import com.mortaTower.Modelo.Entidad;
 import com.mortaTower.Modelo.Habilidad;
 import com.mortaTower.Modelo.Heroe;
 import java.sql.Connection;

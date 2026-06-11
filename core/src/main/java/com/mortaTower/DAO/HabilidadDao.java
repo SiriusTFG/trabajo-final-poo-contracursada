@@ -115,17 +115,21 @@ public class HabilidadDao implements ObjetoDao<Habilidad> {
 
         List<Habilidad> habilidades = new ArrayList<>();
 
-        String sql = "SELECT * FROM habilidades ORDER BY id ASC";
+        String sql = "SELECT * FROM habilidades WHERE origen = ?ORDER BY id ASC";
 
-        try (PreparedStatement pstmt = conexion.prepareStatement(sql);
-            ResultSet rs = pstmt.executeQuery()) {
+        try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
 
-            while (rs.next()) {
+            pstmt.setString(1, "HEROE");
 
-                Habilidad h = mapearHabilidad(rs);
+            try (ResultSet rs = pstmt.executeQuery()) {
 
-                if (h != null) {
-                    habilidades.add(h);
+                while (rs.next()) {
+
+                    Habilidad h = mapearHabilidad(rs);
+
+                    if (h != null) {
+                        habilidades.add(h);
+                    }
                 }
             }
         }
