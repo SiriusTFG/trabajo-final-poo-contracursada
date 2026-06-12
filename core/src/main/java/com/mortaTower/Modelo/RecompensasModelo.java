@@ -16,9 +16,6 @@ public class RecompensasModelo {
     private int cantRecompensas = 3;
 
     private Heroe heroeActual;
-    
-    public enum Opcion {HAB1, HAB2, HAB3}
-    private Opcion seleccion = Opcion.HAB1;
 
     private Random random = new Random();
 
@@ -111,8 +108,6 @@ public class RecompensasModelo {
         
         return nombres;
     }
-
-    public Opcion getOpcionActual(){return seleccion;}
 
     public Habilidad[] getHabilidad() {return rewards;}
     public String[] getTipoRecompensas(){return tiposRecompensas;}
