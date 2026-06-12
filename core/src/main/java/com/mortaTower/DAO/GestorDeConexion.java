@@ -131,8 +131,8 @@ public class GestorDeConexion {
                 }
             }
 
-            stmt.executeUpdate("UPDATE habilidades SET origen = 'ENEMIGO' WHERE id BETWEEN 25 AND 44");
-            stmt.executeUpdate("UPDATE habilidades SET origen = 'HEROE' WHERE id BETWEEN 1 AND 24");
+            //stmt.executeUpdate("UPDATE habilidades SET origen = 'ENEMIGO' WHERE id BETWEEN 25 AND 44");
+            //stmt.executeUpdate("UPDATE habilidades SET origen = 'HEROE' WHERE id BETWEEN 1 AND 24");
             stmt.execute(tablaHeroeHabilidades);
             System.out.println("Tabla 'heroe_habilidades' creada o ya existente");
             stmt.execute(tablaEnemigosHabilidades);
