@@ -45,7 +45,7 @@ For example, `core:clean` removes `build` folder only from the `core` project.
 ## 2. Dominio y alcance del sistema
 
 ### Descripción del problema
-Se busca desarrollar una aplicación de escritorio de un videojuego de rol por turnos con estructura de torre. El jugador elige un personaje inicial y debe avanzar a través de cinco niveles de dificultad creciente, enfrentando enemigos con comportamientos diferentes. En cada combate podrá atacar, defenderse o utilizar habilidades que consumen maná. Si el jugador muere, pierde el progreso de la partida y debe comenzar nuevamente desde el primer nivel. Si supera el quinto nivel y derrota al jefe final, gana la partida.
+Se busca desarrollar una aplicación de escritorio de un videojuego de rol por turnos con estructura de torre. El jugador elige un personaje inicial y debe avanzar a través de cinco niveles de dificultad creciente, enfrentando enemigos con comportamientos diferentes. En cada combate podrá atacar, defenderse o utilizar habilidades que consumen maná. Si el jugador muere, debe comenzar nuevamente desde el primer nivel pero no pierde la experiencia ni las habilidades ganadas. Tambien el juego tiene un sistema de autoguardado, cada vez que inicia el nivel guarda la partida de ese usuario. Si supera el quinto nivel y derrota al jefe final, gana el juego y se presentan los creditos finales. 
 
 ### Objetivo del sistema
 El objetivo del sistema es ofrecer un juego funcional, modular y extensible que permita aplicar de forma clara los conceptos de Programación Orientada a Objetos. El diseño buscará representar correctamente personajes, enemigos, habilidades y combate por turnos, favoreciendo la reutilización de código, el polimorfismo y la separación de responsabilidades.
@@ -53,19 +53,22 @@ El objetivo del sistema es ofrecer un juego funcional, modular y extensible que 
 ### Alcance
 La primera versión del sistema incluirá:
 - Selección inicial de personaje.
+- Seleccion de partidas guardadas.
+- Menu de opciones.
 - Combate por turnos contra enemigos definidos según el nivel.
 - Cinco niveles de torre.
 - Nivel 1 con dificultad introductoria (el zombie herrero).
-- Jefe final en el último nivel.
+- Jefe final en el último nivel con la dificultad maxima.
 - Elección entre recompensas al terminar cada combate.
 - Sistema de habilidades con consumo de maná.
-- Registro de usuarios y persistencia de logros.
+- Registro de usuarios y persistencia de experiencia y habilidades.
 
 Quedarán fuera de alcance en esta versión:
 - Historia.
 - Inventario amplio de objetos.
 - Tienda.
 - Animaciones avanzadas.
+- Otros personajes: Orco y arquero
 
 ### Funcionalidades principales (Features)
 
@@ -107,19 +110,25 @@ Quedarán fuera de alcance en esta versión:
 
 ### Arquitectura general
 
-### Patrón de diseño adicional: Strategy
-- *Nombre del patrón:* Strategy.
-- *Justificación:* Se utilizará el patrón Strategy para modelar el comportamiento de combate de los enemigos.
-Cada enemigo tendrá asociada una estrategia que definirá cómo actúa durante su turno,
-por ejemplo, atacar agresivamente, defenderse.
-Este patrón permitirá encapsular distintos algoritmos de decisión en clases separadas,
-favoreciendo la reutilización, el polimorfismo y la posibilidad de agregar nuevos tipos
-de comportamiento sin modificar la clase Enemigo.
-- *Aplicación concreta:*
-  - Enemigo agresivo: prioriza atacar.
-  - Enemigo defensivo: prioriza defenderse o resistir.
-  - Enemigo inteligente: decide según el contexto del combate, por ejemplo su vida actual, el estado del jugador y el maná disponible.
+### Patrónes de diseño
+- **MVC (Modelo-Vista-Controlador):** Separación estricta de las responsabilidades gráficas de la lógica del juego.
+- **Patrón state:** Utilizado para definir la Inteligencia Artificial enemiga en tiempo de ejecución sin alterar la clase base del enemigo.
+- **Patrón DAO y Singleton:** Implementados para la gestión y persistencia segura de hasta 5 partidas guardadas (slots) en la base de datos.
+- **Multithreading (Concurrencia):** Uso de hilos secundarios (Threads) para el control del temporizador del duende que atacara cada determinado tiempo sin congelar el hilo principal de renderizado gráfico.
+
 
 ### Diagramas de diseño
 
 ### **Diagrama de clases UML (Conceptual)**
+
+
+
+
+
+## 4. Stack tecnológico
+- **Lenguaje:** Java
+- **IDE:** Visual Studio Code
+- **Framework de IGU:** Java Swing
+- *Base de datos:* PostgreSQL
+- **Control de Versiones:** Git y GitHub
+
