@@ -59,6 +59,7 @@ public class PausaControlador extends Screens{
                 game.audio.play(3);
                 
                 pausa = false;
+                
                 Gdx.input.setInputProcessor(menuStage);
             }
         });

@@ -136,7 +136,7 @@ public class CombateVista {
 
         tabla = new Table();
         tabla.left().padLeft(500);
-        tabla.bottom().padBottom(272);
+        tabla.bottom().padBottom(228);
         
         stage.addActor(imgInventario);
         stage.addActor(lblDescripcion);
@@ -167,8 +167,8 @@ public class CombateVista {
 
             iconCategoria = crearIconoTipo(tipo);
 
-            tabla.add(iconCategoria).size(35, 35);
-            tabla.add(stack).size(300, 35).row();
+            tabla.add(iconCategoria).size(38, 38).padRight(10);
+            tabla.add(stack).size(200, 38).padBottom(5).row();
         }
     }
 
