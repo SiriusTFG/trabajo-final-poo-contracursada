@@ -79,21 +79,35 @@ Separación estricta de las responsabilidades gráficas de la lógica del juego.
   - *Interfaz:* Comportamiento Enemigo
   - *Contexto:* Enemigo
   - *Estados Concretos:*
-    * ComportamientoAgresivoFase1: primera etapa con la que empieza el combate contra el Herrero Zombie y el Cuervo Sombrio, en esta fase el enemigo siempre intentara atacar con su mejor habilidad
+    * ComportamientoAgresivoFase1: primera etapa con la que empieza el combate contra el Herrero Zombie y el Cuervo Sombrio, en esta fase el enemigo siempre intentara atacar con su mejor habilidad.
+
     * ComportamientoAgresivoFase2: segunda etapa que se encontraran el Herrero Zombie y el Cuervo Sombrio comienza cuando el enemigo se encuentra a mitad de vida, aumentando su ataque y su defensa base.
+
     * ComportamientoAgresivoFase3: es la ultima etapa del Herrero Zombie y el Cuervo Sombrio, comienza cuando el enemigo se encuantra en su 30% de vida o menor a este, en esta fase aumenta un poco mas su ataque y su defensa base.
+
     * ComportamientoMagicoFase1: primera etapa con la que comienza el combate contra el Mago Oscuro y la Bruja Maltida, en esta fase los enemigos priorizan no quedar por debajo del 50% de mana, en caso de de contar con mas del 50% de mana si prioridad es atacar.
+
     * ComportamientoMagicoFase2: segunda etapa que se encontraran el Mago Oscuto y la Bruja Maldita una vez esten entre el 50% y 30% de vida, en esta fase los enemigos aumentan su defensa y recuperan un porcentaje de vida y mana, y su prioridad es atacar y luego recuperar mana cuando no poseen.
-    * ComportamientoMagicoFase3: ultima etapa del Mago Oscuro y la Bruja Maldita, comienza cuando el enemigo se encuentra en su 30% de vida o menor a este, en esta fase pierden su defensa siendo mas receptivos a los daños, recuperan un porcentaje de vida y aumentan su ataque, y su prioridad es atacar y luego recuperar mana cuando no poseen
+
+    * ComportamientoMagicoFase3: ultima etapa del Mago Oscuro y la Bruja Maldita, comienza cuando el enemigo se encuentra en su 30% de vida o menor a este, en esta fase pierden su defensa siendo mas receptivos a los daños, recuperan un porcentaje de vida y aumentan su ataque, y su prioridad es atacar y luego recuperar mana cuando no poseen.
+
     * ComportamientoJefeFase1: primera etapa con la que comienza el combate contra el Jefe de la Torre, en esta fase el enemigo prioriza curarse, luego atacar y por ultimo recuperar mana.
+
     * ComportamientoJefeFase2: segunda etapa que se encuentra el Jefe de la Torre una vez este entre el 60% y 30% de vida, en esta fase el enemigo aumenta su defensa y recupera mana, y comienza a atacar con su habilidad menos fuerte para comenzar a desgastar al heroe.
+
     * ComportamientoJefeFase3: ultima etapa del Jefe de la Torre, comienza cuando el enemigo se encuentra en su 30% de vida o menor, en esta fase el enemigo pierde un poco de defensa pero aumenta su ataque, y prioriza atacar con su mejor habilidad de ataque, en caso que se encuentre con poca mana, recupera.
+
 - **Patrón DAO:** Implementado para gestionar la persistencia del juego (guardado de partidas, cargar estadisticas, habilidades y enemigos) mediante SQLite. El objetivo principal es aislar el codigo SQL y la gestion de la base de datos de las logicas del Modelo y los Controladores. Se utilizan interfaces (EntidadDao y ObjetoDao) como contratos basicos para la recuperacion de datos. Esto asegura que todas las clases que las implementen cumplan con el contrato y permite que la escalabilidad del juego.
+
 - **Patrón Singleton:** Este patrón se utiliza en la clase de GestorDeConexion, la clase posee un constructor privado por lo que ninguna clase puede crear nuevas conexiones, pero se provee un unico punto de acceso estatico mediante el metodo getInstancia(). Este metodo utiliza la palabra reservada synchronized, lo que lo hace seguro para los hilos. Esto garantiza que si el hilo grafico y el hilo secundario intentaran acceder a la base de datos al mismo tiempo, nunca se crearan dos conexiones simultaneas y no solo establece la conexion sino que ejecuta el metodo iniciarBD() (metodo para la creacion de tablas).
+
 - **Implementacion de hilos:** El juego tiene un evento durante los combates en el cual un "Duende" pasa por pantalla para hacerle daño al heroe. Para lograr este evento en intervalos de tiempos sin interrumpir la interfaz grafica ni el Game Loop, se implemento un sistema de concurrencia mediante el uso de un hilo en segundo plano.
   * Hilo secundario(temporizador): La clase GoblinAtacante, la cual utiliza ScheduledExecutorService de la libreria de concurrencia de Java. Su responsabilidad es funcionar como un temporizador. Este hilo no procesa graficos, simplemente cuenta los segundos en un segundo plano.
+
   * Modelo: La clase Goblin encapsula todos sus atributos fisicos y posee un metodo actualizar(float delta) que calcula el desplazamiento de forma independiente.
+
   * Controlador y el Game Loop: La clase CombateScreen es la encargada de controlar este evento dentro del metodo render(), gerantizando que la actualizacion visual ocurra correctamente.
+  
   * Comunicacion entre Hilos: Dado que LibGDX no permite modificar elementos visuales o de la partda desde un hilo secundario por motivos de seguridad de memoria, se implemento el metodo proveniente de la libreria de LibGDX llamado Gdx.app.postRunneable(). Cuando el ScheduledExecutorService cumple su intervalo de tiempo, no inyecta al duente directamente, sino que envia un mensaje (Runneable) a la cola de eventos del Game Loop
 
 
