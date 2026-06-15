@@ -1,39 +1,3 @@
-# MortalTower
-
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
-
-This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
-
-## Platforms
-
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
-
-## Gradle
-
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
-
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
-
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
-
-
-
 # Proyecto: Mortal Tower
 
 ## 1. Integrantes del equipo
@@ -61,7 +25,7 @@ La primera versión del sistema incluirá:
 - Jefe final en el último nivel con la dificultad maxima.
 - Elección entre recompensas al terminar cada combate.
 - Sistema de habilidades con consumo de maná.
-- Registro de usuarios y persistencia de experiencia y habilidades.
+- Persistencia de partidas.
 
 Quedarán fuera de alcance en esta versión:
 - Historia.
@@ -84,7 +48,7 @@ Quedarán fuera de alcance en esta versión:
 
 - *Sistema de enemigos*
   - Los enemigos aparecerán según el nivel de la torre.
-  - Existirán enemigos de tipo agresivo, defensivo.
+  - Existirán enemigos de tipo agresivo, magicos y el jefe.
   - Cada tipo de enemigo reaccionará de forma distinta ante el estado del combate.
 
 - *Sistema de habilidades*
@@ -101,34 +65,55 @@ Quedarán fuera de alcance en esta versión:
   - Si derrota al jefe final del nivel 5, ganará la partida.
 
 - *Persistencia*
-  - El sistema almacenará las habilidades correspondientes a cada personaje jugable .
-  - Cada jugador registrará un usuario.
-  - El sistema almacenará logros o trofeos asociados a ese usuario.
-  - Los logros podrán consultarse posteriormente.
+  - El sistema almacenará las estadisticas bases de las dinstintas entidades del juego(heroes y enemigos)
+  - El sistema almacenará las habilidades correspondientes a cada entidad.
+  - El sistema dispondra de guardado de partidas donde se puede almacenar hasta 5 de estas, cada partida se guardara al pasar de nivel en la torre, no se realizara el guardado automatico en medio de un combate.
 
 ## 3. Arquitectura y diseño
 
-### Arquitectura general
-
 ### Patrónes de diseño
-- **MVC (Modelo-Vista-Controlador):** Separación estricta de las responsabilidades gráficas de la lógica del juego.
-- **Patrón state:** Utilizado para definir la Inteligencia Artificial enemiga en tiempo de ejecución sin alterar la clase base del enemigo.
-- **Patrón DAO y Singleton:** Implementados para la gestión y persistencia segura de hasta 5 partidas guardadas (slots) en la base de datos.
-- **Multithreading (Concurrencia):** Uso de hilos secundarios (Threads) para el control del temporizador del duende que atacara cada determinado tiempo sin congelar el hilo principal de renderizado gráfico.
+- #### **MVC (Modelo-Vista-Controlador):** 
+Separación estricta de las responsabilidades gráficas de la lógica del juego.
+- #### *Patrón state:* 
+  Implementado para definir la Inteligencia Artificial enemiga en tiempo de ejecución sin alterar para que este se comporte de distintas maneras.
+  - *Interfaz:* Comportamiento Enemigo
+  - *Contexto:* Enemigo
+  - *Estados Concretos:*
+    * ComportamientoAgresivoFase1: primera etapa con la que empieza el combate contra el Herrero Zombie y el Cuervo Sombrio, en esta fase el enemigo siempre intentara atacar con su mejor habilidad
+    * ComportamientoAgresivoFase2: segunda etapa que se encontraran el Herrero Zombie y el Cuervo Sombrio comienza cuando el enemigo se encuentra a mitad de vida, aumentando su ataque y su defensa base.
+    * ComportamientoAgresivoFase3: es la ultima etapa del Herrero Zombie y el Cuervo Sombrio, comienza cuando el enemigo se encuantra en su 30% de vida o menor a este, en esta fase aumenta un poco mas su ataque y su defensa base.
+    * ComportamientoMagicoFase1: primera etapa con la que comienza el combate contra el Mago Oscuro y la Bruja Maltida, en esta fase los enemigos priorizan no quedar por debajo del 50% de mana, en caso de de contar con mas del 50% de mana si prioridad es atacar.
+    * ComportamientoMagicoFase2: segunda etapa que se encontraran el Mago Oscuto y la Bruja Maldita una vez esten entre el 50% y 30% de vida, en esta fase los enemigos aumentan su defensa y recuperan un porcentaje de vida y mana, y su prioridad es atacar y luego recuperar mana cuando no poseen.
+    * ComportamientoMagicoFase3: ultima etapa del Mago Oscuro y la Bruja Maldita, comienza cuando el enemigo se encuentra en su 30% de vida o menor a este, en esta fase pierden su defensa siendo mas receptivos a los daños, recuperan un porcentaje de vida y aumentan su ataque, y su prioridad es atacar y luego recuperar mana cuando no poseen
+    * ComportamientoJefeFase1: primera etapa con la que comienza el combate contra el Jefe de la Torre, en esta fase el enemigo prioriza curarse, luego atacar y por ultimo recuperar mana.
+    * ComportamientoJefeFase2: segunda etapa que se encuentra el Jefe de la Torre una vez este entre el 60% y 30% de vida, en esta fase el enemigo aumenta su defensa y recupera mana, y comienza a atacar con su habilidad menos fuerte para comenzar a desgastar al heroe.
+    * ComportamientoJefeFase3: ultima etapa del Jefe de la Torre, comienza cuando el enemigo se encuentra en su 30% de vida o menor, en esta fase el enemigo pierde un poco de defensa pero aumenta su ataque, y prioriza atacar con su mejor habilidad de ataque, en caso que se encuentre con poca mana, recupera.
+- **Patrón DAO:** Implementado para gestionar la persistencia del juego (guardado de partidas, cargar estadisticas, habilidades y enemigos) mediante SQLite. El objetivo principal es aislar el codigo SQL y la gestion de la base de datos de las logicas del Modelo y los Controladores. Se utilizan interfaces (EntidadDao y ObjetoDao) como contratos basicos para la recuperacion de datos. Esto asegura que todas las clases que las implementen cumplan con el contrato y permite que la escalabilidad del juego.
+- **Patrón Singleton:** Este patrón se utiliza en la clase de GestorDeConexion, la clase posee un constructor privado por lo que ninguna clase puede crear nuevas conexiones, pero se provee un unico punto de acceso estatico mediante el metodo getInstancia(). Este metodo utiliza la palabra reservada synchronized, lo que lo hace seguro para los hilos. Esto garantiza que si el hilo grafico y el hilo secundario intentaran acceder a la base de datos al mismo tiempo, nunca se crearan dos conexiones simultaneas y no solo establece la conexion sino que ejecuta el metodo iniciarBD() (metodo para la creacion de tablas).
+- **Implementacion de hilos:** El juego tiene un evento durante los combates en el cual un "Duende" pasa por pantalla para hacerle daño al heroe. Para lograr este evento en intervalos de tiempos sin interrumpir la interfaz grafica ni el Game Loop, se implemento un sistema de concurrencia mediante el uso de un hilo en segundo plano.
+  * Hilo secundario(temporizador): La clase GoblinAtacante, la cual utiliza ScheduledExecutorService de la libreria de concurrencia de Java. Su responsabilidad es funcionar como un temporizador. Este hilo no procesa graficos, simplemente cuenta los segundos en un segundo plano.
+  * Modelo: La clase Goblin encapsula todos sus atributos fisicos y posee un metodo actualizar(float delta) que calcula el desplazamiento de forma independiente.
+  * Controlador y el Game Loop: La clase CombateScreen es la encargada de controlar este evento dentro del metodo render(), gerantizando que la actualizacion visual ocurra correctamente.
+  * Comunicacion entre Hilos: Dado que LibGDX no permite modificar elementos visuales o de la partda desde un hilo secundario por motivos de seguridad de memoria, se implemento el metodo proveniente de la libreria de LibGDX llamado Gdx.app.postRunneable(). Cuando el ScheduledExecutorService cumple su intervalo de tiempo, no inyecta al duente directamente, sino que envia un mensaje (Runneable) a la cola de eventos del Game Loop
 
 
 ### Diagramas de diseño
 
 ### **Diagrama de clases UML (Conceptual)**
+![Diagrama de Clases](DiagramaClases.png)
 
 
+### **Diagrama de Patron State**
+![Diagrama Patron State](PatronState.png)
 
+### **Esquema de Base de Datos**
+![Diagrama Patron State](EsquemaBD.png)
 
 
 ## 4. Stack tecnológico
 - **Lenguaje:** Java
 - **IDE:** Visual Studio Code
-- **Framework de IGU:** Java Swing
-- *Base de datos:* PostgreSQL
+- **Framework de IGU:** LibGDX
+- *Base de datos:* SQLite
 - **Control de Versiones:** Git y GitHub
 

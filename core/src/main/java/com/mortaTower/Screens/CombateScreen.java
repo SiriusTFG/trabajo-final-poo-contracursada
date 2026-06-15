@@ -1,17 +1,23 @@
 package com.mortaTower.Screens;
 
-import com.mortaTower.Main;
-import com.mortaTower.DAO.*;
-import com.mortaTower.Vista.*;
-import com.mortaTower.Modelo.*;
-import com.mortaTower.Modelo.CombateModelo.Resultado;
-
 import java.sql.SQLException;
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.mortaTower.DAO.PartidaDao;
+import com.mortaTower.DAO.SpriteDao;
+import com.mortaTower.Main;
+import com.mortaTower.Modelo.CombateModelo;
+import com.mortaTower.Modelo.CombateModelo.Resultado;
+import com.mortaTower.Modelo.DatosSprite;
+import com.mortaTower.Modelo.Entidad;
+import com.mortaTower.Modelo.Habilidad;
+import com.mortaTower.Modelo.Heroe;
+import com.mortaTower.Modelo.Partida;
+import com.mortaTower.Vista.CombateVista;
 
 public class CombateScreen extends Screens {
 
@@ -177,7 +183,7 @@ public class CombateScreen extends Screens {
 
         vista.comentarista(spriteBatch, mensaje);
 
-        if()
+        //if()
         vista.resultado(spriteBatch, resultado); 
 
         // Logica y Dibujado del Goblin
