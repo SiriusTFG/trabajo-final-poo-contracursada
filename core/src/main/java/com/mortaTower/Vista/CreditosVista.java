@@ -90,7 +90,7 @@ public class CreditosVista {
                 table.add(new Label("¡GRACIAS POR JUGAR!", estilo)).padTop(40).row();
                 table.pack();
 
-                scrollY = -table.getHeight();
+                scrollY = -table.getHeight(); // el scroll empieza fuera de la pantalla
 
                 table.setPosition((w - table.getWidth()) / 2f, scrollY);
 
@@ -130,7 +130,7 @@ public class CreditosVista {
 
                 float endOfScroll = table.getHeight() + 180;
 
-                if (scrollY >= endOfScroll) {finished = true;}
+                if (scrollY >= endOfScroll) {finished = true;} // devuelve true si el scroll ya paso la pantalla
         }
 
         public boolean isFinished() {return finished;}

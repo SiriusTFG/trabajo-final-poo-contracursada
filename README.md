@@ -145,4 +145,3 @@ Separación estricta de las responsabilidades gráficas de la lógica del juego.
 ### Si no es la primera vez
 
 1. Presionar F5 o Run code desde el main del juego o cualquier clase en la que este posicionado
-

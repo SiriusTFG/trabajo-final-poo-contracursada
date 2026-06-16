@@ -28,7 +28,7 @@ public class TransicionScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        // Actualiza lógica del fade
+        // incrementa el fade
         alpha += delta * speed;
 
         if (alpha >= 1f && !switching) { // si alpha llego a 1(negro total)
@@ -37,12 +37,6 @@ public class TransicionScreen implements Screen {
 
             // cambia la pantalla en el punto negro total
             game.setScreen(toScreen);
-        }
-
-        if (alpha >= 2f) {
-            
-            game.setScreen(toScreen);
-            return;
         }
 
         // Render del screen activo automáticamente
