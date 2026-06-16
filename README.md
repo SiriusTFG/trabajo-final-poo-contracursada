@@ -131,3 +131,18 @@ Separación estricta de las responsabilidades gráficas de la lógica del juego.
 - *Base de datos:* SQLite
 - **Control de Versiones:** Git y GitHub
 
+
+## 5. Ejecucion del Juego
+
+### Si es primera vez ejecutandolo
+
+1. Abrir la carperta del juego
+2. Acceder a la ruta: lwjgl3\src\main\java\com\mortaTower\lwjgl3
+3. Entrar al archivo: Lwjgl3Launcher.java
+4. Presionar F5 o click izquierdo en el apartado Run code de su IDE el cual va a ejecutar el juego. 
+   Tambien podria hacerlo mediante el Run que se encuentra dentro del archivo Lwjgl3Launcher.java
+
+### Si no es la primera vez
+
+1. Presionar F5 o Run code desde el main del juego o cualquier clase en la que este posicionado
+
