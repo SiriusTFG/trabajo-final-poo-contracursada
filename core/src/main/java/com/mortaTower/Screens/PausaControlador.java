@@ -6,8 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mortaTower.Main;
 import com.mortaTower.DAO.PartidaDao;
+import com.mortaTower.Main;
 import com.mortaTower.Modelo.Partida;
 import com.mortaTower.Vista.PausaVista;
 
@@ -77,6 +77,7 @@ public class PausaControlador extends Screens{
 
                 game.audio.play(3);
                 game.audio.stop(nivel);
+                game.audio.stop(5);
 
                 Partida partidaActual = game.getPartidaActual();
 
@@ -128,6 +129,7 @@ public class PausaControlador extends Screens{
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.audio.stop(nivel);
+                game.audio.stop(5);                
                 game.audio.play(1);
                 game.setScreen(new TransicionScreen(game, PausaControlador.this, new MenuScreen(game)));
             }
