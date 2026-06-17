@@ -6,13 +6,6 @@ public class Heroe extends Entidad {
     private int nivel;
     private int experienciaNecesaria;
     private Habilidad habilidadSeleccionada;
-    
-   /* public Heroe(String nombre, int vida, int mana) {
-        super(nombre, vida, mana);
-        this.experiencia = 0;
-        this.nivel = 1;
-        this.experienciaNecesaria = 100; // Ejemplo de experiencia necesaria para subir de nivel
-    }*/ // Nunca se utilizó
 
     public Heroe(int id, String nombre, int vida, int mana, int nivel, int experiencia, int ataque, double defensa) {
         super(nombre, vida, mana);
